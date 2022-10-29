@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+{# 导入静态资源 #}
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>客户管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}"
+          media="all">
+    <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+</head>
+<body>
+{# csrf 保护 #}
+{% csrf_token %}
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <input type="text" name="name"
+                                   class="layui-input searchVal"
+                                   placeholder="客户名"/>
+                        </div>
+                        <div class="layui-input-inline">
+                            <input type="text" name="khno"
+                                   class="layui-input searchVal"
+                                   placeholder="客户编号"/>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="level" id="level">
+                                <option value="">请选择...</option>
+                                <option value="战略合作伙伴">战略合作伙伴</option>
+                                <option value="大客户">大客户</option>
+                                <option value="重点开发客户">重点开发客户</option>
+                            </select>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layui-btn-primary"
+                                    lay-submit lay-filter="data-search-btn"><i
+                                    class="layui-icon"></i> 搜 索
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <table id="customerList" class="layui-table"
+               lay-filter="customers"></table>
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <a class="layui-btn layui-btn-normal addNews_btn"
+                   lay-event="add">
+                    <i class="layui-icon">&#xe608;</i>
+                    添加
+                </a>
+                <a class="layui-btn layui-btn-normal  " lay-event="link">
+                    <i class="layui-icon">&#xe608;</i>
+                    联系人管理
+                </a>
+                <a class="layui-btn layui-btn-normal addNews_btn"
+                   lay-event="recode">
+                    <i class="layui-icon">&#xe608;</i>
+                    交往记录
+                </a>
+                <a class="layui-btn layui-btn-normal addNews_btn"
+                   lay-event="order">
+                    <i class="layui-icon">&#xe608;</i>
+                    订单查看
+                </a>
+            </div>
+        </script>
+        <!--操作-->
+        <script id="customerListBar" type="text/html">
+            <a class="layui-btn layui-btn-xs" id="edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+        </script>
+
+    </div>
+</div>
+<script src="{% static 'js/system/login/jquery.min.js' %}"
+        charset="utf-8"></script>
+<script src="{% static 'js/system/login/jquery.cookie.min.js' %}"
+        charset="utf-8"></script>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+
+        //客户列表展示
+        var t = table.render({
+            elem: '#customerList',
+            url: '{% url 'customer:CustomerList' %}',
+            cellMinWidth: 95,
+            page: true,
+            height: "full-125",
+            limits: [5, 10, 15, 20, 25],
+            limit: 10,
+            toolbar: "#toolbarDemo",
+            id: "customerListTable",
+            cols: [[
+                {type: "checkbox", fixed: "center"},
+                {field: "id", title: '编号', fixed: "true"},
+                {field: 'name', title: '客户名', align: "center"},
+                {field: 'fr', title: '法人', align: 'center'},
+                {field: 'khno', title: '客户编号', align: 'center'},
+                {field: 'area', title: '地区', align: 'center'},
+                {field: 'cusManager', title: '客户经理', align: 'center'},
+                {field: 'myd', title: '满意度', align: 'center'},
+                {field: 'level', title: '客户级别', align: 'center'},
+                {field: 'xyd', title: '信用度', align: 'center'},
+                {field: 'address', title: '详细地址', align: 'center'},
+                {field: 'postCode', title: '邮编', align: 'center'},
+                {field: 'phone', title: '电话', align: 'center'},
+                {field: 'webSite', title: '网站', align: 'center'},
+                {field: 'fax', title: '传真', align: 'center'},
+                {field: 'zczj', title: '注册资金', align: 'center'},
+                {field: 'yyzzzch', title: '营业执照', align: 'center'},
+                {field: 'khyh', title: '开户行', align: 'center'},
+                {field: 'khzh', title: '开户账号', align: 'center'},
+                {field: 'gsdjh', title: '国税', align: 'center'},
+                {field: 'dsdjh', title: '地税', align: 'center'},
+                {
+                    field: 'createDate', title: '创建时间', align: 'center',
+                    templet: function (obj) {
+                        if (obj.createDate == null || obj.createDate == undefined) {
+                            return '';
+                        } else {
+                            return layui.util.toDateString(obj.createDate, 'yyyy-MM-dd HH:mm:ss');
+                        }
+                    }
+                },
+                {
+                    field: 'updateDate', title: '更新时间', align: 'center',
+                    templet: function (obj) {
+                        if (obj.updateDate == null || obj.updateDate == undefined) {
+                            return '';
+                        } else {
+                            return layui.util.toDateString(obj.updateDate, 'yyyy-MM-dd HH:mm:ss');
+                        }
+                    }
+                },
+                {
+                    title: '操作',
+                    templet: '#customerListBar',
+                    fixed: "right",
+                    align: "center",
+                    minWidth: 150
+                }
+            ]]
+        });
+
+        /**
+         * 搜索按钮的点击事件
+         */
+        form.on('submit(data-search-btn)', function (data) {
+            var params = data.field;
+
+            //执行搜索重载
+            t.reload({
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    name: params.name,
+                    khno: params.khno,
+                    level: params.level
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        /**
+         * 监听头部工具栏
+         */
+        table.on('toolbar(customers)', function (obj) {
+            if (obj.event == "add") { // 添加客户信息
+                // 打开添加/修改客户信息的对话框
+                openAddOrUpdateCustomerDialog();
+            } else if (obj.event == "order") { // 客户的订单数据查看
+                // 获取被选中的数据的相关信息
+                var checkStatus = table.checkStatus(obj.config.id);
+                // 打开客户订单的对话框（传递选中的数据记录）
+                openCustomerOrderDialog(checkStatus.data);
+            }
+        });
+
+        /**
+         * 监听行工具栏
+         */
+        table.on('tool(customers)', function (data) {
+            if (data.event == "edit") { // 更新客户信息
+                // 打开添加/修改客户信息的对话框
+                openAddOrUpdateCustomerDialog(data.data.id);
+            } else if (data.event == "del") { // 删除客户信息
+                // 删除客户
+            }
+        });
+
+        /**
+         * 打开添加/修改客户信息的对话框
+         */
+        function openAddOrUpdateCustomerDialog(id) {
+            var title = "<h3>客户管理 - 添加客户信息</h3>";
+            var url = '';
+            // 判断id是否为空 （如果不为空，则为更新操作）
+            if (id != null && id != '') {
+                title = "<h3>客户管理 - 更新客户信息</h3>";
+                url = '/customer/create_or_update/?id=' + id;
+            }
+            // iframe层
+            layui.layer.open({
+                // 类型
+                type: 2,
+                // 标题
+                title: title,
+                // 宽高
+                area: ['700px', '500px'],
+                // url地址
+                content: url,
+                // 可以最大化与最小化
+                maxmin: true
+            });
+        }
+
+        /**
+         * 打开指定客户的订单对话框
+         * @param data
+         */
+        function openCustomerOrderDialog(data) {
+            // 判断用户是否选择客户
+            if (data.length == 0) {
+                layer.msg("请选择想要查看订单的客户！", {icon: 5});
+                return;
+            }
+            // 判断用户是否多选
+            if (data.length > 1) {
+                layer.msg("只能选择一条记录进行查看！", {icon: 5});
+                return;
+            }
+            // 打开对话框
+            layui.layer.open({
+                // 类型
+                type: 2,
+                // 标题
+                title: "<h3>客户管理 - 查看订单信息</h3>",
+                // 宽高
+                area: ['700px', '500px'],
+                // url地址
+                content: "/customer/order/index/?id=" + data[0].id,
+                // 可以最大化与最小化
+                maxmin: true
+            });
+        }
+
+    });
+</script>
+</body>
+</html>

@@ -37,7 +37,7 @@
             "child": [
                 {
                     "title": "客户信息管理",
-                    "href": "",
+                    "href": "customer/CustomerIndex",
                     "icon": "fa fa-exchange",
                     "target": "_self"
                 },
