@@ -1,0 +1,155 @@
+{
+    "homeInfo": {
+        "title": "首页",
+        "href": "welcome"
+    },
+    "logoInfo": {
+        "title": "CRM-智能办公",
+        "image": "static/images/logo.png",
+        "href": ""
+    },
+    "menuInfo": [
+        {
+            "title": "营销管理",
+            "icon": "",
+            "href": "",
+            "target": "_self",
+            "child": [
+                {
+                    "title": "营销机会管理",
+                    "href": "",
+                    "icon": "fa fa-tty",
+                    "target": "_self"
+                },
+                {
+                    "title": "客户开发计划",
+                    "href": "",
+                    "icon": "fa fa-ellipsis-h",
+                    "target": "_self"
+                }
+            ]
+        },
+        {
+            "title": "客户管理",
+            "icon": "",
+            "href": "",
+            "target": "_self",
+            "child": [
+                {
+                    "title": "客户信息管理",
+                    "href": "",
+                    "icon": "fa fa-exchange",
+                    "target": "_self"
+                },
+                {
+                    "title": "客户流失管理",
+                    "href": "",
+                    "icon": "fa fa-user-times",
+                    "target": "_self"
+                }
+            ]
+        },
+        {
+            "title": "服务管理",
+            "icon": "",
+            "href": "",
+            "target": "_self",
+            "child": [
+                {
+                    "title": "服务创建",
+                    "href": "",
+                    "icon": "fa fa-tachometer",
+                    "target": "_self"
+                },
+                {
+                    "title": "服务分配",
+                    "href": "",
+                    "icon": "fa fa-code-fork",
+                    "target": "_self"
+                },
+                {
+                    "title": "服务处理",
+                    "href": "",
+                    "icon": "fa fa-flash",
+                    "target": "_self"
+                },
+                {
+                    "title": "服务反馈",
+                    "href": "",
+                    "icon": "fa fa-exclamation",
+                    "target": "_self"
+                },
+                {
+                    "title": "服务归档",
+                    "href": "",
+                    "icon": "fa fa-folder-o",
+                    "target": "_self"
+                }
+            ]
+        },
+        {
+            "title": "统计报表",
+            "icon": "",
+            "href": "",
+            "target": "_self",
+            "child": [
+                {
+                    "title": "客户贡献分析",
+                    "href": "",
+                    "icon": "fa fa-bar-chart",
+                    "target": "_self"
+                },
+                {
+                    "title": "客户构成分析",
+                    "href": "",
+                    "icon": "fa fa-cubes",
+                    "target": "_self"
+                },
+                {
+                    "title": "客户服务分析",
+                    "href": "",
+                    "icon": "fa fa-coffee",
+                    "target": "_self"
+                },
+                {
+                    "title": "客户流失分析",
+                    "href": "",
+                    "icon": "fa fa-user-times",
+                    "target": "_self"
+                }
+            ]
+        },
+        {
+            "title": "系统设置",
+            "icon": "",
+            "href": "",
+            "target": "_self",
+            "child": [
+                {
+                    "title": "账号审核",
+                    "href": "audit_account",
+                    "icon": "fa fa-user-plus",
+                    "target": "_self"
+                },
+                {
+                    "title": "用户管理",
+                    "href": "",
+                    "icon": "fa fa-users",
+                    "target": "_self"
+                },
+                {
+                    "title": "角色管理",
+                    "href": "",
+                    "icon": "fa fa-street-view",
+                    "target": "_self"
+                },
+                {
+                    "title": "菜单管理",
+                    "href": "",
+                    "icon": "fa fa-window-maximize",
+                    "target": "_self"
+                }
+            ]
+        }
+    ]
+}

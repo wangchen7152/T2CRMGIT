@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+{# 导入静态资源 #}
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>审核账号</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+</head>
+<body>
+{# csrf 保护 #}
+{% csrf_token %}
+<div class="layuimini-container">
+  <div class="layuimini-main">
+
+    <fieldset class="table-search-fieldset">
+      <legend>搜索信息</legend>
+      <div style="margin: 10px 10px 10px 10px">
+        <form class="layui-form layui-form-pane" action="">
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">用户名</label>
+              <div class="layui-input-inline">
+                <input type="text" name="username" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">审核状态</label>
+              <div class="layui-input-inline">
+                <select name="state">
+                  <option value="">请选择</option>
+                  <option value="0">未审核</option>
+                  <option value="1">审核通过</option>
+                  <option value="-1">黑名单</option>
+                </select>
+              </div>
+            </div>
+            <div class="layui-inline">
+              <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i
+                      class="layui-icon"></i> 搜 索
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </fieldset>
+
+    <script type="text/html" id="toolbarDemo">
+      <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="batch_audit"> 审核通过</button>
+        <button class="layui-btn layui-btn-danger layui-btn-sm data-add-btn" lay-event="batch_blacklist"> 黑名单</button>
+      </div>
+    </script>
+
+    <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+  </div>
+</div>
+<script src="{% static 'js/system/login/jquery.min.js' %}" charset="utf-8"></script>
+<script src="{% static 'js/system/login/jquery.cookie.min.js' %}" charset="utf-8"></script>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script>
+  layui.use(['form', 'table'], function () {
+    var $ = layui.jquery,
+        form = layui.form,
+        table = layui.table;
+
+    table.render({
+      elem: '#currentTableId',
+      url: '{% url 'system:AccountUserList' %}',
+      toolbar: '#toolbarDemo',
+      defaultToolbar: ['filter', 'exports', 'print', {
+        title: '提示',
+        layEvent: 'LAYTABLE_TIPS',
+        icon: 'layui-icon-tips'
+      }],
+      cols: [[
+        {type: "checkbox", width: 50},
+        {field: 'id', width: 100, title: 'ID', sort: true},
+        {field: 'username', width: 200, title: '用户名', align: "center"},
+        {
+          field: 'createDate', width: 200, title: '创建时间', align: "center",
+          templet: function (obj) {
+            if (obj.create_date == null || obj.create_date == undefined) {
+              return '';
+            } else {
+              return layui.util.toDateString(obj.create_date, 'yyyy-MM-dd HH:mm:ss');
+            }
+          }
+        },
+        {
+          field: 'updateDate', width: 200, title: '修改时间', align: "center",
+          templet: function (obj) {
+            if (obj.update_date == null || obj.update_date == undefined) {
+              return '';
+            } else {
+              return layui.util.toDateString(obj.update_date, 'yyyy-MM-dd HH:mm:ss');
+            }
+          }
+        },
+        {
+          field: 'state', minWidth: 300, title: '审核状态', align: "center",
+          templet: function (user) {
+            let html = '';
+            if (0 == user.state) {
+              html += '<input type="radio" name="' + user.id + '" lay-filter="audit" value="0" title="未审核" checked="checked">&nbsp;&nbsp;' +
+                  '<input type="radio" name="' + user.id + '" lay-filter="audit" value="1" title="审核通过">&nbsp;&nbsp;' +
+                  '<input type="radio" name="' + user.id + '" lay-filter="audit" value="-1" title="黑名单">';
+              return html;
+            }
+            if (1 == user.state) {
+              html += '<input type="radio" name="' + user.id + '" lay-filter="audit" value="0" title="未审核">&nbsp;&nbsp;' +
+                  '<input type="radio" name="' + user.id + '" lay-filter="audit" value="1" title="审核通过" checked="checked">&nbsp;&nbsp;' +
+                  '<input type="radio" name="' + user.id + '" lay-filter="audit" value="-1" title="黑名单">';
+              return html;
+            }
+            if ('-1' == user.state) {
+              html += '<input type="radio" name="' + user.id + '" lay-filter="audit" value="0" title="未审核">&nbsp;&nbsp;' +
+                  '<input type="radio" name="' + user.id + '" lay-filter="audit" value="1" title="审核通过">&nbsp;&nbsp;' +
+                  '<input type="radio" name="' + user.id + '" lay-filter="audit" value="-1" title="黑名单" checked="checked">';
+              return html;
+            }
+          }
+        }
+      ]],
+      limits: [5, 10, 15, 20, 25, 100],
+      limit: 10,
+      page: true
+    });
+
+    // 监听搜索操作
+    form.on('submit(data-search-btn)', function (data) {
+      var params = data.field;
+
+      //执行搜索重载
+      table.reload('currentTableId', {
+        page: {
+          curr: 1
+        }
+        , where: {
+          username: params.username,
+          state: params.state
+        }
+      }, 'data');
+
+      return false;
+    });
+
+    /**
+     * toolbar监听事件
+     */
+    table.on('toolbar(currentTableFilter)', function (obj) {
+      // https://www.layui.com/doc/modules/table.html#checkStatus
+      var checkStatus = table.checkStatus('currentTableId');
+      {#console.log($(checkStatus.data)) //获取选中行的数据#}
+      let ids = [];
+      $(checkStatus.data).each(function () {
+        ids.push(this.id);
+      });
+      if (obj.event === 'batch_audit') { // 监听批量审核通过操作
+        audit_account(ids, 1);
+        // 重新加载数据表格
+        table.reload('currentTableId');
+      } else if (obj.event === 'batch_blacklist') { // 监听批量黑名单操作
+        audit_account(ids, -1);
+        // 重新加载数据表格
+        table.reload('currentTableId');
+      }
+    });
+
+    //监听表格复选框选择
+    table.on('checkbox(currentTableFilter)', function (obj) {
+      {#console.log(obj)#}
+    });
+
+    // 监听单选框
+    form.on('radio(audit)', function (data) {
+      // https://www.layui.com/doc/modules/form.html#onradio
+      console.log(data.elem.name); // 得到 radio 原始 DOM 对象然后获取 name 值
+      audit_account(data.elem.name, data.value);
+    });
+  });
+
+  // 账号审核
+  function audit_account(ids, state) {
+    console.log(ids);
+    $.ajax({
+      'type': 'POST',
+      'url': '{% url 'system:audit_account' %}',
+      traditional: true, // 是否支持传递数组参数
+      'data': {
+        'csrfmiddlewaretoken': $.cookie('csrftoken'),
+        'ids': ids,
+        'state': state,
+      },
+      'dataType': 'JSON',
+      'success': function (result) {
+        layer.msg(result.msg);
+      },
+      'error': function (result) {
+        layer.msg(result.msg);
+        return false
+      }
+    });
+  }
+  // layui-unselect layui-form-checkbox 未勾选   layui-unselect layui-form-checkbox layui-form-checked 勾选
+</script>
+
+</body>
+</html>
