@@ -101,7 +101,7 @@
         //客户列表展示
         var t = table.render({
             elem: '#customerList',
-            url: '{% url 'customer:CustomerList' %}',
+            url: '{% url 'customer:customerList' %}',
             cellMinWidth: 95,
             page: true,
             height: "full-125",
@@ -111,26 +111,19 @@
             id: "customerListTable",
             cols: [[
                 {type: "checkbox", fixed: "center"},
-                {field: "id", title: '编号', fixed: "true"},
-                {field: 'name', title: '客户名', align: "center"},
-                {field: 'fr', title: '法人', align: 'center'},
-                {field: 'khno', title: '客户编号', align: 'center'},
-                {field: 'area', title: '地区', align: 'center'},
-                {field: 'cusManager', title: '客户经理', align: 'center'},
-                {field: 'myd', title: '满意度', align: 'center'},
-                {field: 'level', title: '客户级别', align: 'center'},
-                {field: 'xyd', title: '信用度', align: 'center'},
+                {field: "id", title: '编号', fixed: "true", sort: true},
+                {field: 'name', title: '客户名', align: "center", sort: true},
+                {field: 'city_id', title: '城市', align: 'center', sort: true},
+                {
+                    field: 'cusManager',
+                    title: '客户经理',
+                    align: 'center',
+                    sort: true
+                },
+                {field: 'level', title: '客户级别', align: 'center', sort: true},
+                {field: 'xyd', title: '信用度', align: 'center', sort: true},
                 {field: 'address', title: '详细地址', align: 'center'},
-                {field: 'postCode', title: '邮编', align: 'center'},
                 {field: 'phone', title: '电话', align: 'center'},
-                {field: 'webSite', title: '网站', align: 'center'},
-                {field: 'fax', title: '传真', align: 'center'},
-                {field: 'zczj', title: '注册资金', align: 'center'},
-                {field: 'yyzzzch', title: '营业执照', align: 'center'},
-                {field: 'khyh', title: '开户行', align: 'center'},
-                {field: 'khzh', title: '开户账号', align: 'center'},
-                {field: 'gsdjh', title: '国税', align: 'center'},
-                {field: 'dsdjh', title: '地税', align: 'center'},
                 {
                     field: 'createDate', title: '创建时间', align: 'center',
                     templet: function (obj) {
@@ -138,16 +131,6 @@
                             return '';
                         } else {
                             return layui.util.toDateString(obj.createDate, 'yyyy-MM-dd HH:mm:ss');
-                        }
-                    }
-                },
-                {
-                    field: 'updateDate', title: '更新时间', align: 'center',
-                    templet: function (obj) {
-                        if (obj.updateDate == null || obj.updateDate == undefined) {
-                            return '';
-                        } else {
-                            return layui.util.toDateString(obj.updateDate, 'yyyy-MM-dd HH:mm:ss');
                         }
                     }
                 },
@@ -206,6 +189,8 @@
                 openAddOrUpdateCustomerDialog(data.data.id);
             } else if (data.event == "del") { // 删除客户信息
                 // 删除客户
+                console.log('事件为删除');
+                deleteCustomer(data.data.id);
             }
         });
 
@@ -214,11 +199,11 @@
          */
         function openAddOrUpdateCustomerDialog(id) {
             var title = "<h3>客户管理 - 添加客户信息</h3>";
-            var url = '';
+            var url = '{% url 'customer:AddCuster' %}';
             // 判断id是否为空 （如果不为空，则为更新操作）
             if (id != null && id != '') {
                 title = "<h3>客户管理 - 更新客户信息</h3>";
-                url = '/customer/create_or_update/?id=' + id;
+                url = '/customer/AddCuster/?id=' + id;
             }
             // iframe层
             layui.layer.open({
@@ -262,6 +247,37 @@
                 content: "/customer/order/index/?id=" + data[0].id,
                 // 可以最大化与最小化
                 maxmin: true
+            });
+        }
+
+        function deleteCustomer(id) {
+            // 弹出确认框，询问用户是否确认删除
+            layer.confirm('确定要删除该记录吗？', {
+                icon: 3,
+                title: "客户管理"
+            }, function (index) {
+                // 关闭确认框
+                layer.close(index);
+                // 发送ajax请求，删除记录
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'customer:DeleteCustomer' %}",
+                    data: {
+                        id: id,
+                    },
+                    success: function (result) {
+                        // 判断删除结果
+                        if (result.code == 200) {
+                            // 提示成功
+                            layer.msg("删除成功！", {icon: 6});
+                            // 刷新表格
+                            t.reload();
+                        } else {
+                            // 提示失败
+                            layer.msg(result.msg, {icon: 5});
+                        }
+                    }
+                });
             });
         }
 

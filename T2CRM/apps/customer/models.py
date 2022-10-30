@@ -5,7 +5,8 @@ from datetime import datetime
 class ModelManager(models.Manager):
 
     def get_queryset(self):
-        return super(ModelManager, self).get_queryset().filter(isValid=1)
+        return super(ModelManager, self).get_queryset().filter(isValid=1,
+                                                               deleted=0)
 
 
 class Province(models.Model):
@@ -20,7 +21,7 @@ class Province(models.Model):
         verbose_name_plural = verbose_name
 
 
-class City(models.Model):
+class CityCourse(models.Model):
     # 主键
     id = models.AutoField(primary_key=True)
     # 城市
@@ -39,48 +40,48 @@ class Customer(models.Model):
     # 主键
     id = models.AutoField(primary_key=True)
     # 客户所属城市
-    city = models.ForeignKey(City, db_column='city_id',
+    city = models.ForeignKey(CityCourse, db_column='city_id',
                              on_delete=models.DO_NOTHING, verbose_name=u'所属城市')
     # 客户编号 KH + 日
     khno = models.CharField(max_length=20, unique=True, verbose_name=u'客户编号')
     # 客户名称
-    name = models.CharField(max_length=20, verbose_name=u'客户名称')
+    name = models.CharField(max_length=128, verbose_name=u'客户名称')
     # 客户所在地区
-    area = models.CharField(max_length=20, verbose_name='所在地区')
+    area = models.CharField(max_length=128, verbose_name='所在地区')
     # 客户经理
-    cusManager = models.CharField(max_length=30, db_column='cus_manager')
+    cusManager = models.CharField(max_length=128, db_column='cus_manager')
     # 客户等级
-    level = models.CharField(max_length=30, verbose_name=u'客户级别')
+    level = models.CharField(max_length=128, verbose_name=u'客户级别')
     # 满意度
-    myd = models.CharField(max_length=30, verbose_name=u'客户满意度')
+    myd = models.CharField(max_length=128, verbose_name=u'客户满意度')
     # 信用度
-    xyd = models.CharField(max_length=30, verbose_name=u'信用度')
+    xyd = models.CharField(max_length=128, verbose_name=u'信用度')
     # 地址
-    address = models.CharField(max_length=100, verbose_name=u'地址')
+    address = models.CharField(max_length=128, verbose_name=u'地址')
     # 邮编
-    postCode = models.CharField(max_length=10, db_column='post_code')
+    postCode = models.CharField(max_length=128, db_column='post_code')
     # 联系电话
-    phone = models.CharField(max_length=18)
+    phone = models.CharField(max_length=128)
     # 传真
-    fax = models.CharField(max_length=20)
+    fax = models.CharField(max_length=128)
     # 网址
-    web_url = models.CharField(max_length=50, db_column='web_url')
+    web_url = models.CharField(max_length=128, db_column='web_url')
     # 营业注册号
-    company_num = models.CharField(max_length=50, verbose_name=u'营业注册号')
+    company_num = models.CharField(max_length=128, verbose_name=u'营业注册号')
     # 法人
-    leader_of_company = models.CharField(max_length=20, verbose_name=u'法人')
+    leader_of_company = models.CharField(max_length=128, verbose_name=u'法人')
     # 注册资金
-    registered_capital = models.CharField(max_length=64, verbose_name=u'注册资本')
+    registered_capital = models.CharField(max_length=128, verbose_name=u'注册资本')
     # 年营业额
-    annual_turnover = models.CharField(max_length=20, verbose_name='年营业额')
+    annual_turnover = models.CharField(max_length=128, verbose_name='年营业额')
     # 开户银行
-    bank = models.CharField(max_length=20, verbose_name=u'开户银行')
+    bank = models.CharField(max_length=128, verbose_name=u'开户银行')
     # 开户账号
-    bank_number = models.CharField(max_length=20, verbose_name=u'开户账号')
+    bank_number = models.CharField(max_length=128, verbose_name=u'开户账号')
     # 地税
-    land_tax = models.CharField(max_length=20, verbose_name=u'地税')
+    land_tax = models.CharField(max_length=128, verbose_name=u'地税')
     # 国税
-    the_irs = models.CharField(max_length=20, verbose_name=u'国税')
+    the_irs = models.CharField(max_length=128, verbose_name=u'国税')
     # 状态 0=正常 1=暂时流失 2=真正流失
     state = models.IntegerField(default=0)
     isValid = models.IntegerField(db_column='is_valid', default=1)
@@ -88,6 +89,9 @@ class Customer(models.Model):
                                       auto_now_add=True)
     updateDate = models.DateTimeField(db_column='update_date',
                                       auto_now_add=True)
+    # 是否删除，0为未删除,1为已删除
+    deleted = models.IntegerField(default=0, choices=((0, '未删除'), (1, '已删除')),
+                                  verbose_name=u'是否删除', null=True)
 
     all = models.Manager()
     objects = ModelManager()
@@ -113,6 +117,9 @@ class LinkMan(models.Model):
                                       default=datetime.now)
     updateDate = models.DateTimeField(db_column='update_date',
                                       auto_now_add=True)
+    # 是否删除，0为未删除,1为已删除
+    deleted = models.IntegerField(default=0, choices=((0, '未删除'), (1, '已删除')),
+                                  verbose_name=u'是否删除', null=True)
 
     objects = ModelManager()
 
@@ -143,6 +150,9 @@ class CustomerOrders(models.Model):
                                       auto_now_add=True)
     updateDate = models.DateTimeField(db_column='update_date',
                                       auto_now_add=True)
+    # 是否删除，0为未删除,1为已删除
+    deleted = models.IntegerField(default=0, choices=((0, '未删除'), (1, '已删除')),
+                                  verbose_name=u'是否删除', null=True)
 
     objects = ModelManager()
 
@@ -173,6 +183,9 @@ class OrdersDetail(models.Model):
                                       auto_now_add=True)
     updateDate = models.DateTimeField(db_column='update_date',
                                       auto_now_add=True)
+    # 是否删除，0为未删除,1为已删除
+    deleted = models.IntegerField(default=0, choices=((0, '未删除'), (1, '已删除')),
+                                  verbose_name=u'是否删除', null=True)
 
     objects = ModelManager()
 
@@ -204,6 +217,9 @@ class CustomerLoss(models.Model):
                                       auto_now_add=True)
     updateDate = models.DateTimeField(db_column='update_date',
                                       auto_now_add=True)
+    # 是否删除，0为未删除,1为已删除
+    deleted = models.IntegerField(default=0, choices=((0, '未删除'), (1, '已删除')),
+                                  verbose_name=u'是否删除', null=True)
     objects = ModelManager()
 
     class Meta:
@@ -225,6 +241,9 @@ class CustomerReprieve(models.Model):
                                       auto_now_add=True)
     updateDate = models.DateTimeField(db_column='update_date',
                                       auto_now_add=True)
+    # 是否删除，0为未删除,1为已删除
+    deleted = models.IntegerField(default=0, choices=((0, '未删除'), (1, '已删除')),
+                                  verbose_name=u'是否删除', null=True)
 
     objects = ModelManager()
 

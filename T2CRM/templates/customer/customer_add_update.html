@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+{# 导入静态资源 #}
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}"
+          media="all">
+    <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+</head>
+<body>
+{# csrf 保护 #}
+<form class="layui-form" style="width:80%;">
+    {% csrf_token %}
+    <input name="id" type="hidden" value="{% if id %}{{ id }}{% endif %}"/>
+
+
+    <div class="layui-form-item layui-row">
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">客户名称</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"
+                       name="name" id="name" lay-verify="required"
+                       value="{% if name %}{{ name }}{% endif %}"
+                       placeholder="请输入客户名">
+            </div>
+        </div>
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">法人</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"
+                       name="leader_of_company" id="leader_of_company"
+                       lay-verify="required"
+                       value="{% if leader_of_company %}{{ leader_of_company }}{% endif %}"
+                       placeholder="请输入法人">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-row">
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">城市</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"
+                       name="area" value="{% if area %}{{ area }}{% endif %}"
+                       placeholder="请输入区域">
+            </div>
+        </div>
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">客户经理</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"
+                       name="cusManager"
+                       value="{% if cusManager %}{{ cusManager }}{% endif %}"
+                       placeholder="请输入客户经理">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-row">
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">客户级别</label>
+            <div class="layui-input-block">
+                <select name="level" id="level">
+                    <option value="">请选择</option>
+                    <option value="普通客户"
+                            {% if level == '普通客户' %}selected{% endif %}>普通客户
+                    </option>
+                    <option value="重点开发客户"
+                            {% if level == '重点开发客户' %}selected{% endif %}>重点开发客户
+                    </option>
+                    <option value="大客户"
+                            {% if level == '大客户' %}selected{% endif %}>大客户
+                    </option>
+                    <option value="战略合作伙伴"
+                            {% if level == '战略合作伙伴' %}selected{% endif %}>战略合作伙伴
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">选择城市</label>
+            <div class="layui-input-block">
+                <select name="city_id" id="city_id">
+                    <option value="">请选择城市</option>
+                    {% if city %}
+                        {% for city in city %}
+                            <option value="{{ city.id }}"
+                                    selected>{{ city.city_name }}
+                            </option>
+                        {% endfor %}
+                    {% else %}
+                        <option value={{ city_id }}
+                                {% if city_id == 7 %}selected {% endif %}>北京市
+                        </option>
+                        <option value={{ city_id }}
+                                {% if city_id == 1 %}selected {% endif %}>太原市
+                        </option>
+                    {% endif %}
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">信用度</label>
+            <div class="layui-input-block">
+                <select name="xyd" id="xyd">
+                    <option value="">请选择</option>
+                    <option value="☆" {% if xyd == '☆' %}selected{% endif %}>☆
+                    </option>
+                    <option value="☆☆" {% if xyd == '☆☆' %}selected{% endif %}>
+                        ☆☆
+                    </option>
+                    <option value="☆☆☆"
+                            {% if xyd == '☆☆☆' %}selected{% endif %}>☆☆☆
+                    </option>
+                    <option value="☆☆☆☆"
+                            {% if xyd == '☆☆☆☆' %}selected{% endif %}>☆☆☆☆
+                    </option>
+                    <option value="☆☆☆☆☆"
+                            {% if xyd == '☆☆☆☆☆' %}selected{% endif %}>☆☆☆☆☆
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-row">
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">邮编</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"
+                       name="postCode"
+                       value="{% if postCode %}{{ postCode }}{% endif %}"
+                       placeholder="请输入客户邮编">
+            </div>
+        </div>
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">联系电话</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"
+                       name="phone" lay-verify="required"
+                       value="{% if phone %}{{ phone }}{% endif %}"
+                       placeholder="请输入客户联系电话">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-row">
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">客户地址</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"
+                       name="address"
+                       value="{% if address %}{{ address }}{% endif %}"
+                       placeholder="请输入客户地址">
+            </div>
+        </div>
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">传真</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"
+                       name="fax" value="{% if fax %}{{ fax }}{% endif %}"
+                       placeholder="请输入客户传真">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-row">
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">网站</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"
+                       name="web_url"
+                       value="{% if web_url %}{{ web_url }}{% endif %}"
+                       placeholder="请输入客户网站地址">
+            </div>
+        </div>
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">注册资金</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"
+                       name="registered_capital" value="{% if registered_capital %}{{ registered_capital }}{% endif %}"
+                       placeholder="请输入注册资金">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item layui-row">
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">开户行</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"
+                       name="bank" value="{% if bank %}{{ bank }}{% endif %}" placeholder="请输入客户开户行">
+            </div>
+        </div>
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">开户账号</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"
+                       name="bank_number" value="{% if bank_number %}{{ bank_number }}{% endif %}" placeholder="请输入开户账号">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-row">
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">国税</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"
+                       name="the_irs"
+                       value="{% if the_irs %}{{ the_irs }}{% endif %}"
+                       placeholder="请输入国税">
+            </div>
+        </div>
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">地税</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"
+                       name="land_tax"
+                       value="{% if land_tax %}{{ land_tax }}{% endif %}"
+                       placeholder="请输入地税">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-row">
+
+        <div class="layui-col-xs6">
+            <label class="layui-form-label">年营业额</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input"
+                       name="annual_turnover" value="{% if annual_turnover %}{{ annual_turnover }}{% endif %}"
+                       placeholder="请输入客户年营业额">
+            </div>
+        </div>
+    </div>
+
+
+    <br/>
+    <div class="layui-form-item layui-row layui-col-xs12">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-lg" lay-submit=""
+                    lay-filter="addOrUpdateCustomer">确认
+            </button>
+            <button id="closeBtn" type="button"
+                    class="layui-btn layui-btn-lg layui-btn-normal">取消
+            </button>
+        </div>
+    </div>
+</form>
+{% csrf_token %}
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"
+        charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js"
+        charset="utf-8"></script>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'layer'], function () {
+        var form = layui.form,
+            layer = parent.layer === undefined ? layui.layer : top.layer,
+            $ = layui.jquery;
+
+        /**
+         * 表单 submit 监听
+         */
+        form.on('submit(addOrUpdateCustomer)', function (data) {
+            // 提交数据时的加载层 （https://layer.layui.com/）
+            var index = top.layer.msg("数据提交中,请稍后...", {
+                icon: 16, // 图标
+                time: false, // 不关闭
+                shade: 0.8 // 设置遮罩的透明度
+            });
+            // 得到所有的表单元素的值
+            var formData = data.field;
+            console.log(formData);
+            // 请求的地址
+
+            var url = '{% url 'customer:AddCuster' %}';
+            $.post(url, formData, function (result) {
+                // 判断操作是否执行成功 200=成功
+                if (result.code == 200) {
+                    // 成功
+                    // 提示成功
+                    top.layer.msg("操作成功！", {icon: 6});
+                    // 关闭加载层
+                    top.layer.close(index);
+                    // 关闭弹出层
+                    layer.closeAll("iframe");
+                    // 刷新父窗口，重新加载数据
+                    parent.location.reload();
+                } else {
+                    // 失败
+                    layer.msg(result.msg, {icon: 5});
+                }
+            });
+            // 阻止表单提交
+            return false;
+        });
+
+        /**
+         * 关闭弹出层
+         */
+        $("#closeBtn").click(function () {
+            // 当你在iframe页面关闭自身时
+            var index = parent.layer.getFrameIndex(window.name); // 先得到当前iframe层的索引
+            parent.layer.close(index); // 再执行关闭
+        });
+    });
+</script>
+</body>
+</html>

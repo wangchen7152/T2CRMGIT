@@ -302,7 +302,7 @@ class ChangePassword(View):
             user = User.objects.values().filter(id=user_id, isValid=1)
             _salt = user[0].get('salt')
             md5_password = md5((old_password + _salt).encode(
-                    encoding='utf-8')).hexdigest()
+                encoding='utf-8')).hexdigest()
             if user[0].get('password') == md5_password:
                 if old_password != new_password or old_password != again_password:
                     if new_password == again_password:
