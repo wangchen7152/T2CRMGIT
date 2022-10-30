@@ -17,7 +17,7 @@ class User(models.Model):
     isValid = models.IntegerField(db_column='is_valid', default=1,
                                   verbose_name=u'是否可用')
     createDate = models.DateTimeField(db_column='create_date',
-                                      default=datetime.now(),
+                                      default=datetime.now,
                                       verbose_name=u'创建时间')
     updateDate = models.DateTimeField(db_column='update_date', null=True,
                                       verbose_name=u'更新时间')
@@ -36,7 +36,7 @@ class City(models.Model):
     des = models.CharField(max_length=200, verbose_name="u描述")
 
     class Meta:
-        db_table = 'T2_city'
+        db_table = 'T2_user_city'
         verbose_name = u"城市"
         verbose_name_plural = verbose_name
 
