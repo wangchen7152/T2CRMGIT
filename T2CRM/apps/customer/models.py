@@ -135,7 +135,7 @@ class CustomerOrders(models.Model):
     customer = models.ForeignKey(Customer, db_column='cus_id',
                                  on_delete=models.DO_NOTHING)
     # 订单编号
-    orderNo = models.DateTimeField(db_column='order_no')
+    orderNo = models.CharField(db_column='order_no', max_length=64)
     # 下单日期
     orderDate = models.DateTimeField(db_column='order_date', auto_now_add=True)
     # 收货地址

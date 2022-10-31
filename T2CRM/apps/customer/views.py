@@ -8,7 +8,9 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 
-from customer.models import Customer, CityCourse, Province
+from django.views.decorators.http import require_GET
+
+from customer.models import Customer, CityCourse, Province, CustomerOrders
 from system.views import GenerateCode
 
 
@@ -80,7 +82,7 @@ class AddCuster(View):
     def get(self, request):
         city = CityCourse.objects.all()
         id = request.GET.get('id')
-        if len(id) == 1:
+        if id:
             custer = Customer.objects.values().filter(id=id)
             return render(request, 'customer/customer_add_update.html',
                           custer[0])
@@ -92,6 +94,8 @@ class AddCuster(View):
     def post(self, request):
         try:
             name = request.POST.get('name').strip()
+            if Customer.objects.filter(name=name):
+                return JsonResponse({'code': 400, 'mag': '该客户已录入，请勿重复录入！'})
             id = request.POST.get('id').strip()
             leader_of_company = request.POST.get('leader_of_company').strip()
             area = request.POST.get('area').strip()
@@ -160,3 +164,19 @@ class DeleteCustomer(View):
         except Exception as e:
             print(e)
             return JsonResponse({'code': 200, 'msg': '删除失败'})
+
+
+@require_GET
+def OrderIndex(request):
+    id = request.GET.get('id')
+    c = Customer.objects.get(id=id)
+    context = {
+        'id': id,
+        'khnc': c.khno,
+        'name': c.name,
+        'leader_of_company': c.leader_of_company,
+        'address': c.address,
+        'phone': c.phone,
+    }
+
+    return render(request, 'customer/customer_order.html', context)

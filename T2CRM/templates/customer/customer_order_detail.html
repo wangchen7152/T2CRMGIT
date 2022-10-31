@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+{# 导入静态资源 #}
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>订单详情查看</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+</head>
+<body>
+{# csrf 保护 #}
+{% csrf_token %}
+<div class="layui-col-md12">
+  <div class="layui-card">
+    <div class="layui-card-body">
+      <form class="layui-form">
+        <input name="id" type="hidden" value="{% if id %}{{ id }}{% endif %}"/>
+        <div class="layui-form-item layui-row">
+          <div class="layui-col-xs6">
+            <label class="layui-form-label">订单编号</label>
+            <div class="layui-input-block">
+              <input type="text" class="layui-input"
+                     name="orderNo" id="orderNo"
+                     value="{% if orderNo %}{{ orderNo }}{% endif %}" readonly="readonly">
+            </div>
+          </div>
+          <div class="layui-col-xs6">
+            <label class="layui-form-label">总金额(￥)</label>
+            <div class="layui-input-block">
+              <input type="text" class="layui-input"
+                     name="totalPrice" id="totalPrice"
+                     value="{% if totalPrice %}{{ totalPrice }}{% endif %}" readonly="readonly">
+            </div>
+          </div>
+        </div>
+
+        <div class="layui-form-item layui-row">
+          <div class="layui-col-xs6">
+            <label class="layui-form-label">物流地址</label>
+            <div class="layui-input-block">
+              <input type="text" class="layui-input"
+                     name="address" value="{% if address %}{{ address }}{% endif %}" readonly="readonly">
+            </div>
+          </div>
+          <div class="layui-col-xs6">
+            <label class="layui-form-label">支付状态</label>
+            <div class="layui-input-block">
+              <input type="text" class="layui-input"
+                     name="state" value="{% if state %}{{ state }}{% endif %}" readonly="readonly">
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="layui-col-md12">
+  <table id="orderDetailList" class="layui-table" lay-filter="orderDetails"></table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" charset="utf-8"></script>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script>
+  layui.use(['table', 'layer', "form"], function () {
+    var layer = parent.layer === undefined ? layui.layer : top.layer,
+        $ = layui.jquery,
+        table = layui.table;
+
+    // 订单列表展示
+    var tableIns = table.render({
+      elem: '#orderDetailList',
+      url: '/customer/order/detail/list/?id=' + $("input[name='id']").val(),
+      cellMinWidth: 95,
+      page: true,
+      height: "full-125",
+      limits: [10, 15, 20, 25],
+      limit: 10,
+      toolbar: "#toolbarDemo",
+      id: "customerOrderListTable",
+      cols: [[
+        {type: "checkbox", fixed: "center"},
+        {field: "id", title: '编号', fixed: "true"},
+        {field: 'goodsName', title: '商品名称', align: "center"},
+        {field: 'goodsNum', title: '商品数量', align: "center"},
+        {field: 'unit', title: '单位', align: "center"},
+        {field: 'price', title: '单价(￥)', align: "center"},
+        {field: 'sum', title: '总价(￥)', align: "center"},
+        {field: 'createDate', title: '创建时间', align: "center"},
+        {field: 'updateDate', title: '更新时间', align: "center"}
+      ]]
+    });
+  });
+</script>
+</body>
+</html>
