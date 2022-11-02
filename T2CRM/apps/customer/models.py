@@ -35,6 +35,10 @@ class CityCourse(models.Model):
         verbose_name = u'客户信息表'
         verbose_name_plural = verbose_name
 
+    def get_course_list(self):
+        # 获取当前城市下所有的客户
+        return self.customer_set.all()
+
 
 class Customer(models.Model):
     # 主键
@@ -135,7 +139,7 @@ class CustomerOrders(models.Model):
     customer = models.ForeignKey(Customer, db_column='cus_id',
                                  on_delete=models.DO_NOTHING)
     # 订单编号
-    orderNo = models.DateTimeField(db_column='order_no')
+    orderNo = models.CharField(db_column='order_no', max_length=64)
     # 下单日期
     orderDate = models.DateTimeField(db_column='order_date', auto_now_add=True)
     # 收货地址

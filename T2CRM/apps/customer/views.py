@@ -8,7 +8,10 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 
-from customer.models import Customer, CityCourse, Province
+from django.views.decorators.http import require_GET
+
+from customer.models import Customer, CityCourse, Province, CustomerOrders, \
+    OrdersDetail
 from system.views import GenerateCode
 
 
@@ -80,7 +83,7 @@ class AddCuster(View):
     def get(self, request):
         city = CityCourse.objects.all()
         id = request.GET.get('id')
-        if len(id) == 1:
+        if id:
             custer = Customer.objects.values().filter(id=id)
             return render(request, 'customer/customer_add_update.html',
                           custer[0])
@@ -160,3 +163,89 @@ class DeleteCustomer(View):
         except Exception as e:
             print(e)
             return JsonResponse({'code': 200, 'msg': '删除失败'})
+
+
+@require_GET
+def OrderIndex(request):
+    id = request.GET.get('id')
+    c = Customer.objects.get(id=id)
+    context = {
+        'id': id,
+        'khnc': c.khno,
+        'name': c.name,
+        'leader_of_company': c.leader_of_company,
+        'address': c.address,
+        'phone': c.phone,
+    }
+
+    return render(request, 'customer/customer_order.html', context)
+
+
+@require_GET
+def GetOrderList(request):
+    # 根据客户主键查询订单信息
+    try:
+        page_num = request.GET.get('page')
+        page_size = request.GET.get('limit')
+        id = request.GET.get('id')
+        order = CustomerOrders.objects.values().filter(customer=id)
+        p = Paginator(order, page_size)
+        data = p.page(page_num).object_list
+        count = p.count
+        context = {
+            'code': 0,
+            'msg': '加载成功',
+            'count': count,
+            'data': list(data)
+        }
+        return JsonResponse(context)
+    except Exception as e:
+        print(e)
+        return JsonResponse(
+            {'state': 401, 'msg': '审核用户列表异常，请重新刷新页面'})
+
+
+@require_GET
+def OrderDetail(request):
+    # 根据订单ID获取订单详情
+    try:
+        id = request.GET.get('id')
+        c = CustomerOrders.objects.get(id=id)
+        context = {
+            'id': id,
+            'orderNo': c.orderNo,
+            'totalPrice': c.totalPrice,
+            'address': c.address,
+            'state': c.state,
+        }
+
+        return render(request, 'customer/customer_order_detail.html', context)
+
+    except Exception as e:
+        print(e)
+        return JsonResponse(
+            {'state': 401, 'msg': '获取订单详情异常'})
+
+
+@require_GET
+def OrderDetailList(request):
+    # 根据订单ID获取订单详情
+    try:
+        page_num = request.GET.get('page')
+        page_size = request.GET.get('limit')
+        id = request.GET.get('id')
+        order = OrdersDetail.objects.values().filter(order=id)
+        p = Paginator(order, page_size)
+        data = p.page(page_num).object_list
+        count = p.count
+        context = {
+            'code': 0,
+            'msg': '加载成功',
+            'count': count,
+            'data': list(data)
+        }
+        return JsonResponse(context)
+    except Exception as e:
+        print(e)
+        return JsonResponse(
+            {'state': 401, 'msg': '审核用户列表异常，请重新刷新页面'})

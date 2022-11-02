@@ -177,6 +177,15 @@
                 var checkStatus = table.checkStatus(obj.config.id);
                 // 打开客户订单的对话框（传递选中的数据记录）
                 openCustomerOrderDialog(checkStatus.data);
+                if (checkStatus.data.length > 1){
+                    layer.msg('只允许选择一个客户查看订单信息');
+                    return false;
+                }
+                if (checkStatus.data.length == 0){
+                    layer.msg('请选择一个客户查看信息');
+                    return false;
+                }
+                console.log()
             }
         });
 
@@ -187,10 +196,12 @@
             if (data.event == "edit") { // 更新客户信息
                 // 打开添加/修改客户信息的对话框
                 openAddOrUpdateCustomerDialog(data.data.id);
+                return false;
             } else if (data.event == "del") { // 删除客户信息
                 // 删除客户
                 console.log('事件为删除');
                 deleteCustomer(data.data.id);
+                return false;
             }
         });
 
@@ -244,7 +255,7 @@
                 // 宽高
                 area: ['700px', '500px'],
                 // url地址
-                content: "/customer/order/index/?id=" + data[0].id,
+                content: "/customer/Order/Index?id=" + data[0].id,
                 // 可以最大化与最小化
                 maxmin: true
             });
@@ -267,6 +278,7 @@
                     },
                     success: function (result) {
                         // 判断删除结果
+                        layer.msg(result.msg);
                         if (result.code == 200) {
                             // 提示成功
                             layer.msg("删除成功！", {icon: 6});
@@ -275,6 +287,7 @@
                         } else {
                             // 提示失败
                             layer.msg(result.msg, {icon: 5});
+                            return false;
                         }
                     }
                 });
