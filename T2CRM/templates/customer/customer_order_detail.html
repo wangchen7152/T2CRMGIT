@@ -74,12 +74,12 @@
     // 订单列表展示
     var tableIns = table.render({
       elem: '#orderDetailList',
-      url: '/customer/order/detail/list/?id=' + $("input[name='id']").val(),
+      url: '/customer/OrderDetailList/?id=' + $("input[name='id']").val(),
       cellMinWidth: 95,
       page: true,
       height: "full-125",
-      limits: [10, 15, 20, 25],
-      limit: 10,
+      limits: [5, 10, 15, 20, 25],
+      limit: 5,
       toolbar: "#toolbarDemo",
       id: "customerOrderListTable",
       cols: [[

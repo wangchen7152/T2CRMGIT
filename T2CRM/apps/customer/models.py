@@ -35,6 +35,10 @@ class CityCourse(models.Model):
         verbose_name = u'客户信息表'
         verbose_name_plural = verbose_name
 
+    def get_course_list(self):
+        # 获取当前城市下所有的客户
+        return self.customer_set.all()
+
 
 class Customer(models.Model):
     # 主键
