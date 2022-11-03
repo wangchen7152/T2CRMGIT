@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator
+from django.db import connection
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 
@@ -7,11 +8,11 @@ from django.views import View
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
-
+import datetime
 from django.views.decorators.http import require_GET
 
 from customer.models import Customer, CityCourse, Province, CustomerOrders, \
-    OrdersDetail
+    OrdersDetail, CustomerLoss
 from system.views import GenerateCode
 
 
@@ -216,7 +217,7 @@ def OrderDetail(request):
             'orderNo': c.orderNo,
             'totalPrice': c.totalPrice,
             'address': c.address,
-            'state': c.state,
+            'state': c.get_state_display(),
         }
 
         return render(request, 'customer/customer_order_detail.html', context)
@@ -249,3 +250,65 @@ def OrderDetailList(request):
         print(e)
         return JsonResponse(
             {'state': 401, 'msg': '审核用户列表异常，请重新刷新页面'})
+
+
+def CreateCusterLoss():
+    """
+    添加流失客户
+
+    """
+    try:
+        # 创建游标对象
+        course = connection.cursor()
+
+        # --------------第一步，查询客户流式数据--------------------
+        # 执行sql
+        sql = '''
+        SELECT DISTINCT
+            t.id id,
+            t.NAME cusname,
+            t.cus_manager cusManager,
+            t.khno cusNO,
+            max(o.order_date) lastorderdate 
+        FROM
+            t2_customer t
+            LEFT JOIN t2_customer_order o ON o.cus_id = t.id 
+        WHERE
+            t.state = 0 
+            AND t.is_valid = 1 
+            AND NOW() > DATE_ADD( t.create_date, INTERVAL 6 MONTH ) 
+            AND NOT EXISTS(
+            SELECT DISTINCT o.cus_id 
+            FROM
+            t2_customer_order ot 
+            WHERE
+            ot.is_valid=1
+            AND ot.state = 0 AND NOW() < DATE_ADD( t.create_date, INTERVAL 6 MONTH ) AND ot.cus_id = t.id
+            ) GROUP BY t.id
+            '''
+        # 执行sql
+        course.execute(sql)
+        # 查询sql执行记录，返回结果,类型为元组
+        customer_tuple = course.fetchall()  #
+        # 关闭游标
+        course.close()
+        # --------------第二步，将客户流失数据插入数据库--------------------
+        # 流失客户ID
+        customer_loss_id = []
+        # 流失客户列表
+        customer_loss_list = []
+        for cu in customer_tuple:
+            customer_loss_id.append(cu[0])
+            customer_loss_list.append(
+                CustomerLoss(cusName=cu[1], cusManager=cu[2], cusNo=cu[3],
+                             lastOrderTime=cu[4]), state=0)
+
+        CustomerLoss.objects.bulk_create(customer_loss_list)
+        # --------------第三步，修改客户表的state为1，表示暂时流失--------------
+        Customer.objects.filter(id__in=customer_loss_id). \
+            update(state=1, updateDate=datetime.now())
+    except Exception as e:
+        print('连接mysql失败')
+    finally:
+        # 关闭连接
+        connection.close()

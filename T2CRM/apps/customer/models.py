@@ -165,6 +165,10 @@ class CustomerOrders(models.Model):
         verbose_name = u'客户订单'
         verbose_name_plural = verbose_name
 
+    def get_all_order(self):
+        # 返回当前客户所有订单信息
+        return self.ordersdetail_set.all()
+
 
 # 订单详情表
 class OrdersDetail(models.Model):
