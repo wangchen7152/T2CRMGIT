@@ -43,7 +43,7 @@
                 },
                 {
                     "title": "客户流失管理",
-                    "href": "",
+                    "href": "customer/CustomerLoseIndex",
                     "icon": "fa fa-user-times",
                     "target": "_self"
                 }

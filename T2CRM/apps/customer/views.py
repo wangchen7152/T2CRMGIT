@@ -1,4 +1,6 @@
+from apscheduler.schedulers.background import BackgroundScheduler
 from django.core.paginator import Paginator
+from django.db import connection
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 
@@ -7,11 +9,10 @@ from django.views import View
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
-
 from django.views.decorators.http import require_GET
 
 from customer.models import Customer, CityCourse, Province, CustomerOrders, \
-    OrdersDetail
+    OrdersDetail, CustomerLoss, CustomerReprieve
 from system.views import GenerateCode
 
 
@@ -216,7 +217,7 @@ def OrderDetail(request):
             'orderNo': c.orderNo,
             'totalPrice': c.totalPrice,
             'address': c.address,
-            'state': c.state,
+            'state': c.get_state_display(),
         }
 
         return render(request, 'customer/customer_order_detail.html', context)
@@ -249,3 +250,225 @@ def OrderDetailList(request):
         print(e)
         return JsonResponse(
             {'state': 401, 'msg': '审核用户列表异常，请重新刷新页面'})
+
+
+def create_customer_loss():
+    """添加暂缓流失客户"""
+    try:
+        # 创建游标对象
+        cursor = connection.cursor()
+        # ---------- 第一步：查询暂缓流失客户数据 ----------
+        # 编写 SQL
+        sql = '''
+            SELECT
+                c.id id,
+                c.khno cusNo,
+                c.NAME cusName,
+                c.cus_manager cusManager,
+                max( co.order_date ) lastOrderTime 
+            FROM
+                t2_customer c
+                LEFT JOIN t2_customer_order co ON c.id = co.cus_id 
+            WHERE
+                c.is_valid = 1 
+                AND c.state = 0 
+                AND NOW() > DATE_ADD( c.create_date, INTERVAL 6 MONTH ) 
+                AND NOT EXISTS (
+                SELECT DISTINCT
+                    o.cus_id 
+                FROM
+                    t2_customer_order o 
+                WHERE
+                    o.is_valid = 1 
+                    AND NOW() < DATE_ADD( o.order_date, INTERVAL 6 MONTH ) 
+                    AND c.id = o.cus_id 
+                ) 
+            GROUP BY
+                c.id;
+        '''
+        # 执行 SQL
+        cursor.execute(sql)
+        # 返回结果，类型是元组
+        customer_loss_tuple = cursor.fetchall()  # 查询当前 SQL 执行后所有的记录
+        # 关闭游标
+        cursor.close()
+        # ---------- 第二步：将暂缓流失客户数据插入客户流失表 ----------
+        # 将元组转为列表
+        customer_loss_id = []  # 暂缓流失客户 id 列表
+        customer_loss_list = []  # 暂缓流失客户数据列表
+        # 遍历元组
+        for cl in customer_loss_tuple:
+            customer_loss_id.append(cl[0])
+            customer_loss_list.append(CustomerLoss(cusNo=cl[1],
+                                                   cusName=cl[2],
+                                                   cusManager=cl[3],
+                                                   lastOrderTime=cl[4],
+                                                   state=0, deleted=0,
+                                                   isValid=1, ))  # 暂缓流失
+
+        # 批量插入客户流失表
+        CustomerLoss.objects.bulk_create(customer_loss_list)
+        # ---------- 第三步：修改刚才这些数据客户表的状态为 1 暂时流失 ----------
+        Customer.objects.filter(id__in=customer_loss_id).update(state=1,
+                                                                deleted=0,
+                                                                updateDate=datetime.now())
+    except Exception as e:
+        print(e)
+    finally:
+        # 关闭连接
+        connection.close()
+
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(create_customer_loss, 'interval', seconds=10)
+scheduler.start()
+
+
+class CustomerLoseIndex(View):
+    def get(self, request):
+        return render(request, 'customer/customer_loss.html')
+
+
+class CustomerLoseList(View):
+    def get(self, request):
+        page_num = request.GET.get('page')
+        page_size = request.GET.get('limit')
+        # 客户编码
+        cusNo = request.GET.get('cusNo')
+        # 客户名称
+        cusName = request.GET.get('cusName')
+        # 客户状态
+        state = request.GET.get('state')
+
+        lose_list = None
+        if cusNo and cusName and state:
+            lose_list = CustomerLoss.objects.values().filter(
+                cusNo__contains=cusNo, cusName__contains=cusName,
+                state=state).order_by('-lastOrderTime')
+        elif cusNo and cusName:
+            lose_list = CustomerLoss.objects.values().filter(
+                cusNo__contains=cusNo, cusName__contains=cusName).order_by(
+                '-lastOrderTime')
+        elif cusName and state:
+            lose_list = CustomerLoss.objects.values().filter(
+                cusName__contains=cusName,
+                state=state).order_by('-lastOrderTime')
+        elif cusNo and state:
+            lose_list = CustomerLoss.objects.values().filter(
+                cusNo__contains=cusNo, state=state).order_by('-lastOrderTime')
+        elif cusNo:
+            lose_list = CustomerLoss.objects.values().filter(
+                cusNo__contains=cusNo).order_by('-lastOrderTime')
+        elif cusName:
+            lose_list = CustomerLoss.objects.values().filter(
+                cusName__contains=cusName).order_by('-lastOrderTime')
+        elif state:
+            lose_list = CustomerLoss.objects.values().filter(
+                state=state).order_by('-lastOrderTime')
+        else:
+            lose_list = CustomerLoss.objects.values().all().order_by(
+                '-lastOrderTime')
+        p = Paginator(lose_list, page_size)
+        data = p.page(page_num).object_list
+        count = p.count
+        context = {
+            'code': 0,
+            'msg': '加载成功',
+            'count': count,
+            'data': list(data)
+        }
+        return JsonResponse(context)
+
+
+class CusterLossDetail(View):
+    def get(self, request):
+        try:
+            id = request.GET.get('id')
+            CustomerLossDetail = CustomerLoss.objects.get(pk=id)
+            context = {
+                'cl': CustomerLossDetail
+            }
+            return render(request, 'customer/customer_reprieve.html', context)
+        except CustomerLoss.DoesNotExist as e:
+            pass
+
+
+class GetReprieve(View):
+    '''
+    查询客户现有的流失措施
+    '''
+
+    def get(self, request):
+        page_num = request.GET.get('page')
+        page_size = request.GET.get('limit')
+        id = request.GET.get('id')
+        reprieve_list = CustomerReprieve.objects.values().filter(
+            customerLoss=id)
+        p = Paginator(reprieve_list, page_size)
+        data = p.page(page_num).object_list
+        count = p.count
+        context = {
+            'code': 0,
+            'msg': '加载成功',
+            'count': count,
+            'data': list(data)
+        }
+        return JsonResponse(context)
+
+
+class ReprieveAddOrUpdate(View):
+
+    def get(self, request):
+        id = request.GET.get('id')
+        lossId = request.GET.get('lossId')
+        context = {'lossId': lossId}
+        if id:
+            prieve = CustomerReprieve.objects.get(pk=id)
+            context['id'] = id
+            context['cp'] = prieve
+
+            return render(request, 'customer/customer_reprieve_add_update.html',
+                          context)
+        else:
+            return render(request, 'customer/customer_reprieve_add_update.html',
+                          context)
+
+    def post(self, request):
+        try:
+            measure = request.POST.get('measure')
+            lossId = request.POST.get('lossId')
+            id = request.POST.get('id')
+            if id:
+                CustomerReprieve.objects.filter(pk=id).update(measure=measure)
+                return JsonResponse({'code': 200, 'msg': '流失措施修改成功'})
+            else:
+                cl = CustomerLoss.objects.get(pk=lossId)
+                CustomerReprieve.objects.create(customerLoss=cl,
+                                                measure=measure)
+                return JsonResponse({'code': 200, 'msg': '流失措施新增成功'})
+        except Exception as e:
+            print(e)
+            return JsonResponse({'code': 400, 'msg': '流失措施新增或修改失败'})
+
+
+class LossConfirm(View):
+    def get(self, request):
+        try:
+            lossId = request.GET.get('lossId')
+            lossReason = request.GET.get('lossReason')
+            CustomerLoss.objects.filter(pk=lossId). \
+                update(lossReason=lossReason, confirmLossTime=datetime.now(),
+                       state=1)
+            return JsonResponse({'code': 200, 'msg': '用户确认流失成功'})
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': e})
+
+
+class ReprieveDelete(View):
+    def get(self, request):
+        try:
+            id = request.GET.get('id')
+            CustomerReprieve.objects.filter(pk=id).update(deleted=1)
+            return JsonResponse({'code': 200, 'msg': '流失措施删除成功'})
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': '流失措施删除失败'})

@@ -2,12 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="082b1962-e094-440a-9340-20240d9979c2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/apps/customer/migrations/0002_auto_20221104_2315.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/customer/migrations/0003_auto_20221105_1229.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/customer/migrations/0004_auto_20221105_1230.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/customer/migrations/0005_auto_20221105_1833.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/customer/customer_loss.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/customer/customer_reprieve.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/customer/customer_reprieve_add_update.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/customer/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/customer/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/customer/migrations/0002_rename_city_citycourse.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/customer/migrations/0003_auto_20221030_1418.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/customer/migrations/0004_auto_20221030_2009.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/customer/migrations/0005_alter_customerorders_orderno.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/customer/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/customer/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/customer/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/customer/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/customer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/customer/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/customer/customer_order.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/customer/customer_order.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/customer/customer_order_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/customer/customer_order_detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/api/init.json" beforeDir="false" afterPath="$PROJECT_DIR$/static/api/init.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/lay-module/iconPicker/iconPickerFa.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/lay-module/iconPicker/iconPickerFa.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/lib/layui-v2.6.3/layui.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/lib/layui-v2.6.3/layui.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,7 +29,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/T2CRM$urls.coverage" NAME="urls Coverage Results" MODIFIED="1667305335620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apps/customer" />
+    <SUITE FILE_PATH="coverage/T2CRM$urls.coverage" NAME="urls Coverage Results" MODIFIED="1667627365320" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/apps/customer" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -38,14 +51,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apps/customer/views.py">
+        <entry file="file://$PROJECT_DIR$/static/api/init.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="98">
-              <caret line="230" column="19" selection-start-line="230" selection-start-column="4" selection-end-line="230" selection-end-column="19" />
-              <folding>
-                <element signature="e#0#43#0" expanded="true" />
-                <element signature="e#7675#8141#0" />
-              </folding>
+            <state relative-caret-position="261">
+              <caret line="50" column="10" lean-forward="true" selection-start-line="50" selection-start-column="10" selection-end-line="50" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -53,22 +62,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/customer/customer_order.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="29" column="37" lean-forward="true" selection-start-line="29" selection-start-column="37" selection-end-line="29" selection-end-column="37" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apps/customer/admin.py">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/customer/customer_order_detail.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="88" column="60" lean-forward="true" selection-start-line="88" selection-start-column="60" selection-end-line="88" selection-end-column="60" />
+            <state relative-caret-position="102">
+              <caret line="104" column="20" selection-start-line="104" selection-start-column="19" selection-end-line="104" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -76,8 +71,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/apps/customer/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="169" column="6" selection-start-line="169" selection-start-column="6" selection-end-line="169" selection-end-column="6" />
+            <state relative-caret-position="51">
+              <caret line="205" column="6" selection-start-line="205" selection-start-column="6" selection-end-line="205" selection-end-column="6" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -86,40 +81,49 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/system/registry.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="13048">
-              <caret line="466" column="14" selection-start-line="466" selection-start-column="14" selection-end-line="466" selection-end-column="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/customer/customer.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7168">
-              <caret line="256" column="24" selection-start-line="256" selection-start-column="24" selection-end-line="256" selection-end-column="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/system/login.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9408">
-              <caret line="336" column="60" selection-start-line="336" selection-start-column="39" selection-end-line="336" selection-end-column="60" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/apps/customer/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="16" column="63" lean-forward="true" selection-start-line="16" selection-start-column="63" selection-end-line="16" selection-end-column="63" />
+            <state relative-caret-position="-770">
+              <caret line="8" column="50" selection-start-line="8" selection-start-column="50" selection-end-line="8" selection-end-column="50" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/apps/customer/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="403">
+              <caret line="444" column="46" selection-start-line="444" selection-start-column="46" selection-end-line="444" selection-end-column="46" />
               <folding>
-                <element signature="e#47#79#0" expanded="true" />
+                <element signature="e#0#65#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../wang917/venv/Lib/site-packages/django/views/generic/base.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="111">
+              <caret line="97" selection-start-line="97" selection-end-line="97" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/customer/customer_loss.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="378">
+              <caret line="62" lean-forward="true" selection-start-line="62" selection-end-line="62" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/customer/customer_reprieve.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="290">
+              <caret line="128" column="24" lean-forward="true" selection-start-line="128" selection-start-column="24" selection-end-line="128" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -136,16 +140,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ForeignKey</find>
-      <find>timezone</find>
-      <find>annual_turnover</find>
-      <find>营业执照</find>
-      <find>form</find>
-      <find>table</find>
-      <find>CustomerList</find>
-      <find>templet</find>
-      <find>添加</find>
-      <find>审核通过</find>
       <find>toolbarDemo</find>
       <find>create_or_update_custome</find>
       <find>客户名称</find>
@@ -159,13 +153,23 @@
       <find>customers</find>
       <find>toolbar</find>
       <find>lay-filter</find>
-      <find>删除</find>
       <find>del</find>
       <find>len(id)</find>
       <find>订单查看</find>
       <find>order</find>
       <find>openAddOrUpdateCustomerDialog</find>
+      <find>datetime.now</find>
+      <find>CustomerIndex</find>
+      <find>客户流失</find>
       <find>page</find>
+      <find>无数据</find>
+      <find>customer/loss/reprieve/index</find>
+      <find>loss/reprieve/list</find>
+      <find>objects.create</find>
+      <find>update</find>
+      <find>删除</find>
+      <find>操作</find>
+      <find>d</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -202,16 +206,21 @@
         <option value="$PROJECT_DIR$/templates/system/password.html" />
         <option value="$PROJECT_DIR$/T2CRM/urls.py" />
         <option value="$PROJECT_DIR$/apps/system/models.py" />
-        <option value="$PROJECT_DIR$/T2CRM/settings.py" />
-        <option value="$PROJECT_DIR$/static/api/init.json" />
         <option value="$PROJECT_DIR$/templates/customer/customer_add_update.html" />
         <option value="$PROJECT_DIR$/apps/system/views.py" />
         <option value="$PROJECT_DIR$/templates/customer/customer.html" />
-        <option value="$PROJECT_DIR$/apps/customer/models.py" />
         <option value="$PROJECT_DIR$/templates/customer/customer_order.html" />
-        <option value="$PROJECT_DIR$/apps/customer/views.py" />
-        <option value="$PROJECT_DIR$/apps/customer/urls.py" />
         <option value="$PROJECT_DIR$/templates/customer/customer_order_detail.html" />
+        <option value="$PROJECT_DIR$/static/api/init.json" />
+        <option value="$PROJECT_DIR$/static/js/lay-module/iconPicker/iconPickerFa.js" />
+        <option value="$PROJECT_DIR$/static/lib/layui-v2.6.3/layui.js" />
+        <option value="$PROJECT_DIR$/T2CRM/settings.py" />
+        <option value="$PROJECT_DIR$/apps/customer/models.py" />
+        <option value="$PROJECT_DIR$/templates/customer/customer_reprieve_add_update.html" />
+        <option value="$PROJECT_DIR$/apps/customer/urls.py" />
+        <option value="$PROJECT_DIR$/templates/customer/customer_reprieve.html" />
+        <option value="$PROJECT_DIR$/templates/customer/customer_loss.html" />
+        <option value="$PROJECT_DIR$/apps/customer/views.py" />
       </list>
     </option>
   </component>
@@ -227,7 +236,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -249,7 +257,13 @@
             <path>
               <item name="T2CRM" type="b2602c69:ProjectViewProjectNode" />
               <item name="T2CRM" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="T2CRM" type="b2602c69:ProjectViewProjectNode" />
               <item name="T2CRM" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="T2CRM" type="b2602c69:ProjectViewProjectNode" />
@@ -276,28 +290,29 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="C:/git_project/gsonline/wang9172" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\project\T2CRMGIT\T2CRM\apps" />
-      <recent name="C:\project\T2CRM\static\js\system\login" />
-      <recent name="C:\project\T2CRM\static\js\system" />
-      <recent name="C:\project\T2CRM\apps" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\project\T2CRMGIT\T2CRM\templates\customer" />
       <recent name="C:\project\T2CRMGIT\T2CRM\apps\customer" />
       <recent name="C:\project\T2CRM\templates\system" />
       <recent name="C:\project\wang917\venv\Lib\site-packages\django\utils" />
       <recent name="C:\project\T2CRM\apps\system" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\project\T2CRMGIT\T2CRM\apps" />
+      <recent name="C:\project\T2CRM\static\js\system\login" />
+      <recent name="C:\project\T2CRM\static\js\system" />
+      <recent name="C:\project\T2CRM\apps" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -394,12 +409,17 @@
       <workItem from="1667218040028" duration="5075000" />
       <workItem from="1667223192626" duration="144000" />
       <workItem from="1667302998752" duration="4675000" />
-      <workItem from="1667389492720" duration="1698000" />
+      <workItem from="1667389492720" duration="3847000" />
+      <workItem from="1667475912808" duration="1859000" />
+      <workItem from="1667480636612" duration="52000" />
+      <workItem from="1667565500884" duration="6376000" />
+      <workItem from="1667573032508" duration="2370000" />
+      <workItem from="1667621898397" duration="17043000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="141464000" />
+    <option name="totallyTimeSpent" value="171313000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -414,22 +434,22 @@
     <frame x="-8" y="-8" width="1552" height="840" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19477911" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19076306" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3286119" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.4837341" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49933067" weight="0.6539548" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49933067" weight="0.4957627" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32956153" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32909605" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3286119" />
-      <window_info anchor="bottom" id="manage.py@T2CRM" order="9" weight="0.6115819" />
+      <window_info anchor="bottom" id="manage.py@T2CRM" order="9" sideWeight="0.49933067" weight="0.84463274" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50066936" side_tool="true" weight="0.45903954" />
-      <window_info anchor="bottom" id="Terminal" order="12" weight="0.5557123" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50066936" side_tool="true" weight="0.7838983" />
+      <window_info anchor="bottom" id="Terminal" order="12" weight="0.5536723" />
       <window_info anchor="bottom" id="Python Console" order="13" weight="0.3286119" />
       <window_info anchor="bottom" id="Messages" order="14" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -485,61 +505,57 @@
   <component name="debuggerHistoryManager">
     <expressions id="evaluateCodeFragment">
       <expression>
-        <expression-string>context</expression-string>
+        <expression-string>CustomerReprieve.objects.get(pk=id)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>CustomerOrders.objects.filter(customer=4)</expression-string>
+        <expression-string>CustomerReprieve.objects.filter(pk=id).update(measure=measure)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>CustomerOrders.objects.get(customer=4)</expression-string>
+        <expression-string>update</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>CustomerOrders.objects.get(customer=id)</expression-string>
+        <expression-string>CustomerReprieve.objects.get(pk=id).update(measure=measure)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>CustomerOrders.objects.values().filter(customer=id)</expression-string>
+        <expression-string>Reprieve.update(measure=measure)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>CustomerOrders.objects.values().filter(cus_id=id)</expression-string>
+        <expression-string>CustomerReprieve.objects.create(customerLoss=cl,
+                                                measure=measure)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>request.GET.get('limit')</expression-string>
+        <expression-string>CustomerReprieve.objects.create(loss_id=lossId,
+                                                measure=measure)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>custer[0].items</expression-string>
+        <expression-string>CustomerReprieve.objects.create(customerLoss=1,
+                                                measure=measure)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>{city['id']: city['city_name']for city in city}</expression-string>
+        <expression-string>CustomerReprieve.objects.create(customerLoss=lossId,
+                                                measure=measure)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../wang917/venv/Lib/site-packages/django/utils/decorators.py" />
-    <entry file="file://$PROJECT_DIR$/../wang917/venv/Lib/site-packages/django/views/decorators/clickjacking.py" />
-    <entry file="file://$PROJECT_DIR$/../wang917/venv/Lib/site-packages/django/conf/global_settings.py" />
-    <entry file="file://$PROJECT_DIR$/../wang917/venv/Lib/site-packages/django/middleware/clickjacking.py" />
-    <entry file="file://$PROJECT_DIR$/apps/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../wang917/venv/Lib/site-packages/django/views/decorators/http.py" />
     <entry file="file://$PROJECT_DIR$/../wang917/venv/Lib/site-packages/django/urls/conf.py" />
     <entry file="file://$PROJECT_DIR$/static/js/system/login/respond.min.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -639,9 +655,6 @@
     <entry file="file://$PROJECT_DIR$/apps/customer/migrations/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/apps/customer/migrations/0001_initial.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/apps/system/migrations/0001_initial.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-926" />
@@ -674,13 +687,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/api/init.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="34" column="23" selection-start-line="34" selection-start-column="23" selection-end-line="34" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/apps/system/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="840">
@@ -695,16 +701,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2690">
           <caret line="28" column="46" lean-forward="true" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/T2CRM/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="44" column="14" lean-forward="true" selection-start-line="44" selection-start-column="14" selection-end-line="44" selection-end-column="14" />
-          <folding>
-            <element signature="e#330#339#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -739,34 +735,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../wang917/venv/Lib/site-packages/django/views/generic/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="97" selection-start-line="97" selection-end-line="97" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../wang917/venv/Lib/site-packages/django/conf/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="66" selection-start-line="66" selection-end-line="66" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../wang917/venv/Lib/site-packages/django/views/decorators/clickjacking.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="124">
           <caret line="49" selection-start-line="49" selection-end-line="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/customer/customer_add_update.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6716">
-          <caret line="16" column="32" lean-forward="true" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
-          <folding>
-            <element signature="n#style#0;n#form#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -777,34 +749,132 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/customer/customer.html">
+    <entry file="file://$PROJECT_DIR$/apps/customer/migrations/0006_remove_customerloss_deleted.py" />
+    <entry file="file://$PROJECT_DIR$/apps/customer/migrations/0001_initial.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7168">
-          <caret line="256" column="24" selection-start-line="256" selection-start-column="24" selection-end-line="256" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/system/login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9408">
-          <caret line="336" column="60" selection-start-line="336" selection-start-column="39" selection-end-line="336" selection-end-column="60" />
+        <state relative-caret-position="73">
+          <caret line="60" column="40" selection-start-line="60" selection-start-column="40" selection-end-line="60" selection-end-column="40" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/apps/customer/admin.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/templates/customer/customer_order_detail.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="602">
+          <caret line="88" column="60" selection-start-line="88" selection-start-column="60" selection-end-line="88" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../wang917/venv/Lib/site-packages/django/conf/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="66" selection-start-line="66" selection-end-line="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/customer/customer_add_update.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1820">
+          <caret line="16" column="32" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/lib/layui-v2.6.3/layui.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="1" column="8277" selection-start-line="1" selection-start-column="8277" selection-end-line="1" selection-end-column="8277" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/T2CRM/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="137" column="38" lean-forward="true" selection-start-line="137" selection-start-column="38" selection-end-line="137" selection-end-column="38" />
+          <folding>
+            <element signature="e#330#339#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/system/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2062">
+          <caret line="336" column="60" selection-start-line="336" selection-start-column="39" selection-end-line="336" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../wang917/venv/Lib/site-packages/django/db/models/query.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="445" column="8" selection-start-line="445" selection-start-column="8" selection-end-line="445" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/customer/customer_reprieve_add_update.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="31" column="29" selection-start-line="31" selection-start-column="29" selection-end-line="31" selection-end-column="29" />
+          <folding>
+            <element signature="n#style#0;n#form#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/customer/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-770">
+          <caret line="8" column="50" selection-start-line="8" selection-start-column="50" selection-end-line="8" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../wang917/venv/Lib/site-packages/django/views/generic/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="111">
+          <caret line="97" selection-start-line="97" selection-end-line="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/customer/customer.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1970">
+          <caret line="193" column="11" lean-forward="true" selection-start-line="193" selection-start-column="11" selection-end-line="193" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templates/customer/customer_order.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="29" column="37" lean-forward="true" selection-start-line="29" selection-start-column="37" selection-end-line="29" selection-end-column="37" />
+        <state relative-caret-position="102">
+          <caret line="104" column="20" selection-start-line="104" selection-start-column="19" selection-end-line="104" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/customer/customer_loss.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="62" lean-forward="true" selection-start-line="62" selection-end-line="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/api/init.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="50" column="10" lean-forward="true" selection-start-line="50" selection-start-column="10" selection-end-line="50" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/customer/customer_reprieve.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="128" column="24" lean-forward="true" selection-start-line="128" selection-start-column="24" selection-end-line="128" selection-end-column="24" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/apps/customer/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="169" column="6" selection-start-line="169" selection-start-column="6" selection-end-line="169" selection-end-column="6" />
+        <state relative-caret-position="51">
+          <caret line="205" column="6" selection-start-line="205" selection-start-column="6" selection-end-line="205" selection-end-column="6" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
@@ -813,29 +883,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/apps/customer/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="230" column="19" selection-start-line="230" selection-start-column="4" selection-end-line="230" selection-end-column="19" />
+        <state relative-caret-position="403">
+          <caret line="444" column="46" selection-start-line="444" selection-start-column="46" selection-end-line="444" selection-end-column="46" />
           <folding>
-            <element signature="e#0#43#0" expanded="true" />
-            <element signature="e#7675#8141#0" />
+            <element signature="e#0#65#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apps/customer/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="16" column="63" lean-forward="true" selection-start-line="16" selection-start-column="63" selection-end-line="16" selection-end-column="63" />
-          <folding>
-            <element signature="e#47#79#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/customer/customer_order_detail.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="88" column="60" lean-forward="true" selection-start-line="88" selection-start-column="60" selection-end-line="88" selection-end-column="60" />
         </state>
       </provider>
     </entry>
