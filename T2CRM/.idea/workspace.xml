@@ -2,25 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="082b1962-e094-440a-9340-20240d9979c2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/customer/migrations/0002_auto_20221104_2315.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/customer/migrations/0003_auto_20221105_1229.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/customer/migrations/0004_auto_20221105_1230.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/customer/migrations/0005_auto_20221105_1833.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/customer/customer_loss.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/customer/customer_reprieve.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/customer/customer_reprieve_add_update.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/customer/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/customer/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/customer/migrations/0002_rename_city_citycourse.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/customer/migrations/0003_auto_20221030_1418.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/customer/migrations/0004_auto_20221030_2009.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/customer/migrations/0005_alter_customerorders_orderno.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/customer/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/customer/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/customer/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/customer/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/customer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/customer/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/api/init.json" beforeDir="false" afterPath="$PROJECT_DIR$/static/api/init.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/lay-module/iconPicker/iconPickerFa.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/lay-module/iconPicker/iconPickerFa.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/lib/layui-v2.6.3/layui.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/lib/layui-v2.6.3/layui.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -72,7 +54,7 @@
         <entry file="file://$PROJECT_DIR$/apps/customer/models.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="51">
-              <caret line="205" column="6" selection-start-line="205" selection-start-column="6" selection-end-line="205" selection-end-column="6" />
+              <caret line="239" column="6" selection-start-line="239" selection-start-column="6" selection-end-line="239" selection-end-column="6" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -92,20 +74,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/apps/customer/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="403">
-              <caret line="444" column="46" selection-start-line="444" selection-start-column="46" selection-end-line="444" selection-end-column="46" />
+            <state relative-caret-position="322">
+              <caret line="50" column="22" lean-forward="true" selection-start-line="50" selection-start-column="22" selection-end-line="50" selection-end-column="22" />
               <folding>
                 <element signature="e#0#65#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../wang917/venv/Lib/site-packages/django/views/generic/base.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="111">
-              <caret line="97" selection-start-line="97" selection-end-line="97" />
             </state>
           </provider>
         </entry>
@@ -414,12 +387,12 @@
       <workItem from="1667480636612" duration="52000" />
       <workItem from="1667565500884" duration="6376000" />
       <workItem from="1667573032508" duration="2370000" />
-      <workItem from="1667621898397" duration="17043000" />
+      <workItem from="1667621898397" duration="18255000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="171313000" />
+    <option name="totallyTimeSpent" value="172525000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -440,7 +413,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3286119" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.4837341" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49933067" weight="0.4957627" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49933067" weight="0.5861582" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32909605" />
@@ -874,7 +847,7 @@
     <entry file="file://$PROJECT_DIR$/apps/customer/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
-          <caret line="205" column="6" selection-start-line="205" selection-start-column="6" selection-end-line="205" selection-end-column="6" />
+          <caret line="239" column="6" selection-start-line="239" selection-start-column="6" selection-end-line="239" selection-end-column="6" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
@@ -883,8 +856,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/apps/customer/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="444" column="46" selection-start-line="444" selection-start-column="46" selection-end-line="444" selection-end-column="46" />
+        <state relative-caret-position="322">
+          <caret line="50" column="22" lean-forward="true" selection-start-line="50" selection-start-column="22" selection-end-line="50" selection-end-column="22" />
           <folding>
             <element signature="e#0#65#0" expanded="true" />
           </folding>

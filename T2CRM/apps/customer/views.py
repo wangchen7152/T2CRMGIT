@@ -39,26 +39,27 @@ class CustomerList(View):
             if name and khno and level:
                 customer_list = Customer.objects.values().filter(
                     username__icontains=name, khno__icontains=khno,
-                    level=level).all().order_by('id')
+                    level=level, state=0).all().order_by('id')
             elif name and khno:
                 customer_list = Customer.objects.values().filter(
                     username__icontains=name,
-                    khno__icontains=khno).all().order_by('id')
+                    khno__icontains=khno, state=0).all().order_by('id')
             elif name and level:
                 customer_list = Customer.objects.values().filter(
-                    username__icontains=name, level=level).all().order_by(
-                    'id')
+                    username__icontains=name, level=level,
+                    state=0).all().order_by('id')
             elif name:
                 customer_list = Customer.objects.values().filter(
-                    username__icontains=name).all().order_by('id')
+                    username__icontains=name, state=0).all().order_by('id')
             elif khno:
                 customer_list = Customer.objects.values().filter(
-                    khno__icontains=khno).all().order_by('id')
+                    khno__icontains=khno, state=0).all().order_by('id')
             elif level:
                 customer_list = Customer.objects.values().filter(
-                    level=level).all().order_by('id')
+                    level=level, state=0).all().order_by('id')
             else:
-                customer_list = Customer.objects.values().all().order_by('id')
+                customer_list = Customer.objects.values().filter(
+                    state=0).order_by('id')
             for customer in customer_list:
                 customer['city_id'] = CityCourse.objects.filter(
                     id=customer['city_id'])[0].city_name
@@ -439,7 +440,8 @@ class ReprieveAddOrUpdate(View):
             lossId = request.POST.get('lossId')
             id = request.POST.get('id')
             if id:
-                CustomerReprieve.objects.filter(pk=id).update(measure=measure)
+                CustomerReprieve.objects.filter(pk=id). \
+                    update(measure=measure, updateDate=datetime.now())
                 return JsonResponse({'code': 200, 'msg': '流失措施修改成功'})
             else:
                 cl = CustomerLoss.objects.get(pk=lossId)
@@ -456,9 +458,15 @@ class LossConfirm(View):
         try:
             lossId = request.GET.get('lossId')
             lossReason = request.GET.get('lossReason')
+
             CustomerLoss.objects.filter(pk=lossId). \
                 update(lossReason=lossReason, confirmLossTime=datetime.now(),
-                       state=1)
+                       state=1, updateDate=datetime.now())
+
+            # 修改客户表状态
+            cl = CustomerLoss.objects.get(pk=lossId)
+            Customer.objects.filter(khno=cl.cusNo). \
+                update(state=2, updateDate=datetime.now())
             return JsonResponse({'code': 200, 'msg': '用户确认流失成功'})
         except Exception as e:
             return JsonResponse({'code': 400, 'msg': e})
@@ -468,7 +476,8 @@ class ReprieveDelete(View):
     def get(self, request):
         try:
             id = request.GET.get('id')
-            CustomerReprieve.objects.filter(pk=id).update(deleted=1)
+            CustomerReprieve.objects.filter(pk=id). \
+                update(deleted=1, updateDate=datetime.now())
             return JsonResponse({'code': 200, 'msg': '流失措施删除成功'})
         except Exception as e:
             return JsonResponse({'code': 400, 'msg': '流失措施删除失败'})
