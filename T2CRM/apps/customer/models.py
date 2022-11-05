@@ -203,32 +203,32 @@ class OrdersDetail(models.Model):
         verbose_name_plural = verbose_name
 
 
-# 客户流失表
 class CustomerLoss(models.Model):
-    # 客户编号
-    cusNo = models.CharField(max_length=40, db_column='cus_no')
+    # 客户编号40
+    cusNo = models.CharField(max_length=24, db_column='cus_no')
     # 客户名称
     cusName = models.CharField(max_length=20, db_column='cus_name')
     # 客户经理
     cusManager = models.CharField(max_length=20, db_column='cus_manager')
     # 上次下单日期
-    lastOrderTime = models.DateTimeField(db_column='last_order_time')
+    lastOrderTime = models.DateTimeField(db_column='last_order_time', null=True)
     # 确认流失日期
-    confirmLossTime = models.DateTimeField(db_column='confirm_loss_time')
+    confirmLossTime = models.DateTimeField(db_column='confirm_loss_time',
+                                           null=True)
     # 状态 0=暂缓流失 1=确认流失
     state = models.IntegerField()
     # 流失原因
-    lossReason = models.CharField(max_length=1000, db_column='loss_reason')
+    lossReason = models.CharField(max_length=1000, db_column='loss_reason',
+                                  null=True)
 
-    isValid = models.IntegerField(db_column='is_valid', default=1)
+    isValid = models.IntegerField(db_column='is_valid', default=1, null=True)
     createDate = models.DateTimeField(db_column='create_date',
-                                      auto_now_add=True)
+                                      auto_now_add=True, null=True)
     updateDate = models.DateTimeField(db_column='update_date',
-                                      auto_now_add=True)
-    # 是否删除，0为未删除,1为已删除
+                                      auto_now_add=True, null=True)
+    objects = ModelManager()
     deleted = models.IntegerField(default=0, choices=((0, '未删除'), (1, '已删除')),
                                   verbose_name=u'是否删除', null=True)
-    objects = ModelManager()
 
     class Meta:
         db_table = 't2_customer_loss'
@@ -244,11 +244,11 @@ class CustomerReprieve(models.Model):
     # 采取措施
     measure = models.CharField(max_length=1000, db_column='measure')
 
-    isValid = models.IntegerField(db_column='is_valid', default=1)
+    isValid = models.IntegerField(db_column='is_valid', default=1, null=True)
     createDate = models.DateTimeField(db_column='create_date',
-                                      auto_now_add=True)
+                                      auto_now_add=True, null=True)
     updateDate = models.DateTimeField(db_column='update_date',
-                                      auto_now_add=True)
+                                      auto_now_add=True, null=True)
     # 是否删除，0为未删除,1为已删除
     deleted = models.IntegerField(default=0, choices=((0, '未删除'), (1, '已删除')),
                                   verbose_name=u'是否删除', null=True)
