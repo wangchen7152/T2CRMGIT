@@ -321,7 +321,7 @@ def create_customer_loss():
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(create_customer_loss, 'interval', seconds=10)
+scheduler.add_job(create_customer_loss, 'interval', minutes=10)
 scheduler.start()
 
 
@@ -458,13 +458,13 @@ class LossConfirm(View):
         try:
             lossId = request.GET.get('lossId')
             lossReason = request.GET.get('lossReason')
-
-            CustomerLoss.objects.filter(pk=lossId). \
-                update(lossReason=lossReason, confirmLossTime=datetime.now(),
-                       state=1, updateDate=datetime.now())
-
-            # 修改客户表状态
             cl = CustomerLoss.objects.get(pk=lossId)
+            cl.lossReason = lossReason
+            cl.state = 1
+            cl.confirmLossTime = datetime.now()
+            cl.save()
+            # 修改客户表状态
+
             Customer.objects.filter(khno=cl.cusNo). \
                 update(state=2, updateDate=datetime.now())
             return JsonResponse({'code': 200, 'msg': '用户确认流失成功'})

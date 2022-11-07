@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+{# 导入静态资源 #}
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>客户开发计划管理</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+</head>
+<body>
+{# csrf 保护 #}
+{% csrf_token %}
+<form class="layui-form">
+  <blockquote class="layui-elem-quote quoteBox">
+    <form class="layui-form">
+      <div class="layui-inline">
+        <div class="layui-input-inline">
+          <input type="text" name="customerName"
+                 class="layui-input
+							searchVal" placeholder="客户名"/>
+        </div>
+        <div class="layui-input-inline">
+          <input type="text" name="createMan" class="layui-input
+							searchVal" placeholder="创建人"/>
+        </div>
+        <div class="layui-input-inline">
+          <select name="devResult" id="devResult">
+            <option value="">请选择开发状态</option>
+            <option value="0">未开发</option>
+            <option value="1">开发中</option>
+            <option value="2">开发成功</option>
+            <option value="3">开发失败</option>
+          </select>
+        </div>
+        <a class="layui-btn search_btn" data-type="reload">
+          <i class="layui-icon">&#xe615;</i> 搜索
+        </a>
+      </div>
+    </form>
+  </blockquote>
+
+  <table id="saleChanceList" class="layui-table" lay-filter="saleChances">
+  </table>
+
+
+  <script type="text/html" id="toolbarDemo"></script>
+
+
+  <!--
+    行工具栏
+        详情:机会数据已开发结束,点击详情展示计划项相关数据
+        开发:机会数据处于开发中,点击开发添加计划项数据
+        此时链接内容显示由开发结果值控制
+  -->
+  <script id="op" type="text/html">
+    {% verbatim %} {{# if (d.devResult === 0 || d.devResult === 1) { }} {% endverbatim %}
+    <a href="javascript:;" class="layui-btn layui-btn-warm layui-btn-xs" lay-event="dev">开发</a>
+    {% verbatim %} {{# } else { }} {% endverbatim %}
+    <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="info">详情</a>
+    {% verbatim %} {{# } }} {% endverbatim %}
+  </script>
+
+</form>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" charset="utf-8"></script>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script>
+  layui.use(['table', 'layer'], function () {
+    var layer = parent.layer === undefined ? layui.layer : top.layer,
+        $ = layui.jquery,
+        table = layui.table;
+
+    /**
+     * 加载数据表格
+     */
+    var tableIns = table.render({
+      id: 'saleChanceTable'
+      // 容器元素的ID属性值
+      , elem: '#saleChanceList'
+      // 容器的高度 full-差值
+      , height: 'full-125'
+      // 单元格最小的宽度
+      , cellMinWidth: 95
+      // state=1 表示已分配
+      , url: '/sales/list/?state=1&flag=1'
+      // 开启分页
+      , page: true
+      // 默认每页显示的数量
+      , limit: 10
+      // 每页页数的可选项
+      , limits: [10, 20, 30, 40, 50]
+      // 开启头部工具栏
+      , toolbar: '#toolbarDemo'
+      // 表头
+      , cols: [[
+        // field：要求field属性值与返回的数据中对应的属性字段名一致
+        // title：设置列的标题
+        // sort：是否允许排序（默认：false）
+        // fixed：固定列
+        {type: 'checkbox', fixed: 'center'}
+        , {field: 'id', title: '编号', sort: true, fixed: 'left'}
+        , {field: 'chanceSource', title: '机会来源', align: 'center'}
+        , {field: 'customerName', title: '客户名称', align: 'center'}
+        , {field: 'cgjl', title: '成功几率', align: 'center'}
+        , {field: 'overview', title: '概要', align: 'center'}
+        , {field: 'linkMan', title: '联系人', align: 'center'}
+        , {field: 'linkPhone', title: '联系号码', align: 'center'}
+        , {field: 'description', title: '描述', align: 'center'}
+        , {field: 'createMan', title: '创建人', align: 'center'}
+        , {field: 'createDate', title: '创建时间', align: 'center'}
+        , {field: 'updateDate', title: '修改时间', align: 'center'}
+        , {
+          field: 'devResult', title: '开发状态', align: 'center', templet: function (d) {
+            // 调用函数，返回格式化的结果
+            return formatDevResult(d.devResult);
+          }
+        }
+        , {title: '操作', templet: '#op', fixed: 'right', align: 'center', minWidth: 150}
+      ]]
+    });
+
+    /**
+     * 格式化开发状态
+     *  0 = 未开发
+     *  1 = 开发中
+     *  2 = 开发成功
+     *  3 = 开发失败
+     *  其他 = 未知
+     * @param devResult
+     */
+    function formatDevResult(devResult) {
+      if (devResult == 0) {
+        return "<div style='color: yellow'>未开发</div>";
+      } else if (devResult == 1) {
+        return "<div style='color: orange'>开发中</div>";
+      } else if (devResult == 2) {
+        return "<div style='color: green'>开发成功</div>";
+      } else if (devResult == 3) {
+        return "<div style='color: red'>开发失败</div>";
+      } else {
+        return "<div style='color: blue'>未知</div>";
+      }
+    }
+
+    /**
+     * 搜索按钮的点击事件
+     */
+    $(".search_btn").click(function () {
+
+      /**
+       * 表格重载
+       *  多条件查询
+       */
+      tableIns.reload({
+        // 设置需要传递给后端的参数
+        where: { //设定异步数据接口的额外参数，任意设
+          // 通过文本框/下拉框的值，设置传递的参数
+          customerName: $("[name='customerName']").val() // 客户名称
+          , createMan: $("[name='createMan']").val() // 创建人
+          , devResult: $("#devResult").val() // 开发状态
+        }
+        , page: {
+          curr: 1 // 重新从第 1 页开始
+        }
+      });
+
+    });
+
+    /**
+     * 行工具栏监听
+     */
+    table.on('tool(saleChances)', function (data) {
+      // 判断类型
+      if (data.event == "dev") { // 开发
+
+        // 打开计划项开发与详情页面
+        openCusDevPlanDialog('计划项数据开发', data.data.id);
+
+      } else if (data.event == "info") { // 详情
+
+        // 打开计划项开发与详情页面
+        openCusDevPlanDialog('计划项数据维护', data.data.id);
+
+      }
+    });
+
+    /**
+     * 打开计划项开发或详情页面
+     * @param titile
+     * @param id
+     */
+    function openCusDevPlanDialog(title, id) {
+      // iframe层
+      layui.layer.open({
+        // 类型
+        type: 2,
+        // 标题
+        title: title,
+        // 宽高
+        area: ['750px', '550px'],
+        // url地址
+        content: "/sales/cus_dev_plan/detail/?saleChanceId=" + id,
+        // 可以最大化与最小化
+        maxmin: true
+      });
+    }
+
+  });
+</script>
+</body>
+</html>

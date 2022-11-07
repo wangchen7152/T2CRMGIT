@@ -1,11 +1,13 @@
 # _*_ encoding:utf:8 _*_
+from django.views.decorators.csrf import csrf_exempt
 
 __author__ = 'wang'
 
 from django.conf.urls import url
 from django.urls import path
 from .views import Registry, Login, CheckUsername, GenerateCaptcha, Index, \
-    Welcome, AuditAccount, AccountUserList, UserSetting, LogOut, ChangePassword
+    Welcome, AuditAccount, AccountUserList, UserSetting, LogOut, ChangePassword, \
+    CustomerManager
 from . import views
 
 # 设置命名空间名称
@@ -39,5 +41,8 @@ urlpatterns = [
     url(r'^ChangePassword/$', ChangePassword.as_view(), name='ChangePassword'),
 
     # path('AccountUserList/', views.AccountUserList, name='AccountUserList'),
+    # 删除流失措施url
+    url(r'CustomerManager/', csrf_exempt(CustomerManager.as_view()),
+        name='CustomerManager'),
 
 ]

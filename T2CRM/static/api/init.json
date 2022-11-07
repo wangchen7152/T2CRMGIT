@@ -17,7 +17,7 @@
             "child": [
                 {
                     "title": "营销机会管理",
-                    "href": "",
+                    "href": "sales/index",
                     "icon": "fa fa-tty",
                     "target": "_self"
                 },
