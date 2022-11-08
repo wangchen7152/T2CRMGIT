@@ -186,6 +186,17 @@
                     return false;
                 }
                 console.log()
+            } else if (obj.event == 'link'){
+                var checkStatus = table.checkStatus(obj.config.id);
+                openCustomerUserDialog(checkStatus.data);
+                if (checkStatus.data.length > 1){
+                    layer.msg('只允许选择一个客户查看订单信息');
+                    return false;
+                }
+                if (checkStatus.data.length == 0){
+                    layer.msg('请选择一个客户查看信息');
+                    return false;
+                }
             }
         });
 
@@ -256,6 +267,32 @@
                 area: ['700px', '500px'],
                 // url地址
                 content: "/customer/Order/Index?id=" + data[0].id,
+                // 可以最大化与最小化
+                maxmin: true
+            });
+        }
+
+        function openCustomerUserDialog(data) {
+            // 判断用户是否选择客户
+            if (data.length == 0) {
+                layer.msg("请选择想要查看联系人的客户！", {icon: 5});
+                return;
+            }
+            // 判断用户是否多选
+            if (data.length > 1) {
+                layer.msg("只能选择一个客户进行查看！", {icon: 5});
+                return;
+            }
+            // 打开对话框
+            layui.layer.open({
+                // 类型
+                type: 2,
+                // 标题
+                title: "<h3>客户管理 - 查看联系人信息</h3>",
+                // 宽高
+                area: ['700px', '500px'],
+                // url地址
+                content: "/customer/GetUserAdd/?id=" + data[0].id,
                 // 可以最大化与最小化
                 maxmin: true
             });

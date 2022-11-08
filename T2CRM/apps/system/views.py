@@ -321,3 +321,9 @@ class ChangePassword(View):
 
         except Exception as e:
             return JsonResponse({'code': 400, 'msg': "修改用户信息失败"})
+
+
+class CustomerManager(View):
+    def get(self, request):
+        CustomerManagerList = User.objects.values('id', 'username').all()
+        return JsonResponse(list(CustomerManagerList), safe=False)

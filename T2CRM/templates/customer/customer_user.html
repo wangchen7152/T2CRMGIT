@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+{# 导入静态资源 #}
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>客户联系人</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}"
+          media="all">
+    <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+</head>
+<body>
+{# csrf 保护 #}
+{% csrf_token %}
+<div class="layui-col-md12">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form class="layui-form">
+                <input name="id" type="hidden"
+                       value="{% if id %}{{ id }}{% endif %}"/>
+                <div class="layui-form-item layui-row">
+                    <div class="layui-col-xs6">
+                        <label class="layui-form-label">客户名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input"
+                                   name="name" id="name"value="{% if name %}{{ name }}{% endif %}"
+                                   readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6">
+                        <label class="layui-form-label">客户经理</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input"
+                                   name="cusManager" id="cusManager" value="{% if cusManager %}{{ cusManager }}{% endif %}"
+                                   readonly="readonly">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-row">
+                    <div class="layui-col-xs6">
+                        <label class="layui-form-label">客户地址</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input"
+                                   name="address" value="{% if address %}{{ address }}{% endif %}"
+                                   readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="layui-col-xs6">
+                        <label class="layui-form-label">联系电话</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input"
+                                   name="phone"value="{% if phone %}{{ phone }}{% endif %}"
+                                   id="phone" readonly="readonly">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="layui-col-md12">
+    <table id="customerUserList" class="layui-table"
+           lay-filter="customerUser"></table>
+</div>
+
+
+<!--操作-->
+<script id="customerUserListBar" type="text/html">
+    <a class="layui-btn layui-btn-xs" id="edit" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+</script>
+<script src="{% static 'js/system/login/jquery.min.js' %}" charset="utf-8"></script>
+<script src="{% static 'js/system/login/jquery.cookie.min.js' %}" charset="utf-8"></script>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script>
+    layui.use(['table', 'layer'], function () {
+        var layer = parent.layer === undefined ? layui.layer : top.layer,
+            $ = layui.jquery,
+            table = layui.table;
+
+        // 订单列表展示
+        var tableIns = table.render({
+            elem: '#customerUserList',
+            url: "/customer/CustomerUserList/?id=" + $("input[name='id']").val(),
+            cellMinWidth: 95,
+            page: true,
+            height: "full-125",
+            limits: [10, 15, 20, 25],
+            limit: 10,
+            toolbar: "#toolbarDemo",
+            id: "customerUserList",
+            cols: [[
+                {type: "checkbox", fixed: "center"},
+                {field: "id", title: '编号', fixed: "true"},
+                {field: 'linkName', title: '用户名称', align: "center"},
+                {
+                    field: 'sex',
+                    title: '性别',
+                    align: "center",
+                    templet: function (s) {
+                        if (s.sex == 0) {
+                            return '女'
+                        } else {
+                            return '男'
+                        }
+                    }
+                },
+                {field: 'zhiwei', title: '职位', align: "center"},
+                {
+                    field: 'phone', title: '联系电话', align: "center"
+                },
+                {field: 'createDate', title: '创建时间', align: "center"},
+                {field: 'updateDate', title: '更新时间', align: "center"},
+                {
+                    title: '操作',
+                    fixed: "right",
+                    align: "center",
+                    minWidth: 150,
+                    templet: "#customerUserListBar"
+                }
+            ]]
+        });
+
+        /**
+         * 监听行工具栏
+         */
+        table.on('tool(customerUserListBar)', function (data) {
+            if (data.event == "edit") { // 更新客户信息
+                // 修改客户信息的对话框
+                EditCustomerUserDialog(data.data.id);
+                console.log('事件为编辑联系人');
+                return false;
+            } else if (data.event == "del") { // 删除客户信息
+                // 删除客户
+                console.log('事件为删除联系人');
+                DelCustomerUser(data.data.id);
+                return false;
+            }
+        });
+        /**
+         * 打开添加/修改客户联系人的对话框
+         */
+        function EditCustomerUserDialog(id) {
+            var title = "<h3>客户管理 - 添加客户信息</h3>";
+            var url = '{% url 'customer:EditUser' %}';
+            // 判断id是否为空 （如果不为空，则为更新操作）
+            if (id != null && id != '') {
+                title = "<h3>客户管理 - 更新客户信息</h3>";
+                url = '/customer/EditUser/?id=' + id;
+            }
+            // iframe层
+            layui.layer.open({
+                // 类型
+                type: 2,
+                // 标题
+                title: title,
+                // 宽高
+                area: ['700px', '400px'],
+                // url地址
+                content: url,
+                // 可以最大化与最小化
+                maxmin: true
+            });
+        }
+        // 删除客户联系人
+        function DelCustomerUser(id) {
+            // 弹出确认框，询问用户是否确认删除
+            layer.confirm('确定要删除该记录吗？', {
+                icon: 3,
+                title: "客户管理"
+            }, function (index) {
+                // 关闭确认框
+                layer.close(index);
+                // 发送ajax请求，删除记录
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'customer:DelUser' %}",
+                    data: {
+                        id: id,
+                    },
+                    success: function (result) {
+                        // 判断删除结果
+                        layer.msg(result.msg);
+                        if (result.code == 200) {
+                            // 提示成功
+                            layer.msg("删除成功！", {icon: 6});
+                            // 刷新表格
+                            t.reload();
+                        } else {
+                            // 提示失败
+                            layer.msg(result.msg, {icon: 5});
+                            return false;
+                        }
+                    }
+                });
+            });
+        }
+    });
+</script>
+</body>
+</html>
