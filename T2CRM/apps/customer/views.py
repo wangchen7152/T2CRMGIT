@@ -12,7 +12,8 @@ from datetime import datetime
 from django.views.decorators.http import require_GET
 
 from customer.models import Customer, CityCourse, Province, CustomerOrders, \
-    OrdersDetail, CustomerLoss, CustomerReprieve
+    OrdersDetail, CustomerLoss, CustomerReprieve, LinkMan
+from sales.views import connect
 from system.views import GenerateCode
 
 
@@ -481,3 +482,91 @@ class ReprieveDelete(View):
             return JsonResponse({'code': 200, 'msg': '流失措施删除成功'})
         except Exception as e:
             return JsonResponse({'code': 400, 'msg': '流失措施删除失败'})
+
+
+class GetUserAdd(View):
+    """
+    进入联系人管理页面
+    """
+
+    def get(self, request):
+        id = request.GET.get('id')
+        cs = Customer.objects.values().filter(id=id)
+        return render(request, 'customer/customer_user.html', cs[0])
+
+
+class CustomerUserList(View):
+    """
+    获取客户联系人列表
+    """
+
+    def get(self, request):
+        try:
+            page_num = request.GET.get('page')
+            page_size = request.GET.get('limit')
+            # 创建连接
+            connection = connect()
+            # 建立游标
+            cursor = connection.cursor()
+            # 编辑sql
+            sql = """
+              SELECT
+                    lk.id id,
+                    lk.link_name linkName,
+                    lk.sex sex,
+                    lk.zhiwei zhiwei,
+                    lk.phone phone,
+                    lk.create_date createDate,
+                    lk.update_date updateDate	
+                FROM
+                    t2_customer_linkman lk 
+                WHERE
+                    is_valid = 1 
+                    AND deleted = 0
+           """
+            # 执行sql
+            cursor.execute(sql)
+            # 获取返回值
+            sc = cursor.fetchall()
+            id = request.GET.get('id')
+
+            if id:
+                sql += ' AND cus_id = {}'.format(id)
+
+            cursor.execute(sql)
+            # 返回结果，类型是dict
+            user_list = cursor.fetchall()  # 查询当前 SQL 执行后所有的记录
+            # 关闭游标
+            cursor.close()
+            p = Paginator(user_list, page_size)
+            data = p.page(page_num).object_list
+            count = p.count
+            context = {
+                'code': 0,
+                'msg': '加载成功',
+                'count': count,
+                'data': data
+            }
+            return JsonResponse(context)
+        except Exception as e:
+            return JsonResponse({'code': 401, 'msg': e})
+        finally:
+            connection.close()
+
+
+class EditUser(View):
+    """
+    编辑联系人
+    """
+
+    def post(self, request):
+        pass
+
+
+class DelUser(View):
+    """
+    删除联系人
+    """
+
+    def post(self, request):
+        pass
