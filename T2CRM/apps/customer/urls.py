@@ -7,7 +7,7 @@ from django.urls import path
 from customer.views import CustomerIndex, CustomerList, AddCuster, \
     DeleteCustomer, CustomerLoseIndex, CustomerLoseList, CusterLossDetail, \
     GetReprieve, ReprieveAddOrUpdate, LossConfirm, ReprieveDelete, GetUserAdd, \
-    EditUser, DelUser, CustomerUserList
+    AddOrEditUser, DelUser, CustomerUserList
 
 from django.views.decorators.csrf import csrf_exempt
 from customer import views
@@ -55,7 +55,7 @@ urlpatterns = [
     # 进入客户联系人页面
     url(r'GetUserAdd/', csrf_exempt(GetUserAdd.as_view()), name='GetUserAdd'),
     # 编辑客户联系人
-    url(r'EditUser/', csrf_exempt(EditUser.as_view()), name='EditUser'),
+    url(r'AddOrEditUser/', csrf_exempt(AddOrEditUser.as_view()), name='AddOrEditUser'),
     # 删除客户联系人
     url(r'DelUser/', csrf_exempt(DelUser.as_view()), name='DelUser'),
     # 删除客户联系人
