@@ -170,12 +170,7 @@
          */
         function EditCustomerUserDialog(id) {
             var title = "<h3>客户管理 - 编辑客户信息</h3>";
-            var url = '{% url 'customer:AddOrEditUser' %}';
-            // 判断id是否为空 （如果不为空，则为更新操作）
-            if (id != null && id != '') {
-                title = "<h3>客户管理 - 更新客户信息</h3>";
-                url = '/customer/AddOrEditUser/?id=' + id;
-            }
+            var url =  '/customer/AddOrEditUser/?id=' + id;
             // iframe层
             layui.layer.open({
                 // 类型
@@ -191,7 +186,7 @@
             });
         }
         function AddCustomerUserDialog() {
-            var  title = "<h3>客户管理 - 更新客户信息</h3>";
+            var  title = "<h3>客户管理 - 添加客户信息</h3>";
             var  url = '/customer/AddOrEditUser/?CusId=' + $("[name='id']").val();
 
             // iframe层
@@ -231,7 +226,7 @@
                             // 提示成功
                             layer.msg("删除成功！", {icon: 6});
                             // 刷新表格
-                            t.reload();
+                            tableIns.reload();
                         } else {
                             // 提示失败
                             layer.msg(result.msg, {icon: 5});

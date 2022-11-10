@@ -35,9 +35,9 @@
             <label class="layui-form-label">性别</label>
             <div class="layui-input-block">
                 <select name='sex' id ='sex'>
-                    <options values='请选择'></options>
-                    <options values='女'>{% if sex==0 %}selected{% endif %}女</options>
-                    <options values='男'>{% if sex==1 %}selected{% endif %}男</options>
+                    <option value='请选择'></option>
+                    <option value="0" {% if cus.sex == 0 %}selected{% endif %}>女</option>
+                    <option value="1" {% if cus.sex == 1 %}selected{% endif %}>男</option>
                 </select>
             </div>
         </div>
