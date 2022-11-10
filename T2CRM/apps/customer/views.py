@@ -491,8 +491,11 @@ class GetUserAdd(View):
 
     def get(self, request):
         id = request.GET.get('id')
-        cs = Customer.objects.values().filter(id=id)
-        return render(request, 'customer/customer_user.html', cs[0])
+        cs = Customer.objects.get(id=id)
+        context = {
+            'cs': cs
+        }
+        return render(request, 'customer/customer_user.html', context)
 
 
 class CustomerUserList(View):
@@ -517,7 +520,9 @@ class CustomerUserList(View):
                     lk.zhiwei zhiwei,
                     lk.phone phone,
                     lk.create_date createDate,
-                    lk.update_date updateDate	
+                    lk.office_phone officePhone,
+                    lk.update_date updateDate,
+                    lk.cus_id CusId	
                 FROM
                     t2_customer_linkman lk 
                 WHERE
@@ -554,13 +559,46 @@ class CustomerUserList(View):
             connection.close()
 
 
-class EditUser(View):
+class AddOrEditUser(View):
     """
     编辑联系人
     """
 
+    def get(self, request):
+        id = request.GET.get('id')
+        CusId = request.GET.get('CusId')
+        context = {'CusId': CusId}
+        if id:
+            cus_user = LinkMan.objects.get(pk=id)
+            context['cus'] = cus_user
+            return render(request, 'customer/customer_user_add_edit.html',
+                          context)
+        else:
+            return render(request, 'customer/customer_user_add_edit.html',
+                          context)
+
     def post(self, request):
-        pass
+        try:
+            id = request.POST.get('id')
+            cus_id = request.POST.get('CusId')
+            linkName = request.POST.get('linkName')
+            sex = request.POST.get('sex')
+            zhiwei = request.POST.get('zhiwei')
+            phone = request.POST.get('phone')
+            officePhone = request.POST.get('officePhone')
+            if id:
+                LinkMan.objects.filter(id=id).update(linkName=linkName, sex=sex,
+                                                     zhiwei=zhiwei, phone=phone,
+                                                     officePhone=officePhone,
+                                                     updateDate=datetime.now())
+                return JsonResponse({'code': 200, 'msg': '客户联系人修改成功'})
+            else:
+                LinkMan.objects.create(linkName=linkName, sex=sex,
+                                       zhiwei=zhiwei, phone=phone, cusId=cus_id,
+                                       officePhone=officePhone)
+                return JsonResponse({'code': 200, 'msg': '客户联系人添加成功'})
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': e})
 
 
 class DelUser(View):

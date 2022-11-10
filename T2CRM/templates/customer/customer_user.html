@@ -21,13 +21,13 @@
         <div class="layui-card-body">
             <form class="layui-form">
                 <input name="id" type="hidden"
-                       value="{% if id %}{{ id }}{% endif %}"/>
+                       value="{% if cs.id %}{{ cs.id }}{% endif %}"/>
                 <div class="layui-form-item layui-row">
                     <div class="layui-col-xs6">
                         <label class="layui-form-label">客户名称</label>
                         <div class="layui-input-block">
                             <input type="text" class="layui-input"
-                                   name="name" id="name"value="{% if name %}{{ name }}{% endif %}"
+                                   name="name" id="name" value="{% if cs.name %}{{ cs.name }}{% endif %}"
                                    readonly="readonly">
                         </div>
                     </div>
@@ -35,7 +35,7 @@
                         <label class="layui-form-label">客户经理</label>
                         <div class="layui-input-block">
                             <input type="text" class="layui-input"
-                                   name="cusManager" id="cusManager" value="{% if cusManager %}{{ cusManager }}{% endif %}"
+                                   name="cusManager" id="cusManager" value="{% if cs.cusManager %}{{ cs.cusManager }}{% endif %}"
                                    readonly="readonly">
                         </div>
                     </div>
@@ -46,7 +46,7 @@
                         <label class="layui-form-label">客户地址</label>
                         <div class="layui-input-block">
                             <input type="text" class="layui-input"
-                                   name="address" value="{% if address %}{{ address }}{% endif %}"
+                                   name="address" value="{% if cs.address %}{{ cs.address }}{% endif %}"
                                    readonly="readonly">
                         </div>
                     </div>
@@ -54,7 +54,7 @@
                         <label class="layui-form-label">联系电话</label>
                         <div class="layui-input-block">
                             <input type="text" class="layui-input"
-                                   name="phone"value="{% if phone %}{{ phone }}{% endif %}"
+                                   name="phone" value="{% if cs.phone %}{{ cs.phone }}{% endif %}"
                                    id="phone" readonly="readonly">
                         </div>
                     </div>
@@ -68,7 +68,16 @@
     <table id="customerUserList" class="layui-table"
            lay-filter="customerUser"></table>
 </div>
-
+// 添加
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <a class="layui-btn layui-btn-normal addNews_btn"
+           lay-event="add">
+            <i class="layui-icon">&#xe608;</i>
+            添加联系人
+        </a>
+    </div>
+</script>
 
 <!--操作-->
 <script id="customerUserListBar" type="text/html">
@@ -112,6 +121,7 @@
                     }
                 },
                 {field: 'zhiwei', title: '职位', align: "center"},
+                {field: 'officePhone', title: '座机', align: "center"},
                 {
                     field: 'phone', title: '联系电话', align: "center"
                 },
@@ -130,16 +140,28 @@
         /**
          * 监听行工具栏
          */
-        table.on('tool(customerUserListBar)', function (data) {
+        table.on('tool(customerUser)', function (data) {
             if (data.event == "edit") { // 更新客户信息
                 // 修改客户信息的对话框
-                EditCustomerUserDialog(data.data.id);
                 console.log('事件为编辑联系人');
+                console.log(data.data);
+                EditCustomerUserDialog(data.data.id);
                 return false;
-            } else if (data.event == "del") { // 删除客户信息
+            }
+            else if (data.event == "del") { // 删除客户信息
                 // 删除客户
                 console.log('事件为删除联系人');
                 DelCustomerUser(data.data.id);
+                return false;
+            }
+        });
+        table.on('toolbar(customerUser)',function (data) {
+            if (data.event == "add") {
+                // 添加客户信息的对话框
+                console.log('事件为添加联系人');
+                console.log(data.data);
+                AddCustomerUserDialog();
+
                 return false;
             }
         });
@@ -147,13 +169,31 @@
          * 打开添加/修改客户联系人的对话框
          */
         function EditCustomerUserDialog(id) {
-            var title = "<h3>客户管理 - 添加客户信息</h3>";
-            var url = '{% url 'customer:EditUser' %}';
+            var title = "<h3>客户管理 - 编辑客户信息</h3>";
+            var url = '{% url 'customer:AddOrEditUser' %}';
             // 判断id是否为空 （如果不为空，则为更新操作）
             if (id != null && id != '') {
                 title = "<h3>客户管理 - 更新客户信息</h3>";
-                url = '/customer/EditUser/?id=' + id;
+                url = '/customer/AddOrEditUser/?id=' + id;
             }
+            // iframe层
+            layui.layer.open({
+                // 类型
+                type: 2,
+                // 标题
+                title: title,
+                // 宽高
+                area: ['700px', '400px'],
+                // url地址
+                content: url,
+                // 可以最大化与最小化
+                maxmin: true
+            });
+        }
+        function AddCustomerUserDialog() {
+            var  title = "<h3>客户管理 - 更新客户信息</h3>";
+            var  url = '/customer/AddOrEditUser/?CusId=' + $("[name='id']").val();
+
             // iframe层
             layui.layer.open({
                 // 类型
