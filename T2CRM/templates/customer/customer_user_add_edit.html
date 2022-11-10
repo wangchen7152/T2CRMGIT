@@ -34,10 +34,11 @@
         <div class="layui-col-xs6">
             <label class="layui-form-label">性别</label>
             <div class="layui-input-block">
-                <input type="text" class="layui-input"
-                       name="sex" id="sex" lay-verify="required"
-                       value="{% if cus.sex %}{{ cus.sex }}{% endif %}"
-                       placeholder="">
+                <select name='sex' id ='sex'>
+                    <options values='请选择'></options>
+                    <options values='女'>{% if sex==0 %}selected{% endif %}女</options>
+                    <options values='男'>{% if sex==1 %}selected{% endif %}男</options>
+                </select>
             </div>
         </div>
     </div>
