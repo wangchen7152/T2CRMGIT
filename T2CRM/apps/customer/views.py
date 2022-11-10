@@ -594,12 +594,14 @@ class AddOrEditUser(View):
                 return JsonResponse({'code': 200, 'msg': '客户联系人修改成功'})
             else:
                 # 查询新增用户联系人是否已经录入系统
-                linkuser = LinkMan.objects.values().filter(cusId=cus_id,linkName=linkName)
+                linkuser = LinkMan.objects.values().filter(cusId=cus_id,
+                                                           linkName=linkName)
                 if linkuser:
-                    return JsonResponse({'code':401,'msg':'客户联系人已存在'})
+                    return JsonResponse({'code': 401, 'msg': '客户联系人已存在'})
                 else:
                     LinkMan.objects.create(linkName=linkName, sex=sex,
-                                           zhiwei=zhiwei, phone=phone, cusId=cus_id,
+                                           zhiwei=zhiwei, phone=phone,
+                                           cusId=cus_id,
                                            officePhone=officePhone)
                 return JsonResponse({'code': 200, 'msg': '客户联系人添加成功'})
         except Exception as e:
@@ -612,7 +614,8 @@ class DelUser(View):
     """
 
     def post(self, request):
-       id = request.POST.get('id')
+        id = request.POST.get('id')
         if id:
-            LinkMan.objects.filter(pk=id).update(deleted=1,updaDate=datetime.now())
-            return JsonResponse({'code':200,'msg':'客户联系人删除成功')
+            LinkMan.objects.filter(pk=id).update(deleted=1,
+                                                 updateDate=datetime.now())
+            return JsonResponse({'code': 200, 'msg': '客户联系人删除成功'})

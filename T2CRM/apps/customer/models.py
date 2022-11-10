@@ -111,7 +111,7 @@ class LinkMan(models.Model):
     # 客户id，外键
     cusId = models.IntegerField(db_column='cus_id')
     linkName = models.CharField(max_length=20, db_column='link_name')
-    sex = models.CharField(max_length=4)
+    sex = models.IntegerField(max_length=4)
     zhiwei = models.CharField(max_length=20, db_column='zhiwei')
     officePhone = models.CharField(max_length=20, db_column='office_phone')
     phone = models.CharField(max_length=20, db_column='phone')
