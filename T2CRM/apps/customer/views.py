@@ -84,16 +84,16 @@ class CustomerList(View):
 class AddCuster(View):
     @xframe_options_exempt
     def get(self, request):
-        city = CityCourse.objects.all()
+        # 有ID确认为更新用户信息
         id = request.GET.get('id')
+        context = None
         if id:
-            custer = Customer.objects.values().filter(id=id)
+            cus = Customer.objects.get(id=id)
+            context = {'cus': cus}
             return render(request, 'customer/customer_add_update.html',
-                          custer[0])
+                          context)
         else:
-            return render(request, 'customer/customer_add_update.html', {
-                'city': city
-            })
+            return render(request, 'customer/customer_add_update.html', context)
 
     def post(self, request):
         try:
@@ -115,7 +115,7 @@ class AddCuster(View):
             the_irs = request.POST.get('the_irs').strip()
             land_tax = request.POST.get('land_tax').strip()
             annual_turnover = request.POST.get('annual_turnover').strip()
-            city_id = request.POST.get('city_id').strip()
+            city_id = int(request.POST.get('city_name').strip())
             if len(id) > 1:
                 return JsonResponse({'code': 400, 'msg': '仅可以勾选一个用户'})
             if id:
@@ -619,3 +619,9 @@ class DelUser(View):
             LinkMan.objects.filter(pk=id).update(deleted=1,
                                                  updateDate=datetime.now())
             return JsonResponse({'code': 200, 'msg': '客户联系人删除成功'})
+
+
+class CityList(View):
+    def get(self, request):
+        CityList = CityCourse.objects.values('id', 'city_name').all()
+        return JsonResponse(list(CityList), safe=False)
