@@ -55,44 +55,49 @@ class SalesList(View):
             cursor = connection.cursor()
             sql = '''
                SELECT
-                   sc.id id,
-                   sc.chance_source chanceSource,
-                   sc.customer_id customerId,
-                   sc.customer_name customerName,
-                   sc.cgjl cgjl,
-                   sc.overview overview,
-                   sc.link_man linkMan,
-                   sc.link_phone linkPhone,
-                   sc.description description,
-                   u.username createMan,
-                   u.username assignMan,
-                   sc.assign_time assignTime,
-                   sc.state state,
-                   sc.dev_result devResult,
-                   sc.is_valid isValid,
-                   sc.create_date createDate,
-                   sc.update_date updateDate
+                    sc.id id,
+                    sc.chance_source chanceSource,
+                    sc.customer_id customerId,
+                    sc.customer_name customerName,
+                    sc.cgjl cgjl,
+                    sc.overview overview,
+                    sc.link_man linkMan,
+                    sc.link_phone linkPhone,
+                    sc.description description,
+                    tt.username createMan,
+                    u.username assignMan,
+                    sc.assign_time assignTime,
+                    sc.state state,
+                    sc.dev_result devResult,
+                    sc.is_valid isValid,
+                    sc.create_date createDate,
+                    sc.update_date updateDate 
                FROM
-                   t2_sale_chance sc
-               INNER JOIN t2_customer c ON sc.customer_id = c.id
-               LEFT JOIN t2_user u ON sc.assign_man = u.id 
+                    t2_sale_chance sc
+                    INNER JOIN t2_customer c ON sc.customer_id = c.id
+                    LEFT JOIN t2_user u ON sc.assign_man = u.id 
+                    LEFT JOIN T2_user tt ON sc.create_man = tt.id
                WHERE
-                   sc.is_valid = 1 AND c.is_valid = 1
+                    sc.is_valid = 1 
+                    AND c.is_valid = 1 
+                    AND sc.deleted = 0 
+                    AND c.deleted = 0 
            '''
 
             # 搜索客户名称
-            customerName = request.GET.get('customerName')
+            customer_Name = request.GET.get('customerName')
             # 搜索客户状态
             state = request.GET.get('state')
             # 搜索创建人
-            createMan = request.GET.get('createMan')
+            create_Man = request.GET.get('createMan')
             # 开发计划状态
             devResult = request.GET.get('devResult')
             # 如果有查询条件需要拼接sql
-            if customerName:
-                sql += ' AND sc.customerName like "%{}%" '.format(customerName)
-            if createMan:
-                sql += ' AND sc.createMan like "%{}%" '.format(createMan)
+            if customer_Name:
+                sql += ' AND sc.customer_name like "%{}%" '.format(
+                    customer_Name)
+            if create_Man:
+                sql += ' AND tt.username like "%{}%" '.format(create_Man)
             if state:
                 sql += ' AND sc.state = "{}"  '.format(state)
             if devResult:
@@ -129,12 +134,14 @@ class CreateUpdateSales(View):
     @xframe_options_exempt
     def get(self, request):
         salechanceId = request.GET.get('saleChanceId')
+        context = None
         if salechanceId:
-            sale = SaleChance.objects.filter(id=salechanceId)
+            sale = SaleChance.objects.get(pk=salechanceId)
+            context = {'sc': sale}
             return render(request, 'sales/add_update.html',
-                          sale[0])
+                          context)
         else:
-            return render(request, 'sales/add_update.html')
+            return render(request, 'sales/add_update.html', context)
 
     def post(self, request):
         pass
@@ -155,8 +162,7 @@ class CustomerCompany(View):
                 FROM
                     t2_customer t 
                 WHERE
-                    t.state = 0 AND
-                    t.id not IN (select s.customer_id from t2_sale_chance s) 
+                    t.state = 0 
 
             """
             # 执行sql
@@ -178,13 +184,11 @@ class CreateSaleChance(View):
             # 获取营销机会的ID
             id = request.POST.get('id')
             # 获取客户ID
-            customerId = request.POST.get('customerId')
+            customerId = request.POST.get('customer')
             # 获取客户名称
             customerName = request.POST.get('customerName')
             # 获取指派人的ID
-            assignManId = request.POST.get('assignManId')
-            # 获取指派人名称
-            assignMan = request.POST.get('assignMan')
+            assignManId = request.POST.get('assignMan')
             # 机会来源
             chanceSource = request.POST.get('chanceSource')
             # 联系人
@@ -197,15 +201,53 @@ class CreateSaleChance(View):
             cgjl = request.POST.get('cgjl')
             # 机会描述
             description = request.POST.get('description')
+            if int(assignManId) == 0:
+                state = 0
+            else:
+                state = 1
+            if id:
+                """
+                如果有营销机会的ID证明为编辑操作
+                """
+                Slase_Chanse = SaleChance.objects.filter(pk=id)
+                Slase_Chanse.update(chanceSource=chanceSource,
+                                    customerId=customerId,
+                                    customerName=customerName, cgjl=cgjl,
+                                    overview=overview, linkMan=linkMan,
+                                    linkPhone=linkPhone,
+                                    description=description, createMan=1,
+                                    assignMan=assignManId,
+                                    createDate=datetime.now(),
+                                    assignTime=datetime.now(), state=state,
+                                    devResult=0)
+                return JsonResponse({'code': 200, 'msg': '营销机会创建成功'})
 
-            SaleChance.objects.create(chanceSource=chanceSource,
-                                      customerId=customerId,
-                                      customerName=customerName, cgjl=cgjl,
-                                      overview=overview, linkMan=linkMan,
-                                      linkPhone=linkPhone,
-                                      description=description, createMan=1,
-                                      assignMan=assignMan,
-                                      assignTime=datetime.now(), state=1)
-            return JsonResponse({'code': 200, 'msg': '营销机会创建成功'})
+
+            else:
+                if SaleChance.objects.filter(customerId=customerId):
+                    return JsonResponse(
+                        {'code': 400, 'msg': '当前客户已添加营销机会，请勿重复添加！'})
+
+                else:
+                    SaleChance.objects.create(chanceSource=chanceSource,
+                                              customerId=customerId,
+                                              customerName=customerName,
+                                              cgjl=cgjl,
+                                              overview=overview,
+                                              linkMan=linkMan,
+                                              linkPhone=linkPhone,
+                                              description=description,
+                                              createMan=1,
+                                              assignMan=assignManId,
+                                              state=state, devResult=0,
+                                              updateDate=datetime.now())
+                    return JsonResponse({'code': 200, 'msg': '营销机会创建成功'})
         except Exception as e:
             return JsonResponse({'code': 400, 'msg': e})
+
+
+class DelSaleChance(View):
+    def post(self, request):
+        ids = [i for i in request.POST.get('ids').split(',')]
+        SaleChance.objects.filter(pk__in=ids).update(deleted=1)
+        return JsonResponse({'code': 200, 'msg': '营销机会删除成功！'})

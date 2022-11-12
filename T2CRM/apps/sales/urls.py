@@ -5,7 +5,8 @@ __author__ = 'wang'
 
 from .views import *
 from django.conf.urls import url
-from sales.views import SalesIndex, SalesList, CustomerCompany, CreateSaleChance
+from sales.views import SalesIndex, SalesList, CustomerCompany, \
+    CreateSaleChance, DelSaleChance
 
 app_name = 'sales'
 urlpatterns = [
@@ -17,4 +18,6 @@ urlpatterns = [
         name='CreateUpdateSales'),
     url(r'CreateSaleChance/', csrf_exempt(CreateSaleChance.as_view()),
         name='CreateSaleChance'),
+    url(r'DelSaleChance/', csrf_exempt(DelSaleChance.as_view()),
+        name='DelSaleChance'),
 ]
