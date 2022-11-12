@@ -126,14 +126,14 @@
       // 判断ID是否为空
       if (saleChanceId != null && saleChanceId != '') {
         // 更新操作
-        url = "/sales/update/";
+        url = "/sales/CreateSaleChance/?saleChanceId=" + saleChanceId;
       }
       $.post(url, data.field, function (result) {
         // 判断操作是否执行成功 200=成功
         if (result.code == 200) {
           // 成功
           // 提示成功
-          layer.msg("操作成功！", {icon: 6});
+          layer.msg("营销机会添加成功！", {icon: 6});
           // 关闭加载层
           layer.close(index);
           // 关闭弹出层
@@ -174,11 +174,14 @@
         if (data != null) {
           // 获取隐藏域设置的客户ID
           var customerId = $("#customerId").val();
+          console.log('客户ID为：'+ $("#customerId").val());
           // 遍历返回的数据
           for (var i = 0; i < data.length; i++) {
             var opt = "";
             // 如果循环得到的ID与隐藏域的ID相等，则表示被选中
             if (customerId == data[i].id) {
+                console.log(customerId);
+                console.log(data[i].id);
               // 设置下拉选项  设置下拉选项选中
               opt = "<option value='" + data[i].id + "' selected>" + data[i].name + "</option>";
               $("#customerName").val(data[i].name);
@@ -199,7 +202,9 @@
     // 选择客户以后，给客户名称隐藏域赋值
     form.on('select(customer)', function (data) {
       $('#customerName').val(data.elem[data.elem.selectedIndex].text);
+      console.log('客户名称隐藏域赋值为:'+ data.elem[data.elem.selectedIndex].text)
     });
+
 
     /**
      * 加载指派人的下拉框
@@ -214,11 +219,15 @@
         if (data != null) {
           // 获取隐藏域设置的指派人ID
           var assignManId = $("#assignManId").val();
+          console.log("指派人ID为："+ $("#assignManId").val());
           // 遍历返回的数据
           for (var i = 0; i < data.length; i++) {
             var opt = "";
             // 如果循环得到的ID与隐藏域的ID相等，则表示被选中
             if (assignManId == data[i].id) {
+                console.log(assignManId);
+                console.log(data[i].id);
+
               // 设置下拉选项  设置下拉选项选中
               opt = "<option value='" + data[i].id + "' selected>" + data[i].username + "</option>";
             } else {
