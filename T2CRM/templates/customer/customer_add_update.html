@@ -16,7 +16,9 @@
 {# csrf 保护 #}
 <form class="layui-form" style="width:80%;">
     {% csrf_token %}
-    <input name="id" type="hidden" value="{% if id %}{{ id }}{% endif %}"/>
+    <input name="id" type="hidden" value="{% if cus.id %}{{ cus.id }}{% endif %}"/>
+
+    <input id="city_id" type="hidden" value="{% if cus.city_id %}{{ cus.city_id }}{% endif %}"/>
 
 
     <div class="layui-form-item layui-row">
@@ -25,7 +27,7 @@
             <div class="layui-input-block">
                 <input type="text" class="layui-input"
                        name="name" id="name" lay-verify="required"
-                       value="{% if name %}{{ name }}{% endif %}"
+                       value="{% if cus.name %}{{ cus.name }}{% endif %}"
                        placeholder="请输入客户名">
             </div>
         </div>
@@ -35,7 +37,7 @@
                 <input type="text" class="layui-input"
                        name="leader_of_company" id="leader_of_company"
                        lay-verify="required"
-                       value="{% if leader_of_company %}{{ leader_of_company }}{% endif %}"
+                       value="{% if cus.leader_of_company %}{{ cus.leader_of_company }}{% endif %}"
                        placeholder="请输入法人">
             </div>
         </div>
@@ -45,8 +47,9 @@
         <div class="layui-col-xs6">
             <label class="layui-form-label">城市</label>
             <div class="layui-input-block">
+                <input type="hidden" id="cityName" name="cityName">
                 <input type="text" class="layui-input"
-                       name="area" value="{% if area %}{{ area }}{% endif %}"
+                       name="area" value="{% if cus.area %}{{ cus.area }}{% endif %}"
                        placeholder="请输入区域">
             </div>
         </div>
@@ -55,7 +58,7 @@
             <div class="layui-input-block">
                 <input type="text" class="layui-input"
                        name="cusManager"
-                       value="{% if cusManager %}{{ cusManager }}{% endif %}"
+                       value="{% if cus.cusManager %}{{ cus.cusManager }}{% endif %}"
                        placeholder="请输入客户经理">
             </div>
         </div>
@@ -68,16 +71,16 @@
                 <select name="level" id="level">
                     <option value="">请选择</option>
                     <option value="普通客户"
-                            {% if level == '普通客户' %}selected{% endif %}>普通客户
+                            {% if cus.level == '普通客户' %}selected{% endif %}>普通客户
                     </option>
                     <option value="重点开发客户"
-                            {% if level == '重点开发客户' %}selected{% endif %}>重点开发客户
+                            {% if cus.level == '重点开发客户' %}selected{% endif %}>重点开发客户
                     </option>
                     <option value="大客户"
-                            {% if level == '大客户' %}selected{% endif %}>大客户
+                            {% if cus.level == '大客户' %}selected{% endif %}>大客户
                     </option>
                     <option value="战略合作伙伴"
-                            {% if level == '战略合作伙伴' %}selected{% endif %}>战略合作伙伴
+                            {% if cus.level == '战略合作伙伴' %}selected{% endif %}>战略合作伙伴
                     </option>
                 </select>
             </div>
@@ -85,23 +88,8 @@
         <div class="layui-col-xs6">
             <label class="layui-form-label">选择城市</label>
             <div class="layui-input-block">
-                <select name="city_id" id="city_id">
-                    <option value="">请选择城市</option>
-                    {% if city %}
-                        {% for city in city %}
-                            <option value="{{ city.id }}"
-                                    selected>{{ city.city_name }}
-                            </option>
-                        {% endfor %}
-                    {% else %}
-                        <option value={{ city_id }}
-                                {% if city_id == 7 %}selected {% endif %}>北京市
-                        </option>
-                        <option value={{ city_id }}
-                                {% if city_id == 1 %}selected {% endif %}>太原市
-                        </option>
-                    {% endif %}
-
+                <select name="city_name" id="city_name">
+                    <option value="0">请选择城市</option>
                 </select>
             </div>
         </div>
@@ -110,19 +98,19 @@
             <div class="layui-input-block">
                 <select name="xyd" id="xyd">
                     <option value="">请选择</option>
-                    <option value="☆" {% if xyd == '☆' %}selected{% endif %}>☆
+                    <option value="☆" {% if cus.xyd == '☆' %}selected{% endif %}>☆
                     </option>
-                    <option value="☆☆" {% if xyd == '☆☆' %}selected{% endif %}>
+                    <option value="☆☆" {% if cus.xyd == '☆☆' %}selected{% endif %}>
                         ☆☆
                     </option>
                     <option value="☆☆☆"
-                            {% if xyd == '☆☆☆' %}selected{% endif %}>☆☆☆
+                            {% if cus.xyd == '☆☆☆' %}selected{% endif %}>☆☆☆
                     </option>
                     <option value="☆☆☆☆"
-                            {% if xyd == '☆☆☆☆' %}selected{% endif %}>☆☆☆☆
+                            {% if cus.xyd == '☆☆☆☆' %}selected{% endif %}>☆☆☆☆
                     </option>
                     <option value="☆☆☆☆☆"
-                            {% if xyd == '☆☆☆☆☆' %}selected{% endif %}>☆☆☆☆☆
+                            {% if cus.xyd == '☆☆☆☆☆' %}selected{% endif %}>☆☆☆☆☆
                     </option>
                 </select>
             </div>
@@ -135,7 +123,7 @@
             <div class="layui-input-block">
                 <input type="text" class="layui-input"
                        name="postCode"
-                       value="{% if postCode %}{{ postCode }}{% endif %}"
+                       value="{% if cus.postCode %}{{ cus.postCode }}{% endif %}"
                        placeholder="请输入客户邮编">
             </div>
         </div>
@@ -144,7 +132,7 @@
             <div class="layui-input-block">
                 <input type="text" class="layui-input"
                        name="phone" lay-verify="required"
-                       value="{% if phone %}{{ phone }}{% endif %}"
+                       value="{% if cus.phone %}{{ cus.phone }}{% endif %}"
                        placeholder="请输入客户联系电话">
             </div>
         </div>
@@ -156,7 +144,7 @@
             <div class="layui-input-block">
                 <input type="text" class="layui-input"
                        name="address"
-                       value="{% if address %}{{ address }}{% endif %}"
+                       value="{% if cus.address %}{{ cus.address }}{% endif %}"
                        placeholder="请输入客户地址">
             </div>
         </div>
@@ -164,7 +152,7 @@
             <label class="layui-form-label">传真</label>
             <div class="layui-input-block">
                 <input type="text" class="layui-input"
-                       name="fax" value="{% if fax %}{{ fax }}{% endif %}"
+                       name="fax" value="{% if cus.fax %}{{ cus.fax }}{% endif %}"
                        placeholder="请输入客户传真">
             </div>
         </div>
@@ -176,7 +164,7 @@
             <div class="layui-input-block">
                 <input type="text" class="layui-input"
                        name="web_url"
-                       value="{% if web_url %}{{ web_url }}{% endif %}"
+                       value="{% if cus.web_url %}{{ cus.web_url }}{% endif %}"
                        placeholder="请输入客户网站地址">
             </div>
         </div>
@@ -184,7 +172,7 @@
             <label class="layui-form-label">注册资金</label>
             <div class="layui-input-block">
                 <input type="text" class="layui-input"
-                       name="registered_capital" value="{% if registered_capital %}{{ registered_capital }}{% endif %}"
+                       name="registered_capital" value="{% if cus.registered_capital %}{{ cus.registered_capital }}{% endif %}"
                        placeholder="请输入注册资金">
             </div>
         </div>
@@ -196,14 +184,14 @@
             <label class="layui-form-label">开户行</label>
             <div class="layui-input-block">
                 <input type="text" class="layui-input"
-                       name="bank" value="{% if bank %}{{ bank }}{% endif %}" placeholder="请输入客户开户行">
+                       name="bank" value="{% if cus.bank %}{{ cus.bank }}{% endif %}" placeholder="请输入客户开户行">
             </div>
         </div>
         <div class="layui-col-xs6">
             <label class="layui-form-label">开户账号</label>
             <div class="layui-input-block">
                 <input type="text" class="layui-input"
-                       name="bank_number" value="{% if bank_number %}{{ bank_number }}{% endif %}" placeholder="请输入开户账号">
+                       name="bank_number" value="{% if cus.bank_number %}{{ cus.bank_number }}{% endif %}" placeholder="请输入开户账号">
             </div>
         </div>
     </div>
@@ -214,7 +202,7 @@
             <div class="layui-input-block">
                 <input type="text" class="layui-input"
                        name="the_irs"
-                       value="{% if the_irs %}{{ the_irs }}{% endif %}"
+                       value="{% if cus.the_irs %}{{ cus.the_irs }}{% endif %}"
                        placeholder="请输入国税">
             </div>
         </div>
@@ -223,7 +211,7 @@
             <div class="layui-input-block">
                 <input type="text" class="layui-input"
                        name="land_tax"
-                       value="{% if land_tax %}{{ land_tax }}{% endif %}"
+                       value="{% if cus.land_tax %}{{ cus.land_tax }}{% endif %}"
                        placeholder="请输入地税">
             </div>
         </div>
@@ -235,7 +223,7 @@
             <label class="layui-form-label">年营业额</label>
             <div class="layui-input-block">
                 <input type="text" class="layui-input"
-                       name="annual_turnover" value="{% if annual_turnover %}{{ annual_turnover }}{% endif %}"
+                       name="annual_turnover" value="{% if cus.annual_turnover %}{{ cus.annual_turnover }}{% endif %}"
                        placeholder="请输入客户年营业额">
             </div>
         </div>
@@ -255,9 +243,9 @@
     </div>
 </form>
 {% csrf_token %}
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"
+<script src="{% static 'js/system/login/jquery.min.js' %}"
         charset="utf-8"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js"
+<script src="{% static 'js/system/login/jquery.cookie.min.js' %}"
         charset="utf-8"></script>
 <script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
 <script>
@@ -302,6 +290,43 @@
             // 阻止表单提交
             return false;
         });
+        /**
+     * 加载城市名称的下拉框
+     */
+    $.ajax({
+      type: "get",
+      url: "customer/CityList/",
+      data: {},
+      success: function (data) {
+        // console.log(data);
+        // 判断返回的数据是否为空
+        if (data != null) {
+          // 获取隐藏域设置的客户ID
+          var city_id = $("#city_id").val();
+          console.log('城市id为：'+ $("#city_id").val());
+          // 遍历返回的数据
+          for (var i = 0; i < data.length; i++) {
+            var opt = "";
+            // 如果循环得到的ID与隐藏域的ID相等，则表示被选中
+            if (city_id == data[i].id) {
+                console.log(city_id);
+                console.log(data[i].id);
+              // 设置下拉选项  设置下拉选项选中
+              opt = "<option value='" + data[i].id + "' selected>" + data[i].city_name + "</option>";
+              $("#city_name").val(data[i].city_name);
+            } else {
+              // 设置下拉选项
+              opt = "<option value='" + data[i].id + "'>" + data[i].city_name + "</option>";
+            }
+
+            // 将下拉项设置到下拉框中
+            $("#city_name").append(opt);
+          }
+        }
+        // 重新渲染下拉框的内容
+        layui.form.render("select");
+      }
+    });
 
         /**
          * 关闭弹出层

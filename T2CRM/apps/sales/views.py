@@ -7,6 +7,7 @@ from django.views import View
 from django.views.decorators.clickjacking import xframe_options_exempt
 from datetime import datetime
 
+from customer.models import LinkMan
 from dbutil import pymysql_pool
 from .models import SaleChance
 
@@ -201,10 +202,19 @@ class CreateSaleChance(View):
             cgjl = request.POST.get('cgjl')
             # 机会描述
             description = request.POST.get('description')
+            LinkManCheck = LinkMan.objects.filter(linkName=linkMan)
+            if not LinkManCheck:
+                LinkMan.objects.create(linkName=linkMan, sex=0,
+                                       phone=linkPhone,
+                                       cusId=customerId,
+                                       officePhone=linkPhone)
             if int(assignManId) == 0:
                 state = 0
+                assigntime = None
+                assignManId = None
             else:
                 state = 1
+                assigntime = datetime.now()
             if id:
                 """
                 如果有营销机会的ID证明为编辑操作
@@ -218,7 +228,7 @@ class CreateSaleChance(View):
                                     description=description, createMan=1,
                                     assignMan=assignManId,
                                     createDate=datetime.now(),
-                                    assignTime=datetime.now(), state=state,
+                                    assignTime=assigntime, state=state,
                                     devResult=0)
                 return JsonResponse({'code': 200, 'msg': '营销机会创建成功'})
 
@@ -237,8 +247,10 @@ class CreateSaleChance(View):
                                               linkMan=linkMan,
                                               linkPhone=linkPhone,
                                               description=description,
-                                              createMan=1,
+                                              createMan=
+                                              request.session.get('user')['id'],
                                               assignMan=assignManId,
+                                              assignTime=assigntime,
                                               state=state, devResult=0,
                                               updateDate=datetime.now())
                     return JsonResponse({'code': 200, 'msg': '营销机会创建成功'})
