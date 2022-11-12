@@ -112,8 +112,9 @@ class LinkMan(models.Model):
     cusId = models.IntegerField(db_column='cus_id')
     linkName = models.CharField(max_length=20, db_column='link_name')
     sex = models.IntegerField(max_length=4)
-    zhiwei = models.CharField(max_length=20, db_column='zhiwei')
-    officePhone = models.CharField(max_length=20, db_column='office_phone')
+    zhiwei = models.CharField(max_length=20, db_column='zhiwei', null=True)
+    officePhone = models.CharField(max_length=20, db_column='office_phone',
+                                   null=True)
     phone = models.CharField(max_length=20, db_column='phone')
 
     isValid = models.IntegerField(db_column='is_valid', default=1)
