@@ -9,7 +9,7 @@ from datetime import datetime
 
 from customer.models import LinkMan
 from dbutil import pymysql_pool
-from .models import SaleChance
+from .models import SaleChance, CusDevPlan
 
 # 准备数据
 config = {
@@ -263,3 +263,102 @@ class DelSaleChance(View):
         ids = [i for i in request.POST.get('ids').split(',')]
         SaleChance.objects.filter(pk__in=ids).update(deleted=1)
         return JsonResponse({'code': 200, 'msg': '营销机会删除成功！'})
+
+
+class SaleDevPlanIndex(View):
+    def get(self, request):
+        return render(request, 'sales/cus_dev_plan.html')
+
+
+class SaleDevPlanDetail(View):
+    def get(self, request):
+        id = request.GET.get('saleChanceId')
+        sc = SaleChance.objects.get(pk=id)
+        return render(request, 'sales/cus_dev_plan_detail.html',
+                      {'sc': sc})
+
+
+class CusDevPlanList(View):
+    @xframe_options_exempt
+    def get(self, request):
+        try:
+            page_num = request.GET.get('page', 1)
+            page_size = request.GET.get('limit', 10)
+            saleChanceId = request.GET.get('saleChanceId')
+            sc = CusDevPlan.objects.values().filter(saleChance=saleChanceId)
+
+            p = Paginator(sc, page_size)
+            data = p.page(page_num).object_list
+            count = p.count
+            context = {
+                'code': 0,
+                'msg': '加载成功',
+                'count': count,
+                'data': list(data),
+            }
+            return JsonResponse(context)
+        except Exception as e:
+            return JsonResponse({'code': 400, "msg": '查询失败'})
+
+
+class AddOrUpdateSaleChance(View):
+    def get(self, request):
+        id = request.GET.get('id')
+        context = None
+        if id:
+            cusDevPlan = CusDevPlan.objects.get(pk=id)
+            context = {'cusDevPlan': cusDevPlan}
+            return render(request, 'sales/cus_dev_plan_add_update.html',
+                          context)
+        else:
+            saleChanceId = request.GET.get('saleChanceId')
+            return render(request, 'sales/cus_dev_plan_add_update.html',
+                          {'saleChanceId': saleChanceId})
+
+    def post(self, request):
+        try:
+            # 计划内容
+            planItem = request.POST.get('planItem')
+            # 计划执行时间
+            planDate = request.POST.get('planDate')
+            # 执行效果
+            exeAffect = request.POST.get('exeAffect')
+            # 营销机会的ID
+            saleChanceId = request.POST.get('saleChanceId')
+            # 客户开发计划ID，存在证明为更新，不存在则为创建
+            id = request.POST.get('id')
+            if id:
+                try:
+                    CusDevPlan.objects.filter(pk=id).update(planItem=planItem,
+                                                            planDate=planDate,
+                                                            exeAffect=exeAffect,
+                                                            isValid=1,
+                                                            updateDate=datetime.now())
+                    return JsonResponse({'code': 200, 'msg': '营销计划编辑成功'})
+                except Exception as e:
+                    return JsonResponse({'code': 400, 'msg': '营销计划编辑失败'})
+            else:
+                try:
+                    sc = SaleChance.objects.get(id=int(saleChanceId))
+                    CusDevPlan.objects.create(saleChance=sc,
+                                              planItem=planItem,
+                                              planDate=planDate,
+                                              exeAffect=exeAffect,
+                                              isValid=1,
+                                              createDate=datetime.now(),
+                                              updateDate=datetime.now())
+                    return JsonResponse({'code': 200, 'msg': '营销计划创建成功'})
+                except Exception as e:
+                    return JsonResponse({'code': 400, 'msg': '营销计划创建失败'})
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': '未知错误'})
+
+
+class DeleteSaleChance(View):
+    def post(self, request):
+        id = request.POST.get('id')
+        try:
+            CusDevPlan.objects.filter(pk=id).update(deleted=1)
+            return JsonResponse({'code': 200, 'msg': '删除成功'})
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': '删除失败'})

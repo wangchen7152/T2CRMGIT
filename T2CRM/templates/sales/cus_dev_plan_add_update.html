@@ -87,9 +87,13 @@
       // 请求的地址
       var url = "";
       if (data.field.id == '' || data.field.id == undefined) {
-        url = "/sales/cus_dev_plan/create/";
+        url = "/sales/AddOrUpdateSaleChance/?saleChanceId=" + $("[name='saleChanceId']").val();
+        console.log(formData);
+        console.log($("[name='saleChanceId']").val())
       } else {
-        url = "/sales/cus_dev_plan/update/";
+        url = "/sales/AddOrUpdateSaleChance/";
+        console.log(formData);
+        console.log($("[name='saleChanceId']").val());
       }
 
       $.post(url, formData, function (result) {
