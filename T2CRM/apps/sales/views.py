@@ -285,6 +285,9 @@ class CusDevPlanList(View):
             page_num = request.GET.get('page', 1)
             page_size = request.GET.get('limit', 10)
             saleChanceId = request.GET.get('saleChanceId')
+            # 时间格式后端转化处理
+            # CusDevPlan.objects.extra(
+            #     select={ 'planDate': 'data_format(plan_date,"%%Y-%%m-%%d")'})
             sc = CusDevPlan.objects.values().filter(saleChance=saleChanceId)
 
             p = Paginator(sc, page_size)
@@ -362,3 +365,18 @@ class DeleteSaleChance(View):
             return JsonResponse({'code': 200, 'msg': '删除成功'})
         except Exception as e:
             return JsonResponse({'code': 400, 'msg': '删除失败'})
+
+
+class SaleChanceCompleteOrFailed(View):
+    def post(self, request):
+        saleChanceId = request.POST.get('saleChanceId')
+        devResult = int(request.POST.get('devResult'))
+        try:
+            SaleChance.objects.filter(pk=saleChanceId).update(
+                devResult=devResult, updateDate=datetime.now())
+            if devResult == 2:
+                return JsonResponse({'code': 200, 'msg': '开发完成'})
+            else:
+                return JsonResponse({'code': 200, 'msg': '确认失败成功'})
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': '编辑失败'})
