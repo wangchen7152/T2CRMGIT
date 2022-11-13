@@ -63,7 +63,7 @@
 
         <div class="layui-form-item layui-row">
           <div class="layui-col-xs6">
-            <label class="layui-form-label">概要</label>
+            <label class="layui-form-label">客户需求</label>
             <div class="layui-input-block">
               <input type="text" class="layui-input"
                      name="overview"
@@ -133,7 +133,7 @@
       // 单元格最小的宽度
       , cellMinWidth: 95
       // 访问数据的URL（后台的数据接口）
-      , url: '/sales/cus_dev_plan/list/?saleChanceId=' + $("[name='id']").val()
+      , url: '/sales/CusDevPlanList/?saleChanceId=' + $("[name='id']").val()
       // 开启分页
       , page: true
       // 默认每页显示的数量
@@ -204,7 +204,7 @@
     function openAddOrUpdateCusDevPlanDialog(id) {
 
       var title = "计划项管理 - 添加计划项";
-      var url = "/sales/cus_dev_plan/create_or_update/?saleChanceId=" + $("[name='id']").val();
+      var url = "/sales/AddOrUpdateSaleChance/?saleChanceId=" + $("[name='id']").val();
 
       // 判断计划项的ID是否为空 （如果为空，则表示添加；不为空则表示更新操作）
       if (id != null && id != '') {
@@ -235,7 +235,7 @@
       // 弹出确认框，询问用户是否确认删除
       layer.confirm('您确认要删除该记录吗？', {icon: 3, title: '开发项数据管理'}, function (index) {
         // 发送ajax请求，执行删除操作
-        $.post('/sales/cus_dev_plan/delete/', {id: id}, function (result) {
+        $.post('/sales/DeleteSaleChance/', {id: id}, function (result) {
           // 判断删除结果
           if (result.code == 200) {
             // 提示成功

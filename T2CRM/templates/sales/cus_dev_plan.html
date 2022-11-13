@@ -86,13 +86,13 @@
       // 单元格最小的宽度
       , cellMinWidth: 95
       // state=1 表示已分配
-      , url: '/sales/list/?state=1&flag=1'
+      , url: '/sales/SalesList/?state=1&flag=1'
       // 开启分页
       , page: true
       // 默认每页显示的数量
       , limit: 10
       // 每页页数的可选项
-      , limits: [10, 20, 30, 40, 50]
+      , limits: [5, 10, 20, 30, 40, 50]
       // 开启头部工具栏
       , toolbar: '#toolbarDemo'
       // 表头
@@ -102,24 +102,43 @@
         // sort：是否允许排序（默认：false）
         // fixed：固定列
         {type: 'checkbox', fixed: 'center'}
-        , {field: 'id', title: '编号', sort: true, fixed: 'left'}
+        , {field: 'id', title: '编号',width: 80, sort: true, fixed: 'left'}
         , {field: 'chanceSource', title: '机会来源', align: 'center'}
         , {field: 'customerName', title: '客户名称', align: 'center'}
-        , {field: 'cgjl', title: '成功几率', align: 'center'}
-        , {field: 'overview', title: '概要', align: 'center'}
-        , {field: 'linkMan', title: '联系人', align: 'center'}
-        , {field: 'linkPhone', title: '联系号码', align: 'center'}
+        , {field: 'cgjl', title: '成功几率',width: 90, align: 'center'}
+        , {field: 'overview', title: '客户需求',width: 80, align: 'center'}
+        , {field: 'linkMan', title: '联系人',width: 80, align: 'center'}
+        , {field: 'linkPhone', title: '联系号码',width: 140, align: 'center'}
         , {field: 'description', title: '描述', align: 'center'}
-        , {field: 'createMan', title: '创建人', align: 'center'}
-        , {field: 'createDate', title: '创建时间', align: 'center'}
-        , {field: 'updateDate', title: '修改时间', align: 'center'}
+        , {field: 'createMan', title: '创建人',width: 90, align: 'center'}
+         , {
+                    field: 'createDate', title: '创建时间', align: 'center',
+                    templet: function (obj) {
+                        if (obj.createDate == null || obj.createDate == undefined) {
+                            return '';
+                        } else {
+                            return layui.util.toDateString(obj.createDate, 'yyyy-MM-dd HH:mm:ss');
+                        }
+                    }
+                }
+         , {
+            field: 'updateDate', title: '更新时间', align: 'center',
+            templet: function (obj) {
+                if (obj.updateDate == null || obj.updateDate == undefined) {
+                    return '';
+                } else {
+                    return layui.util.toDateString(obj.updateDate, 'yyyy-MM-dd HH:mm:ss');
+                }
+            }
+        }
         , {
-          field: 'devResult', title: '开发状态', align: 'center', templet: function (d) {
+          field: 'devResult', title: '开发状态', width: 90,align: 'center', templet: function (d) {
             // 调用函数，返回格式化的结果
             return formatDevResult(d.devResult);
+            console.log(d.devResult);
           }
         }
-        , {title: '操作', templet: '#op', fixed: 'right', align: 'center', minWidth: 150}
+        , {title: '操作', templet: '#op', width: 100,fixed: 'right', align: 'center', minWidth: 150}
       ]]
     });
 
@@ -134,7 +153,7 @@
      */
     function formatDevResult(devResult) {
       if (devResult == 0) {
-        return "<div style='color: yellow'>未开发</div>";
+        return "<div style='color: grey'>未开发</div>";
       } else if (devResult == 1) {
         return "<div style='color: orange'>开发中</div>";
       } else if (devResult == 2) {
@@ -203,7 +222,7 @@
         // 宽高
         area: ['750px', '550px'],
         // url地址
-        content: "/sales/cus_dev_plan/detail/?saleChanceId=" + id,
+        content: "/sales/SaleDevPlanDetail/?saleChanceId=" + id,
         // 可以最大化与最小化
         maxmin: true
       });
