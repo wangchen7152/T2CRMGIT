@@ -36,4 +36,8 @@ urlpatterns = [
     # 删除开发计划
     url(r'DeleteSaleChance/', csrf_exempt(DeleteSaleChance.as_view()),
         name='DeleteSaleChance'),
+    # 开发计划完成或失败
+    url(r'SaleChanceCompleteOrFailed/',
+        csrf_exempt(SaleChanceCompleteOrFailed.as_view()),
+        name='SaleChanceCompleteOrFailed'),
 ]

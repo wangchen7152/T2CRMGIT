@@ -261,7 +261,7 @@
         // 得到需要被更新的饿营销机会的ID （通过隐藏域获取）
         var saleChanceId = $("[name='id']").val();
         // 发送ajax请求，更新营销机会的开发状态
-        $.post('/sales/cus_dev_plan/dev_result/', {
+        $.post('/sales/SaleChanceCompleteOrFailed/', {
           saleChanceId: saleChanceId,
           devResult: devResult
         }, function (result) {
