@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+{# 导入静态资源 #}
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>服务分配</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+</head>
+<body>
+{# csrf 保护 #}
+{% csrf_token %}
+<form class="layui-form">
+  <blockquote class="layui-elem-quote quoteBox">
+    <form class="layui-form">
+      <div class="layui-inline">
+        <div class="layui-input-inline">
+          <input type="text" name="customer"
+                 class="layui-input
+					searchVal" placeholder="客户"/>
+        </div>
+        <div class="layui-input-inline">
+          <select name="type" id="type">
+            <option value="">请选择</option>
+            <option value="6">咨询</option>
+            <option value="7">投诉</option>
+            <option value="8">建议</option>
+          </select>
+        </div>
+
+        <a class="layui-btn search_btn" data-type="reload"><i
+                class="layui-icon">&#xe615;</i> 搜索</a>
+      </div>
+    </form>
+  </blockquote>
+
+  <table id="customerServeList" class="layui-table" lay-filter="customerServes"></table>
+
+
+  <script type="text/html" id="toolbarDemo">
+
+    </script>
+
+  <script id="customerServeListBar" type="text/html">
+    <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="assign">分配</a>
+  </script>
+
+</form>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" charset="utf-8"></script>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script>
+  layui.use(['table', 'layer', "form"], function () {
+    var layer = parent.layer === undefined ? layui.layer : top.layer,
+        $ = layui.jquery,
+        table = layui.table;
+
+    //服务列表展示
+    table.render({
+      elem: '#customerServeList',
+      url: '/serve/list?state=1',
+      cellMinWidth: 95,
+      page: true,
+      height: "full-125",
+      limits: [10, 15, 20, 25],
+      limit: 10,
+      toolbar: "#toolbarDemo",
+      id: "customerServeListTable",
+      cols: [[
+        {type: "checkbox", fixed: "left", width: 50},
+        {field: "id", title: '编号', fixed: "true", width: 80},
+        {field: 'customer', title: '客户名', minWidth: 50, align: "center"},
+        {
+          field: 'serveType', title: '服务类型', minWidth: 100, align: 'center',
+          templet: function (obj) {
+            if (obj.serveType == 6) {
+              return "咨询";
+            } else if (obj.serveType == 7) {
+              return "投诉";
+            } else if (obj.serveType == 8) {
+              return "建议";
+            }
+          }
+        },
+        {field: 'overview', title: '概要信息', align: 'center'},
+        {field: 'createPeople', title: '创建人', minWidth: 100, align: 'center'},
+        {field: 'assignTime', title: '分配时间', minWidth: 50, align: "center"},
+        {field: 'assigner', title: '分配人', minWidth: 100, align: 'center'},
+        {field: 'createDate', title: '创建时间', align: 'center', minWidth: 150},
+        {field: 'updateDate', title: '更新时间', align: 'center', minWidth: 150},
+        {title: '操作', minWidth: 150, templet: '#customerServeListBar', fixed: "right", align: "center"}
+      ]]
+    });
+
+    // 多条件搜索
+    $(".search_btn").on("click", function () {
+      table.reload("customerServeListTable", {
+        page: {
+          curr: 1 // 重新从第 1 页开始
+        },
+        where: {
+          customer: $("input[name='customer']").val(),  // 客户名
+          serveType: $("#type").val()  // 服务类型
+        }
+      })
+    });
+
+
+    /**
+     * 监听行工具栏
+     */
+    table.on('tool(customerServes)', function (data) {
+
+      if (data.event == "assign") { // 服务分配操作
+
+        // 打开服务分配对话框
+        openCustomerServeAssignDialog(data.data.id);
+
+      }
+
+    });
+
+    /**
+     * 打开服务分配对话框
+     */
+    function openCustomerServeAssignDialog(id) {
+      var title = "<h3>服务管理 - 服务分配</h3>";
+      var url = "/serve/assign/workflow/?id=" + id;
+
+      // iframe层
+      layui.layer.open({
+        // 类型
+        type: 2,
+        // 标题
+        title: title,
+        // 宽高
+        area: ['700px', '500px'],
+        // url地址
+        content: url,
+        // 可以最大化与最小化
+        maxmin: true
+      });
+    }
+
+  });
+</script>
+</body>
+</html>

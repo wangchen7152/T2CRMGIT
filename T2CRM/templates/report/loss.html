@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+{# 导入静态资源 #}
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>流失客户统计</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+</head>
+<body>
+{# csrf 保护 #}
+{% csrf_token %}
+<form class="layui-form">
+  <blockquote class="layui-elem-quote quoteBox">
+    <form class="layui-form">
+      <div class="layui-inline">
+        <div class="layui-input-inline">
+          <input type="text" name="cusNo"
+                 class="layui-input
+					searchVal" placeholder="客户编号"/>
+        </div>
+        <div class="layui-input-inline">
+          <input type="text" name="cusName" class="layui-input
+					searchVal" placeholder="客户名"/>
+        </div>
+        <a class="layui-btn search_btn" data-type="reload"><i
+                class="layui-icon">&#xe615;</i> 搜索</a>
+      </div>
+    </form>
+  </blockquote>
+
+  <table id="customerLossList" class="layui-table" lay-filter="customerLosses"></table>
+
+
+  <script type="text/html" id="toolbarDemo">
+	</script>
+
+
+</form>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" charset="utf-8"></script>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script>
+  layui.use(['table', 'layer', "form"], function () {
+    var layer = parent.layer === undefined ? layui.layer : top.layer,
+        $ = layui.jquery,
+        table = layui.table;
+    // 流失客户列表展示
+    var tableIns = table.render({
+      elem: '#customerLossList',
+      url: '/customer/loss/list/?state=1', // 1 确认流失
+      cellMinWidth: 95,
+      page: true,
+      height: "full-125",
+      limits: [10, 15, 20, 25],
+      limit: 10,
+      toolbar: "#toolbarDemo",
+      id: "customerLossListTable",
+      cols: [[
+        {field: 'cusNo', title: '客户编号', align: "center"},
+        {field: 'cusName', title: '客户名称', align: "center"},
+        {field: 'cusManager', title: '客户经理', align: "center"},
+        {
+          field: 'lastOrderTime', title: '最后下单时间', align: "center",
+          templet: function (obj) {
+            if (obj.lastOrderTime == null || obj.lastOrderTime == undefined) {
+              return '';
+            } else {
+              return layui.util.toDateString(obj.lastOrderTime, 'yyyy-MM-dd HH:mm:ss');
+            }
+          }
+        },
+        {field: 'lossReason', title: '流失原因', align: "center"},
+        {
+          field: 'confirmLossTime', title: '确认流失时间', align: "center",
+          templet: function (obj) {
+            if (obj.confirmLossTime == null || obj.confirmLossTime == undefined) {
+              return '';
+            } else {
+              return layui.util.toDateString(obj.confirmLossTime, 'yyyy-MM-dd HH:mm:ss');
+            }
+          }
+        }
+      ]]
+    });
+
+
+    /**
+     * 搜索按钮的点击事件
+     */
+    $(".search_btn").click(function () {
+
+      /**
+       * 表格重载
+       *  多条件查询
+       */
+      tableIns.reload({
+        // 设置需要传递给后端的参数
+        where: { //设定异步数据接口的额外参数，任意设
+          // 通过文本框，设置传递的参数
+          cusName: $("[name='cusName']").val() // 客户名称
+          , cusNo: $("[name='cusNo']").val() // 客户编号
+        }
+        , page: {
+          curr: 1 // 重新从第 1 页开始
+        }
+      });
+
+    });
+
+  });
+</script>
+</body>
+</html>

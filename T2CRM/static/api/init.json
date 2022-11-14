@@ -57,7 +57,7 @@
             "child": [
                 {
                     "title": "服务创建",
-                    "href": "",
+                    "href": "serve/ServeIndex",
                     "icon": "fa fa-tachometer",
                     "target": "_self"
                 },

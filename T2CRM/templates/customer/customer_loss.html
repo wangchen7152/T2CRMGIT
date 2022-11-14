@@ -86,24 +86,34 @@
             id: "customerLossListTable",
             cols: [[
                 {type: "checkbox", fixed: "center"},
-                {field: "id", title: '编号', fixed: "true"},
+                {field: "id", title: '编号', width: 80, fixed: "true"},
                 {field: 'cusNo', title: '客户编号', align: "center"},
                 {field: 'cusName', title: '客户名称', align: "center"},
-                {field: 'cusManager', title: '客户经理', align: "center"},
+                {
+                    field: 'cusManager',
+                    title: '客户经理',
+                    width: 120,
+                    align: "center"
+                },
                 {
                     field: 'lastOrderTime', title: '最后下单时间', align: "center",
                     templet: function (obj) {
                         return layui.util.toDateString(obj.lastOrderTime, 'yyyy-MM-dd HH:mm:ss');
                     }
                 },
-                {field: 'state', title: '是否流失', align: "center",templet:function (d) {
-                        if (d.state==1){
-                            return "已流失"
-                        }
-                        else {
+                {
+                    field: 'state',
+                    title: '是否流失',
+                    width: 120,
+                    align: "center",
+                    templet: function (d) {
+                        if (d.state == 1) {
+                            return "<div style='color: red'>开发失败</div>";
+                        } else {
                             return ""
                         }
-                    }},
+                    }
+                },
                 {field: 'lossReason', title: '流失原因', align: "center"},
                 {
                     field: 'confirmLossTime', title: '确认流失时间', align: "center",
@@ -139,6 +149,7 @@
                     title: '操作',
                     fixed: "right",
                     align: "center",
+                    width: 120,
                     minWidth: 150,
                     templet: "#op"
                 }

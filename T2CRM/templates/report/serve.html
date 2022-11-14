@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+{# 导入静态资源 #}
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>客户服务分析</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+</head>
+<body>
+{# csrf 保护 #}
+{% csrf_token %}
+<div class="layui-card">
+  <div class="layui-card-header">客户服务分析</div>
+  <div class="layui-card-body" id="make" style="width: 100%;min-height:500px"></div>
+  <div class="layui-card-body" id="make02" style="width: 100%;min-height:500px"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" charset="utf-8"></script>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script src="{% static 'js/lay-config.js' %}" charset="utf-8"></script>
+<script>
+  layui.use(['layer', 'echarts'], function () {
+    var $ = layui.jquery,
+        echarts = layui.echarts;
+
+    /**
+     * 发送ajax请求，获取折线图以及饼状图所需要的数据
+     */
+    $.ajax({
+      type: "get",
+      url: "/report/serve/",
+      dataType: "json",
+      success: function (result) {
+        // console.log(result);
+        var serveType = []; // 服务类型
+        var amount = []; // 客户数量
+        var data = []; // 用于构建饼图的对象数组
+        // 获取数据进行赋值
+        for (i = 0; i < result.length; i++) {
+          serveType.push(result[i].type);
+          amount.push(result[i].amount);
+          // 用于构建饼图的对象及数组
+          data.push({"value": result[i].amount, "name": result[i].type});
+        }
+        // 基于准备好的dom，初始化echarts折线图
+        var myChart1 = echarts.init(document.getElementById('make'));
+
+        // 指定图表的配置项和数据
+        var option1 = {
+          // 标题
+          title: {
+            text: '客户构成分析'
+          },
+          // 提示框
+          tooltip: {},
+          // X轴
+          xAxis: {
+            type: 'category',
+            data: serveType
+          },
+          // Y轴
+          yAxis: {
+            type: 'value'
+          },
+          // 系列
+          series: [{
+            // 数据
+            data: amount,
+            // 折线图
+            type: 'line'
+          }]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart1.setOption(option1);
+
+
+        // 基于准备好的dom，初始化echarts饼状图（南丁格尔玫瑰图）
+        var myChart2 = echarts.init(document.getElementById('make02'));
+
+        // 指定图表的配置项和数据
+        var option2 = {
+          title: {
+            text: '客户构成分析',
+            subtext: '来自CRM',
+            left: 'center'
+          },
+          tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+          },
+          legend: {
+            left: 'center',
+            top: 'bottom',
+            data: serveType
+          },
+          toolbox: {
+            show: true,
+            feature: {
+              mark: {show: true},
+              dataView: {show: true, readOnly: false},
+              magicType: {
+                show: true,
+                type: ['pie', 'funnel']
+              },
+              restore: {show: true},
+              saveAsImage: {show: true}
+            }
+          },
+          series: [
+            {
+              name: '半径模式',
+              type: 'pie',
+              radius: [20, 110],
+              center: ['25%', '50%'],
+              roseType: 'radius',
+              label: {
+                show: false
+              },
+              emphasis: {
+                label: {
+                  show: true
+                }
+              },
+              data: data
+            },
+            {
+              name: '面积模式',
+              type: 'pie',
+              radius: [30, 110],
+              center: ['75%', '50%'],
+              roseType: 'area',
+              data: data
+            }
+          ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart2.setOption(option2);
+      }
+    });
+
+  });
+</script>
+</body>
+</html>
