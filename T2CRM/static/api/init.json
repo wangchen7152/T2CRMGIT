@@ -63,7 +63,7 @@
                 },
                 {
                     "title": "服务分配",
-                    "href": "",
+                    "href": "serve/ServeAssign",
                     "icon": "fa fa-code-fork",
                     "target": "_self"
                 },
