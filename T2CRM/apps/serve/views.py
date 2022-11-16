@@ -33,7 +33,7 @@ class ServeList(View):
                         s.assign_time assign_time,
                         s.createPeople_id createPeople,
                         U.id CreateUserID,
-                        U.username createPeople,
+                        U.username createPeopleName,
                         su.username AssignUserName,
                         su.id AssignUserID,
                         s.customer_id customer_id,
@@ -69,6 +69,9 @@ class ServeList(View):
                     customer_Name)
             if type:
                 sql += ' AND s.serve_type = "{}"'.format(type)
+            user_id = request.session['user']['id']
+            if user_id != 1:
+                sql += ' AND s.createPeople_id = "{}"'.format(user_id)
             sql += 'ORDER BY s.id DESC;'
             # 执行 SQL
             cursor.execute(sql)
@@ -100,7 +103,14 @@ class ServeAssign(View):
 
 class CreateWorkflow(View):
     def get(self, request):
-        return render(request, 'serve/serve_create_create.html')
+        id = request.GET.get('id')
+        context = None
+        if id:
+            cs = CustomerServe.objects.get(pk=id)
+            context = {"cs": cs}
+            return render(request, 'serve/serve_create_create.html', context)
+        else:
+            return render(request, 'serve/serve_create_create.html', context)
 
     def post(self, request):
         try:
@@ -114,19 +124,38 @@ class CreateWorkflow(View):
             serviceRequest = request.POST.get('serviceRequest')
             # 服务描述
             overview = request.POST.get('overview')
-
-            # 插入数据库数据
+            # id如果获取到id则表示为编辑操作
+            CsId = request.POST.get('CsId')
             cs = Customer.objects.get(id=customer)
             create_us = User.objects.get(id=create_user_id)
-            if CustomerServe.objects.filter(customer=cs,
-                                            serveType=serveType):
-                return JsonResponse({'code': 401, 'msg': "客户同样的服务已创建，请勿重复添加"})
+            if CsId:
 
-            CustomerServe.objects.create(serveType=serveType, overview=overview,
-                                         customer=cs, state=1,
-                                         serviceRequest=serviceRequest,
-                                         createPeople=create_us,
-                                         createDate=datetime.now())
-            return JsonResponse({'code': 200, 'msg': "客服服务添加成功"})
+                CustomerServe.objects.filter(pk=CsId). \
+                    update(serveType=serveType, overview=overview,
+                           customer=cs, state=1, serviceRequest=serviceRequest,
+                           createPeople=create_us, updateDate=datetime.now())
+                return JsonResponse({'code': 200, 'msg': "客服服务编辑成功"})
+
+            else:
+                # 插入数据库数据
+                if CustomerServe.objects.filter(customer=cs,
+                                                serveType=serveType):
+                    return JsonResponse(
+                        {'code': 401, 'msg': "客户同样的服务已创建，请勿重复添加"})
+
+                CustomerServe.objects.create(serveType=serveType,
+                                             overview=overview,
+                                             customer=cs, state=1,
+                                             serviceRequest=serviceRequest,
+                                             createPeople=create_us,
+                                             createDate=datetime.now())
+                return JsonResponse({'code': 200, 'msg': "客服服务添加成功"})
         except Exception as e:
             return JsonResponse({'code': 400, 'msg': e})
+
+
+class DelWorkflow(View):
+    def post(self, request):
+        id = request.POST.get('id')
+        CustomerServe.objects.filter(pk=id).update(deleted=1)
+        return JsonResponse({'code': 200, 'msg': "客服服务删除成功"})

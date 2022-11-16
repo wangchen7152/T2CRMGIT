@@ -70,7 +70,7 @@
             table = layui.table;
 
         //服务列表展示
-        table.render({
+        var t = table.render({
             elem: '#customerServeList',
             url: '/serve/ServeList/?state=1',
             cellMinWidth: 95,
@@ -106,7 +106,7 @@
                 },
                 {field: 'overview', title: '概要信息', align: 'center'},
                 {
-                    field: 'createPeople',
+                    field: 'createPeopleName',
                     title: '创建人',
                     minWidth: 100,
                     align: 'center'
@@ -128,7 +128,14 @@
                     field: 'updateDate',
                     title: '更新时间',
                     align: 'center',
-                    minWidth: 150
+                    minWidth: 150,
+                    templet: function (obj) {
+                        if (obj.updateDate == null || obj.updateDate == undefined) {
+                            return '';
+                        } else {
+                            return layui.util.toDateString(obj.updateDate, 'yyyy-MM-dd HH:mm:ss');
+                        }
+                    }
                 },
                 {
                     title: '操作',
@@ -158,9 +165,8 @@
                 edit_customer_user(data.data.id)
             } else if (data.event == "del" && user_id == 1) {
                 del_customer_user(data.data.id)
-            }
-            else {
-                layer.msg('当前用户无权限，请联系管理员处理！' ,{icon: 5});
+            } else {
+                layer.msg('当前用户无权限，请联系管理员处理！', {icon: 5});
                 return false
             }
         });
@@ -169,7 +175,7 @@
             // 判断id是否为空 （如果不为空，则为更新操作）
             if (id != null && id != '') {
                 title = "<h3>客户管理 - 更新客户信息</h3>";
-                url = '/serve/EditServer/?id=' + id;
+                url = '/serve/CreateWorkflow/?id=' + id;
             }
             // iframe层
             layui.layer.open({
@@ -185,24 +191,37 @@
                 maxmin: true
             });
         }
+
         function del_customer_user(id) {
-            // 判断id是否为空 （如果不为空，则为更新操作）
-            if (id != null && id != '') {
-                title = "<h3>客户管理 - 更新客户信息</h3>";
-                url = '/serve/delServer/?id=' + id;
-            }
-            // iframe层
-            layui.layer.open({
-                // 类型
-                type: 2,
-                // 标题
-                title: title,
-                // 宽高
-                area: ['700px', '500px'],
-                // url地址
-                content: url,
-                // 可以最大化与最小化
-                maxmin: true
+            // 弹出确认框，询问用户是否确认删除
+            layer.confirm('确定要删除该记录吗？', {
+                icon: 3,
+                title: "客户服务"
+            }, function (index) {
+                // 关闭确认框
+                layer.close(index);
+                // 发送ajax请求，删除记录
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'serve:DelWorkflow' %}",
+                    data: {
+                        id: id,
+                    },
+                    success: function (result) {
+                        // 判断删除结果
+                        layer.msg(result.msg);
+                        if (result.code == 200) {
+                            // 提示成功
+                            layer.msg("删除成功！", {icon: 6});
+                            // 刷新表格
+                            t.reload();
+                        } else {
+                            // 提示失败
+                            layer.msg(result.msg, {icon: 5});
+                            return false;
+                        }
+                    }
+                });
             });
         }
 

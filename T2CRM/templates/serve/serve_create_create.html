@@ -17,6 +17,10 @@
 {% csrf_token %}
 <form class="layui-form" style="width:80%;">
     <input id="userId" type="hidden" value="{{ request.session.user.id }}">
+    <input id="customerID" type="hidden"
+           value="{% if cs.customer_id %}{{ cs.customer_id }}{% endif %}"/>
+    <input id="CsID" type="hidden"
+           value="{% if cs.id %}{{ cs.id }}{% endif %}"/>
     <input name="state" type="hidden" value="1"/>
     <div class="layui-form-item layui-row">
         <div class="layui-col-xs6">
@@ -24,9 +28,15 @@
             <div class="layui-input-block">
                 <select name="serveType" id="serveType">
                     <option value="">请选择</option>
-                    <option value="6">咨询</option>
-                    <option value="7">投诉</option>
-                    <option value="8">建议</option>
+                    <option value="6"
+                            {% if cs.serveType == 6 %}selected{% endif %}>咨询
+                    </option>
+                    <option value="7"
+                            {% if cs.serveType == 7 %}selected{% endif %}>投诉
+                    </option>
+                    <option value="8"
+                            {% if cs.serveType == 8 %}selected{% endif %}>建议
+                    </option>
                 </select>
             </div>
         </div>
@@ -45,7 +55,7 @@
         <label class="layui-form-label">服务内容</label>
         <div class="layui-input-block">
             <textarea placeholder="请输入服务内容" name="serviceRequest"
-                      class="layui-textarea"></textarea>
+                      class="layui-textarea">{% if cs.serviceRequest %}{{ cs.serviceRequest }}{% endif %}</textarea>
         </div>
     </div>
 
@@ -53,7 +63,7 @@
         <label class="layui-form-label">服务概要</label>
         <div class="layui-input-block">
             <textarea placeholder="请输入服务信息" name="overview"
-                      class="layui-textarea"></textarea>
+                      class="layui-textarea">{% if cs.overview %}{{ cs.overview }}{% endif %}</textarea>
         </div>
     </div>
     </div>
@@ -70,9 +80,9 @@
         </div>
     </div>
 </form>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"
+<script src="{% static 'js/system/login/jquery.min.js' %}"
         charset="utf-8"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js"
+<script src="{% static 'js/system/login/jquery.cookie.min.js' %}"
         charset="utf-8"></script>
 <script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
 <script>
@@ -96,19 +106,31 @@
 
             // 设置创建人
             data.field.createPeople = $("#userId").val();
+            // 设置服务的ID
+            data.field.CsId = $("#CsID").val();
 
             // 得到所有的表单元素的值
             var formData = data.field;
 
             // 请求的地址
-            var url = "/serve/CreateWorkflow/"; // 添加服务
+            var url = '';
+            var CsId = $("#CsID").val();
+            console.log("客户服务的ID为:" + CsId);
+            // 判断ID是否为空
+            if (CsId != null && CsId != '') {
+                // 更新操作
+                url = "/serve/CreateWorkflow/?CsId=" + CsId;
+            }else {
+                url = "/serve/CreateWorkflow/";
+
+            }// 添加服务
 
             $.post(url, formData, function (result) {
                 // 判断操作是否执行成功 200=成功
                 if (result.code == 200) {
                     // 成功
                     // 提示成功
-                    top.layer.msg("添加服务成功！", {icon: 6});
+                    top.layer.msg(result.msg, {icon: 6});
                     // 关闭加载层
                     top.layer.close(index);
                     // 关闭弹出层
@@ -143,14 +165,21 @@
             data: {},
             success: function (data) {
                 // console.log(data);
+                var customerID = $("#customerID").val();
+                console.log("所选择客户ID为：" + $("#customerID").val());
                 // 判断返回的数据是否为空
                 if (data != null) {
                     for (var i = 0; i < data.length; i++) {
                         var opt = "";
-
-                        opt = "<option value='" + data[i].id + "'>" + data[i].name + "</option>";
-
-                        // 将下拉项设置到下拉框中
+                        if (customerID == data[i].id) {
+                            console.log(customerID);
+                            console.log(data[i].id);
+                            // 设置下拉选项  设置下拉选项选中
+                            opt = "<option value='" + data[i].id + "' selected>" + data[i].name + "</option>";
+                        } else {
+                            // 设置下拉选项
+                            opt = "<option value='" + data[i].id + "'>" + data[i].name + "</option>";
+                        }
                         $("#customer").append(opt);
                     }
                 }
