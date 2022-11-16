@@ -4,13 +4,20 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.views import View
+from datetime import datetime
 
+from customer.models import Customer
 from sales.views import connect
+from serve.models import CustomerServe
+from system.models import User
 
 
 class ServeIndex(View):
     def get(self, request):
-        return render(request, 'serve/serve_create.html')
+        user = request.session.get('user'),
+        return render(request, 'serve/serve_create.html', {
+            'user': user[0]['id']
+        })
 
 
 class ServeList(View):
@@ -84,3 +91,42 @@ class ServeList(View):
             return JsonResponse({'code': 401, 'msg': '执行数据库失败'})
         finally:
             connection.close()
+
+
+class ServeAssign(View):
+    def get(self, request):
+        return render(request, 'serve/serve_assign.html')
+
+
+class CreateWorkflow(View):
+    def get(self, request):
+        return render(request, 'serve/serve_create_create.html')
+
+    def post(self, request):
+        try:
+            # 创建的用户ID
+            create_user_id = request.POST.get('createPeople')
+            # 服务类型
+            serveType = request.POST.get('serveType')
+            # 客户名称
+            customer = request.POST.get('customer')
+            # 服务内容
+            serviceRequest = request.POST.get('serviceRequest')
+            # 服务描述
+            overview = request.POST.get('overview')
+
+            # 插入数据库数据
+            cs = Customer.objects.get(id=customer)
+            create_us = User.objects.get(id=create_user_id)
+            if CustomerServe.objects.filter(customer=cs,
+                                            serveType=serveType):
+                return JsonResponse({'code': 401, 'msg': "客户同样的服务已创建，请勿重复添加"})
+
+            CustomerServe.objects.create(serveType=serveType, overview=overview,
+                                         customer=cs, state=1,
+                                         serviceRequest=serviceRequest,
+                                         createPeople=create_us,
+                                         createDate=datetime.now())
+            return JsonResponse({'code': 200, 'msg': "客服服务添加成功"})
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': e})
