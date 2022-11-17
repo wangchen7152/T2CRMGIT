@@ -6,8 +6,8 @@
       <change beforePath="$PROJECT_DIR$/apps/serve/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/serve/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/serve/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/serve/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/serve/serve_assign.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/serve/serve_assign.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/serve/serve_create.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/serve/serve_create.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/serve/serve_create_create.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/serve/serve_create_create.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/serve/serve_assign_assign.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/serve/serve_assign_assign.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/serve/serve_feedback_feedback.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/serve/serve_feedback_feedback.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -37,11 +37,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/apps/serve/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="66" column="29" lean-forward="true" selection-start-line="66" selection-start-column="29" selection-end-line="66" selection-end-column="29" />
+            <state relative-caret-position="322">
+              <caret line="174" selection-start-line="174" selection-end-line="174" />
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
               </folding>
@@ -50,68 +50,37 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apps/sales/views.py">
+        <entry file="file://$PROJECT_DIR$/apps/serve/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
-              <caret line="217" column="16" lean-forward="true" selection-start-line="217" selection-start-column="16" selection-end-line="217" selection-end-column="16" />
+            <state relative-caret-position="28">
+              <caret line="13" column="6" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
               <folding>
-                <element signature="e#26#40#0" expanded="true" />
-                <element signature="e#1190#4044#0" />
+                <element signature="e#0#28#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/serve/serve_create.html">
+        <entry file="file://$PROJECT_DIR$/apps/customer/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1752">
-              <caret line="108" column="44" selection-start-line="108" selection-start-column="28" selection-end-line="108" selection-end-column="44" />
+            <state relative-caret-position="219">
+              <caret line="42" column="6" selection-start-line="42" selection-start-column="6" selection-end-line="42" selection-end-column="6" />
+              <folding>
+                <element signature="e#0#28#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/serve/serve_assign.html">
+        <entry file="file://$PROJECT_DIR$/apps/serve/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="318">
-              <caret line="98" column="12" lean-forward="true" selection-start-line="98" selection-start-column="12" selection-end-line="98" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/customer/customer.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="338">
-              <caret line="105" column="23" lean-forward="true" selection-start-line="105" selection-start-column="23" selection-end-line="105" selection-end-column="23" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/customer/customer_user.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="96" column="20" selection-start-line="96" selection-start-column="12" selection-end-line="96" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/sales/cus_dev_plan_add_update.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="311">
-              <caret line="89" column="62" selection-start-line="89" selection-start-column="62" selection-end-line="89" selection-end-column="94" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/sales/sale_chance.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-7385">
-              <caret line="84" column="20" selection-start-line="84" selection-start-column="12" selection-end-line="84" selection-end-column="20" />
+            <state relative-caret-position="294">
+              <caret line="21" column="14" lean-forward="true" selection-start-line="21" selection-start-column="14" selection-end-line="21" selection-end-column="14" />
+              <folding>
+                <element signature="e#0#32#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -119,20 +88,47 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/serve/serve_create_create.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
-              <caret line="111" column="26" lean-forward="true" selection-start-line="111" selection-start-column="26" selection-end-line="111" selection-end-column="26" />
-              <folding>
-                <element signature="n#style#0;n#form#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
+            <state relative-caret-position="334">
+              <caret line="180" column="28" lean-forward="true" selection-start-line="180" selection-start-column="28" selection-end-line="180" selection-end-column="101" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/sales/add_update.html">
+        <entry file="file://$PROJECT_DIR$/templates/serve/serve_assign.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="135" column="21" selection-start-line="135" selection-start-column="21" selection-end-line="135" selection-end-column="31" />
+            <state relative-caret-position="325">
+              <caret line="180" column="44" selection-start-line="180" selection-start-column="30" selection-end-line="180" selection-end-column="44" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/serve/serve_assign_assign.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="154">
+              <caret line="150" column="22" lean-forward="true" selection-start-line="150" selection-start-column="22" selection-end-line="150" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/serve/serve_feedback_feedback.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="296">
+              <caret line="160" column="11" lean-forward="true" selection-start-line="160" selection-start-column="11" selection-end-line="160" selection-end-column="89" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apps/system/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="378">
+              <caret line="325" column="21" selection-start-line="325" selection-start-column="6" selection-end-line="325" selection-end-column="21" />
+              <folding>
+                <element signature="e#23#32#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -150,11 +146,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>customerServeListBar</find>
-      <find>obj</find>
-      <find>customerServes</find>
-      <find>toolbar</find>
-      <find>tool</find>
       <find>id'</find>
       <find>id</find>
       <find>name=</find>
@@ -166,10 +157,8 @@
       <find>data</find>
       <find>···</find>
       <find>context = None</find>
-      <find>context = None</find>
       <find>textarea</find>
       <find>city_id</find>
-      <find>customerID</find>
       <find>customer</find>
       <find>saleChanceId</find>
       <find>formData</find>
@@ -180,6 +169,13 @@
       <find>t.reload()</find>
       <find>t</find>
       <find>var t</find>
+      <find>指派人的下拉框</find>
+      <find>cursor.fetchall()</find>
+      <find>cursor.close()</find>
+      <find>customer_manager</find>
+      <find>customerID</find>
+      <find>CustomerManager</find>
+      <find>assigner</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -193,8 +189,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/../wang917/venv/Lib/site-packages/xadmin/models.py" />
-        <option value="$PROJECT_DIR$/apps/system/forms.py" />
         <option value="$PROJECT_DIR$/../wang917/venv/Lib/site-packages/django/middleware/clickjacking.py" />
         <option value="$PROJECT_DIR$/../wang917/venv/Lib/site-packages/django/conf/global_settings.py" />
         <option value="$PROJECT_DIR$/T2CRM/commen.py" />
@@ -239,11 +233,13 @@
         <option value="$PROJECT_DIR$/apps/serve/models.py" />
         <option value="$PROJECT_DIR$/T2CRM/urls.py" />
         <option value="$PROJECT_DIR$/static/api/init.json" />
-        <option value="$PROJECT_DIR$/apps/serve/urls.py" />
         <option value="$PROJECT_DIR$/templates/serve/serve_create_create.html" />
         <option value="$PROJECT_DIR$/templates/serve/serve_create.html" />
         <option value="$PROJECT_DIR$/templates/serve/serve_assign.html" />
         <option value="$PROJECT_DIR$/apps/serve/views.py" />
+        <option value="$PROJECT_DIR$/apps/serve/urls.py" />
+        <option value="$PROJECT_DIR$/templates/serve/serve_feedback_feedback.html" />
+        <option value="$PROJECT_DIR$/templates/serve/serve_assign_assign.html" />
       </list>
     </option>
   </component>
@@ -282,6 +278,12 @@
               <item name="T2CRM" type="462c0819:PsiDirectoryNode" />
               <item name="apps" type="462c0819:PsiDirectoryNode" />
               <item name="serve" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="T2CRM" type="b2602c69:ProjectViewProjectNode" />
+              <item name="T2CRM" type="462c0819:PsiDirectoryNode" />
+              <item name="apps" type="462c0819:PsiDirectoryNode" />
+              <item name="system" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="T2CRM" type="b2602c69:ProjectViewProjectNode" />
@@ -445,12 +447,13 @@
       <workItem from="1668320034976" duration="11403000" />
       <workItem from="1668426933979" duration="5917000" />
       <workItem from="1668513613969" duration="6792000" />
-      <workItem from="1668600192231" duration="5154000" />
+      <workItem from="1668600192231" duration="5323000" />
+      <workItem from="1668687927484" duration="3678000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="264425000" />
+    <option name="totallyTimeSpent" value="268272000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -465,13 +468,13 @@
     <frame x="-8" y="0" width="1552" height="840" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49787235" visible="true" weight="0.20682731" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49787235" visible="true" weight="0.20950468" />
       <window_info id="Structure" order="1" sideWeight="0.50212765" side_tool="true" weight="0.22824632" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32768363" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.28107345" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4986613" weight="0.50282484" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4986613" visible="true" weight="0.21327683" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32909605" />
@@ -480,7 +483,7 @@
       <window_info anchor="bottom" id="manage.py@T2CRM" order="9" sideWeight="0.49933067" weight="0.45762712" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50133866" side_tool="true" weight="0.58474576" />
-      <window_info anchor="bottom" id="Terminal" order="12" weight="0.5480226" />
+      <window_info anchor="bottom" id="Terminal" order="12" weight="0.5472497" />
       <window_info anchor="bottom" id="Python Console" order="13" weight="0.32768363" />
       <window_info anchor="bottom" id="Messages" order="14" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -577,58 +580,47 @@
   <component name="debuggerHistoryManager">
     <expressions id="evaluateCodeFragment">
       <expression>
-        <expression-string>CustomerServe.objects.filter(pk=CsId). \
-                    update(serveType=serveType, overview=overview,
-                           customer=cs, state=1, serviceRequest=serviceRequest,
-                           createPeople=create_us, updateDate=datetime.now())</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
-      </expression>
-      <expression>
         <expression-string>request.POST</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>request.POST.get('CsId')</expression-string>
+        <expression-string>request.POST.get('assigner')</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>request</expression-string>
+        <expression-string>customer.name</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>request.get</expression-string>
+        <expression-string>customer</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>cs.id</expression-string>
+        <expression-string>customer['name']</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>cs</expression-string>
+        <expression-string>customer[0]['name']</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>CustomerServe.objects.create(serveType=serveType, overview=overview,
-                                         customer=cs, state=1,
-                                         serviceRequest=serviceRequest,
-                                         createPeople=create_us,
-                                         createDate=datetime.now())</expression-string>
+        <expression-string>name['name']</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>CustomerServe.objects.create(serveType=serveType, overview=overview,
-                                         customer=cs, state=1,
-                                         serviceRequest=serviceRequest,
-                                         createPeople=create_user_id,
-                                         createDate=datetime.now())</expression-string>
+        <expression-string>name.name</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>name</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
       </expression>
@@ -639,13 +631,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="13048">
           <caret line="466" column="14" selection-start-line="466" selection-start-column="14" selection-end-line="466" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apps/system/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1064">
-          <caret line="38" column="39" selection-start-line="38" selection-start-column="39" selection-end-line="38" selection-end-column="39" />
         </state>
       </provider>
     </entry>
@@ -762,9 +747,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/serve/serve_feedback_feedback.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/serve/serve_handle.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-84" />
@@ -773,16 +755,6 @@
     <entry file="file://$PROJECT_DIR$/templates/serve/serve_handle_handle.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3108" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/serve/serve_assign_assign.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apps/sales/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="28">
-          <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="52" />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/T2CRM/urls.py">
@@ -819,16 +791,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/apps/system/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="72" column="15" selection-start-line="72" selection-start-column="15" selection-end-line="72" selection-end-column="30" />
-          <folding>
-            <element signature="e#23#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/serve/serve_feedback.html">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -852,40 +814,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/apps/serve/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="23" column="4" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apps/customer/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="42" column="6" selection-start-line="42" selection-start-column="6" selection-end-line="42" selection-end-column="6" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/api/init.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="318">
           <caret line="61" column="37" selection-start-line="61" selection-start-column="37" selection-end-line="61" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apps/serve/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="6" column="17" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -903,17 +835,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sales/cus_dev_plan_add_update.html">
+    <entry file="file://$PROJECT_DIR$/apps/sales/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="89" column="62" selection-start-line="89" selection-start-column="62" selection-end-line="89" selection-end-column="94" />
+        <state relative-caret-position="3948">
+          <caret line="217" column="16" selection-start-line="217" selection-start-column="16" selection-end-line="217" selection-end-column="16" />
+          <folding>
+            <element signature="e#26#40#0" expanded="true" />
+            <element signature="e#1190#4044#0" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sales/add_update.html">
+    <entry file="file://$PROJECT_DIR$/templates/sales/sale_chance.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="135" column="21" selection-start-line="135" selection-start-column="21" selection-end-line="135" selection-end-column="31" />
+        <state relative-caret-position="2352">
+          <caret line="84" column="20" selection-start-line="84" selection-start-column="12" selection-end-line="84" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/customer/customer.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="338">
+          <caret line="105" column="23" selection-start-line="105" selection-start-column="23" selection-end-line="105" selection-end-column="23" />
         </state>
       </provider>
     </entry>
@@ -924,62 +867,116 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sales/sale_chance.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7385">
-          <caret line="84" column="20" selection-start-line="84" selection-start-column="12" selection-end-line="84" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/customer/customer.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="338">
-          <caret line="105" column="23" lean-forward="true" selection-start-line="105" selection-start-column="23" selection-end-line="105" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/apps/sales/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="217" column="16" lean-forward="true" selection-start-line="217" selection-start-column="16" selection-end-line="217" selection-end-column="16" />
-          <folding>
-            <element signature="e#26#40#0" expanded="true" />
-            <element signature="e#1190#4044#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/serve/serve_assign.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="98" column="12" lean-forward="true" selection-start-line="98" selection-start-column="12" selection-end-line="98" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/serve/serve_create_create.html">
+    <entry file="file://$PROJECT_DIR$/templates/sales/cus_dev_plan_add_update.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="100">
-          <caret line="111" column="26" lean-forward="true" selection-start-line="111" selection-start-column="26" selection-end-line="111" selection-end-column="26" />
-          <folding>
-            <element signature="n#style#0;n#form#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <caret line="89" column="62" selection-start-line="89" selection-start-column="62" selection-end-line="89" selection-end-column="94" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/sales/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="28">
+          <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="52" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/serve/serve_create.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1752">
-          <caret line="108" column="44" selection-start-line="108" selection-start-column="28" selection-end-line="108" selection-end-column="44" />
+        <state relative-caret-position="294">
+          <caret line="118" column="20" selection-start-line="118" selection-start-column="20" selection-end-line="124" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/system/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="364">
+          <caret line="13" column="18" selection-start-line="13" selection-start-column="12" selection-end-line="13" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/customer/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="42" column="6" selection-start-line="42" selection-start-column="6" selection-end-line="42" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/serve/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="28">
+          <caret line="13" column="6" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/serve/serve_create_create.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="334">
+          <caret line="180" column="28" lean-forward="true" selection-start-line="180" selection-start-column="28" selection-end-line="180" selection-end-column="101" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/serve/serve_assign.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="180" column="44" selection-start-line="180" selection-start-column="30" selection-end-line="180" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/serve/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="21" column="14" lean-forward="true" selection-start-line="21" selection-start-column="14" selection-end-line="21" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sales/add_update.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="213" column="21" selection-start-line="213" selection-start-column="21" selection-end-line="213" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apps/system/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="325" column="21" selection-start-line="325" selection-start-column="6" selection-end-line="325" selection-end-column="21" />
+          <folding>
+            <element signature="e#23#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/serve/serve_feedback_feedback.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="296">
+          <caret line="160" column="11" lean-forward="true" selection-start-line="160" selection-start-column="11" selection-end-line="160" selection-end-column="89" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/apps/serve/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="66" column="29" lean-forward="true" selection-start-line="66" selection-start-column="29" selection-end-line="66" selection-end-column="29" />
+        <state relative-caret-position="322">
+          <caret line="174" selection-start-line="174" selection-end-line="174" />
           <folding>
             <element signature="e#0#43#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/serve/serve_assign_assign.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="150" column="22" lean-forward="true" selection-start-line="150" selection-start-column="22" selection-end-line="150" selection-end-column="22" />
         </state>
       </provider>
     </entry>

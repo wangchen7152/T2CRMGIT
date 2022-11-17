@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.views.decorators.csrf import csrf_exempt
 
 from .views import ServeIndex, ServeList, ServeAssign, CreateWorkflow, \
-    DelWorkflow
+    DelWorkflow, AssignWorkflow, AssignUpdate
 
 app_name = 'serve'
 urlpatterns = [
@@ -19,4 +19,10 @@ urlpatterns = [
     # 创建服务接口
     url(r'^DelWorkflow/', csrf_exempt(DelWorkflow.as_view()),
         name='DelWorkflow'),
+    # 进入服务分配接口
+    url(r'^AssignWorkflow/', csrf_exempt(AssignWorkflow.as_view()),
+        name='AssignWorkflow'),
+    # 服务分配创接口
+    url(r'^AssignUpdate/', csrf_exempt(AssignUpdate.as_view()),
+        name='AssignUpdate'),
 ]
