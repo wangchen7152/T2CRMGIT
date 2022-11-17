@@ -75,7 +75,7 @@
         {field: "id", title: '编号', fixed: "true", width: 80},
         {field: 'customer', title: '客户名', minWidth: 50, align: "center"},
         {
-          field: 'serveType', title: '服务类型', minWidth: 100, align: 'center',
+          field: 'serveType', title: '服务类型',width:120, minWidth: 100, align: 'center',
           templet: function (obj) {
             if (obj.serveType == 6) {
               return "咨询";
@@ -87,12 +87,12 @@
           }
         },
         {field: 'overview', title: '概要信息', align: 'center'},
-        {field: 'createPeople', title: '创建人', minWidth: 100, align: 'center'},
+        {field: 'createPeopleName', title: '创建人',width:80, minWidth: 100, align: 'center'},
         {field: 'assignTime', title: '分配时间', minWidth: 50, align: "center"},
         {field: 'assigner', title: '分配人', minWidth: 100, align: 'center'},
         {field: 'createDate', title: '创建时间', align: 'center', minWidth: 150},
         {field: 'updateDate', title: '更新时间', align: 'center', minWidth: 150},
-        {title: '操作', minWidth: 150, templet: '#customerServeListBar', fixed: "right", align: "center"}
+        {title: '操作', minWidth: 150,width:100, templet: '#customerServeListBar', fixed: "right", align: "center"}
       ]]
     });
 
