@@ -23,9 +23,9 @@
       <div class="layui-input-block">
         <select name="serveType" id="serveType" disabled="disabled">
           <option value="">请选择</option>
-          <option value="6" {% if cs.serveType == '6' %}selected="selected"{% endif %}>咨询</option>
-          <option value="7" {% if cs.serveType == '7' %}selected="selected"{% endif %}>建议</option>
-          <option value="8" {% if cs.serveType == '8' %}selected="selected"{% endif %}>投诉</option>
+          <option value="6" {% if cs.serveType == 6 %}selected="selected"{% endif %}>咨询</option>
+          <option value="7" {% if cs.serveType == 7 %}selected="selected"{% endif %}>建议</option>
+          <option value="8" {% if cs.serveType == 8 %}selected="selected"{% endif %}>投诉</option>
         </select>
       </div>
     </div>
@@ -34,7 +34,7 @@
       <div class="layui-input-block">
         <input type="text" class="layui-input"
                lay-verify="required" name="customer" id="customer"
-               value="{% if cs.customer %}{{ cs.customer }}{% endif %}"
+               value="{% if customerName %}{{ customerName }}{% endif %}"
                readonly="readonly">
       </div>
     </div>
@@ -105,7 +105,7 @@
       // console.log(formData);
 
       // 请求的地址
-      var url = "/serve/update/"; // 服务分配操作
+      var url = "/serve/AssignUpdate/"; // 服务分配操作
 
       $.post(url, formData, function (result) {
         // 判断操作是否执行成功 200=成功
@@ -144,7 +144,7 @@
      */
     $.ajax({
       type: "get",
-      url: "/customer_manager/",
+      url: "system/CustomerManager/",
       data: {},
       success: function (data) {
         // console.log(data);
@@ -155,7 +155,7 @@
           for (var i = 0; i < data.length; i++) {
 
             // 设置下拉选项
-            var opt = "<option value='" + data[i].username + "'>" + data[i].username + "</option>";
+             var opt = "<option value='" + data[i].id + "'>" + data[i].username + "</option>";
 
             // 将下拉项设置到下拉框中
             $("#assigner").append(opt);

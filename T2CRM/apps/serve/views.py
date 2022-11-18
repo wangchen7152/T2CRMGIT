@@ -159,3 +159,22 @@ class DelWorkflow(View):
         id = request.POST.get('id')
         CustomerServe.objects.filter(pk=id).update(deleted=1)
         return JsonResponse({'code': 200, 'msg': "客服服务删除成功"})
+
+
+class AssignWorkflow(View):
+    def get(self, request):
+        id = request.GET.get('id')
+        cs = CustomerServe.objects.get(pk=id)
+        customer = Customer.objects.get(id=cs.customer_id)
+        context = {
+            'cs': cs, 'customerName': customer.name}
+        return render(request, 'serve/serve_assign_assign.html', context)
+
+
+class AssignUpdate(View):
+    def post(self, request):
+        id = request.POST.get('id')
+        assigner = request.POST.get('assigner')
+        CustomerServe.objects.filter(pk=id).update(assigner=assigner, state=2,
+                                                   updateDate=datetime.now())
+        return JsonResponse({'code': 200, 'msg': "分配成功"})
