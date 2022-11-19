@@ -27,8 +27,8 @@
           <select name="type" id="type">
             <option value="">请选择</option>
             <option value="6">咨询</option>
-            <option value="7">投诉</option>
-            <option value="8">建议</option>
+            <option value="8">投诉</option>
+            <option value="7">建议</option>
           </select>
         </div>
 
@@ -50,8 +50,8 @@
   </script>
 
 </form>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" charset="utf-8"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" charset="utf-8"></script>
+<script src="{% static 'js/system/login/jquery.min.js' %}" charset="utf-8"></script>
+<script src="{% static 'js/system/login/jquery.cookie.min.js' %}" charset="utf-8"></script>
 <script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
 <script>
   layui.use(['table', 'layer', "form"], function () {
@@ -62,7 +62,7 @@
     // 服务列表展示
     table.render({
       elem: '#customerServeList',
-      url: '/serve/list?state=3',
+      url: '/serve/ServeList/?state=3',
       cellMinWidth: 95,
       page: true,
       height: "full-125",
@@ -87,13 +87,25 @@
           }
         },
         {field: 'overview', title: '概要信息', align: 'center'},
-        {field: 'createPeople', title: '创建人', minWidth: 100, align: 'center'},
-        {field: 'assignTime', title: '分配时间', minWidth: 50, align: "center"},
-        {field: 'assigner', title: '分配人', minWidth: 100, align: 'center'},
-        {field: 'serviceProcePeople', title: '处理人', minWidth: 50, align: "center"},
-        {field: 'serviceProceTime', title: '处理时间', minWidth: 100, align: 'center'},
-        {field: 'createDate', title: '创建时间', align: 'center', minWidth: 150},
-        {field: 'updateDate', title: '更新时间', align: 'center', minWidth: 150},
+        {field: 'AssignUserName', title: '分配人', minWidth: 100, align: 'center'},
+        {field: 'serviceProcePeopleName', title: '处理人', minWidth: 50, align: "center"},
+          {field: 'updateDate', title: '处理时间', align: 'center', minWidth: 150,
+              templet: function (obj) {
+                        if (obj.createDate == null || obj.createDate == undefined) {
+                            return '';
+                        } else {
+                            return layui.util.toDateString(obj.createDate, 'yyyy-MM-dd HH:mm:ss');
+                        }
+                    }},
+        {field: 'createDate', title: '创建时间', align: 'center', minWidth: 150,
+        templet: function (obj) {
+                        if (obj.createDate == null || obj.createDate == undefined) {
+                            return '';
+                        } else {
+                            return layui.util.toDateString(obj.createDate, 'yyyy-MM-dd HH:mm:ss');
+                        }
+                    }},
+
         {title: '操作', minWidth: 150, templet: '#customerServeListBar', fixed: "right", align: "center"}
       ]]
     });
@@ -131,7 +143,7 @@
      */
     function openCustomerServeFeedBackDialog(id) {
       var title = "<h3>服务管理 - 服务反馈</h3>";
-      var url = "/serve/feedback/workflow?id=" + id;
+      var url = "/serve/ServeFeedbackFeedback/?id=" + id;
 
       // iframe层
       layui.layer.open({

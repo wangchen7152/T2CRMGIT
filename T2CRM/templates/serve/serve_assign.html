@@ -54,10 +54,8 @@
     </script>
 
 </form>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"
-        charset="utf-8"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js"
-        charset="utf-8"></script>
+<script src="{% static 'js/system/login/jquery.min.js' %}" charset="utf-8"></script>
+<script src="{% static 'js/system/login/jquery.cookie.min.js' %}" charset="utf-8"></script>
 <script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
 <script>
     layui.use(['table', 'layer', "form"], function () {
@@ -94,9 +92,9 @@
                     templet: function (obj) {
                         if (obj.serveType == 6) {
                             return "咨询";
-                        } else if (obj.serveType == 7) {
-                            return "投诉";
                         } else if (obj.serveType == 8) {
+                            return "投诉";
+                        } else if (obj.serveType == 7) {
                             return "建议";
                         }
                     }
@@ -106,18 +104,6 @@
                     field: 'createPeopleName',
                     title: '创建人',
                     width: 80,
-                    minWidth: 100,
-                    align: 'center'
-                },
-                {
-                    field: 'assignTime',
-                    title: '分配时间',
-                    minWidth: 50,
-                    align: "center"
-                },
-                {
-                    field: 'assigner',
-                    title: '分配人',
                     minWidth: 100,
                     align: 'center'
                 },

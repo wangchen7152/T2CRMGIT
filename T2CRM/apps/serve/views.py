@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render
 
@@ -32,21 +33,28 @@ class ServeList(View):
                         s.id id,
                         s.assign_time assign_time,
                         s.createPeople_id createPeople,
+                        s.service_proce_result serviceProceResult,
+                        s.myd myd,
+                        s.customer_id customer_id,
+                        s.serve_type serveType,
+                        s.service_proce service_proce,
+                        s.overview overview,
+                        s.create_date createDate,
+                        s.update_date updateDate,
                         U.id CreateUserID,
                         U.username createPeopleName,
                         su.username AssignUserName,
                         su.id AssignUserID,
-                        s.customer_id customer_id,
-                        s.serve_type serveType,
-                        s.overview overview,
-                        s.create_date createDate,
-                        s.update_date updateDate,
                         cu.id customer_id,
-                        cu.`name` customer 
+                        cu.`name` customer,
+                        tu.id  serviceProcePeopleId,
+                        tu.username serviceProcePeopleName,
+                        TIMESTAMPDIFF(HOUR,s.create_date,s.update_date) UTIME 
                   FROM
                         t2_customer_serve s
                         LEFT JOIN t2_user u ON s.createPeople_id = u.id
-                        LEFT JOIN t2_user su ON s.assigner_id = u.id
+                        LEFT JOIN t2_user su ON s.assigner_id = su.id
+                        LEFT JOIN t2_user tu ON s.serviceProcePeople_id = tu.id
                         LEFT JOIN t2_customer cu ON s.customer_id = cu.id 
                   WHERE
                         u.is_valid = 1 
@@ -71,7 +79,9 @@ class ServeList(View):
                 sql += ' AND s.serve_type = "{}"'.format(type)
             user_id = request.session['user']['id']
             if user_id != 1:
-                sql += ' AND s.createPeople_id = "{}"'.format(user_id)
+                sql += ' AND (s.createPeople_id = "%s" OR s.assigner_id = "%s" ' \
+                       'OR s.serviceProcePeople_id = "%s")' \
+                       % (user_id, user_id, user_id)
             sql += 'ORDER BY s.id DESC;'
             # 执行 SQL
             cursor.execute(sql)
@@ -96,11 +106,13 @@ class ServeList(View):
             connection.close()
 
 
+# 进入服务分配页面
 class ServeAssign(View):
     def get(self, request):
         return render(request, 'serve/serve_assign.html')
 
 
+# 服务创建内创建服务
 class CreateWorkflow(View):
     def get(self, request):
         id = request.GET.get('id')
@@ -137,11 +149,30 @@ class CreateWorkflow(View):
                 return JsonResponse({'code': 200, 'msg': "客服服务编辑成功"})
 
             else:
+                server_type = {
+                    6: u'咨询', 8: '投诉', 7: u'建议'
+                }
                 # 插入数据库数据
-                if CustomerServe.objects.filter(customer=cs,
-                                                serveType=serveType):
-                    return JsonResponse(
-                        {'code': 401, 'msg': "客户同样的服务已创建，请勿重复添加"})
+                cs_repeat = CustomerServe.objects.filter(~Q(state=4),
+                                                         customer=cs,
+                                                         serveType=serveType)
+                if cs_repeat:
+                    server_name = server_type.get(cs_repeat[0].serveType)
+                    # 已创建
+                    if cs_repeat[0].state == 1:
+                        return JsonResponse(
+                            {'code': 401,
+                             'msg': "客户的%s服务已创建，请勿重复创建" % (server_name)})
+                    # 已分配
+                    if cs_repeat[0].state == 2:
+                        return JsonResponse(
+                            {'code': 401,
+                             'msg': "客户的%s服务已处于分配阶段，请勿重复创建" % (server_name)})
+                    # 已处理
+                    if cs_repeat[0].state == 3:
+                        return JsonResponse(
+                            {'code': 401,
+                             'msg': "客户的%s服务已处于处理阶段，请勿重复创建" % (server_name)})
 
                 CustomerServe.objects.create(serveType=serveType,
                                              overview=overview,
@@ -149,11 +180,13 @@ class CreateWorkflow(View):
                                              serviceRequest=serviceRequest,
                                              createPeople=create_us,
                                              createDate=datetime.now())
-                return JsonResponse({'code': 200, 'msg': "客服服务添加成功"})
+                return JsonResponse({'code': 200, 'msg': "客服%s服务添加成功" % (
+                    server_type.get(serveType))})
         except Exception as e:
             return JsonResponse({'code': 400, 'msg': e})
 
 
+# 服务创建内删除客户服务
 class DelWorkflow(View):
     def post(self, request):
         id = request.POST.get('id')
@@ -161,6 +194,7 @@ class DelWorkflow(View):
         return JsonResponse({'code': 200, 'msg': "客服服务删除成功"})
 
 
+# 服务分配内进入分配
 class AssignWorkflow(View):
     def get(self, request):
         id = request.GET.get('id')
@@ -171,10 +205,87 @@ class AssignWorkflow(View):
         return render(request, 'serve/serve_assign_assign.html', context)
 
 
+# 服务分配内分配服务
 class AssignUpdate(View):
     def post(self, request):
         id = request.POST.get('id')
+        # 指派人
         assigner = request.POST.get('assigner')
-        CustomerServe.objects.filter(pk=id).update(assigner=assigner, state=2,
+        # 分配人
+        user_id = request.session['user']['id']
+        user = User.objects.get(id=user_id)
+
+        CustomerServe.objects.filter(pk=id).update(assigner=user,
+                                                   serviceProcePeople=assigner,
+                                                   assignTime=datetime.now(),
+                                                   state=2,
                                                    updateDate=datetime.now())
         return JsonResponse({'code': 200, 'msg': "分配成功"})
+
+
+class ServiceHandle(View):
+    def get(self, request):
+        return render(request, 'serve/serve_handle.html')
+
+
+class HandleWorkflow(View):
+    def get(self, request):
+        id = request.GET.get('id')
+        cs = CustomerServe.objects.get(pk=id)
+        customer_id = cs.customer_id
+        customer_name = Customer.objects.get(pk=customer_id).name
+        # 指派人/处理人
+        serviceProcePeople = User.objects.get(
+            id=cs.serviceProcePeople_id).username
+        context = {"cs": cs, 'customer_name': customer_name,
+                   'serviceProcePeople': serviceProcePeople}
+        return render(request, 'serve/serve_handle_handle.html', context)
+
+    def post(self, request):
+        # 服务ID
+        id = request.POST.get('id')
+        # 处理内容
+        serviceProce = request.POST.get('serviceProce')
+        CustomerServe.objects.filter(pk=id).update(state=3,
+                                                   serviceProce=serviceProce,
+                                                   serviceProceTime=datetime.now(),
+                                                   updateDate=datetime.now())
+        return JsonResponse({'code': 200, 'msg': "服务处理确认成功"})
+
+
+class ServeFeedback(View):
+    def get(self, request):
+        return render(request, 'serve/serve_feedback.html')
+
+    def post(self, request):
+        pass
+
+
+class ServeFeedbackFeedback(View):
+    def get(self, request):
+        id = request.GET.get('id')
+        cs = CustomerServe.objects.get(pk=id)
+        customer_name = Customer.objects.get(pk=cs.customer_id).name
+        # 指派人/处理人
+        serviceProcePeople = User.objects.get(
+            id=cs.serviceProcePeople_id).username
+        context = {'cs': cs, 'customer_name': customer_name,
+                   'serviceProcePeople': serviceProcePeople}
+        return render(request, 'serve/serve_feedback_feedback.html', context)
+
+    def post(self, request):
+        # 服务ID
+        id = request.POST.get('id')
+        # 满意度
+        myd = request.POST.get('myd')
+        # 处理结果
+        serviceProceResult = request.POST.get('serviceProceResult')
+        CustomerServe.objects.filter(pk=id).update(state=4, myd=myd,
+                                                   serviceProceResult=serviceProceResult,
+                                                   updateDate=datetime.now())
+        return JsonResponse({'code': 200, 'msg': "服务反馈成功"})
+
+
+class ServeArchive(View):
+    def get(self, request):
+        return render(request, 'serve/serve_archive.html')

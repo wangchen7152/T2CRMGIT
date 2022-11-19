@@ -2,7 +2,8 @@ from django.conf.urls import url
 from django.views.decorators.csrf import csrf_exempt
 
 from .views import ServeIndex, ServeList, ServeAssign, CreateWorkflow, \
-    DelWorkflow, AssignWorkflow, AssignUpdate
+    DelWorkflow, AssignWorkflow, AssignUpdate, ServiceHandle, HandleWorkflow, \
+    ServeFeedback, ServeArchive, ServeFeedbackFeedback
 
 app_name = 'serve'
 urlpatterns = [
@@ -25,4 +26,20 @@ urlpatterns = [
     # 服务分配创接口
     url(r'^AssignUpdate/', csrf_exempt(AssignUpdate.as_view()),
         name='AssignUpdate'),
+    # 进入服务处理接口
+    url(r'^ServiceHandle/', csrf_exempt(ServiceHandle.as_view()),
+        name='ServiceHandle'),
+    # 服务处理接口
+    url(r'^HandleWorkflow/', csrf_exempt(HandleWorkflow.as_view()),
+        name='HandleWorkflow'),
+    # 进入服务反馈接口
+    url(r'^ServeFeedback/', csrf_exempt(ServeFeedback.as_view()),
+        name='ServeFeedback'),
+    # 进入服务归档接口
+    url(r'^ServeArchive/', csrf_exempt(ServeArchive.as_view()),
+        name='ServeArchive'),
+    # 进入服务归档接口
+    url(r'^ServeFeedbackFeedback/',
+        csrf_exempt(ServeFeedbackFeedback.as_view()),
+        name='ServeFeedbackFeedback'),
 ]
