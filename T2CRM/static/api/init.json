@@ -11,7 +11,7 @@
     "menuInfo": [
         {
             "title": "营销管理",
-            "icon": "",
+            "icon": "sales/index",
             "href": "",
             "target": "_self",
             "child": [
@@ -51,7 +51,7 @@
         },
         {
             "title": "服务管理",
-            "icon": "",
+            "icon": "serve/ServeIndex",
             "href": "",
             "target": "_self",
             "child": [
@@ -69,19 +69,19 @@
                 },
                 {
                     "title": "服务处理",
-                    "href": "",
+                    "href": "serve/ServiceHandle",
                     "icon": "fa fa-flash",
                     "target": "_self"
                 },
                 {
                     "title": "服务反馈",
-                    "href": "",
+                    "href": "serve/ServeFeedback",
                     "icon": "fa fa-exclamation",
                     "target": "_self"
                 },
                 {
                     "title": "服务归档",
-                    "href": "",
+                    "href": "serve/ServeArchive",
                     "icon": "fa fa-folder-o",
                     "target": "_self"
                 }
@@ -121,7 +121,7 @@
         },
         {
             "title": "系统设置",
-            "icon": "",
+            "icon": "audit_account",
             "href": "",
             "target": "_self",
             "child": [

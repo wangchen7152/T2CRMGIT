@@ -23,9 +23,9 @@
       <div class="layui-input-block">
         <select name="serveType" id="serveType" disabled="disabled">
           <option value="">请选择</option>
-          <option value="6" {% if cs.serveType == '6' %}selected="selected"{% endif %}>咨询</option>
-          <option value="7" {% if cs.serveType == '7' %}selected="selected"{% endif %}>建议</option>
-          <option value="8" {% if cs.serveType == '8' %}selected="selected"{% endif %}>投诉</option>
+          <option value="6" {% if cs.serveType == 6 %}selected="selected"{% endif %}>咨询</option>
+          <option value="7" {% if cs.serveType == 7 %}selected="selected"{% endif %}>建议</option>
+          <option value="8" {% if cs.serveType == 8 %}selected="selected"{% endif %}>投诉</option>
         </select>
       </div>
     </div>
@@ -33,8 +33,8 @@
       <label class="layui-form-label">客户</label>
       <div class="layui-input-block">
         <input type="text" class="layui-input"
-               lay-verify="required" name="customer" id="customer"
-               value="{% if cs.customer %}{{ cs.customer }}{% endif %}"
+               lay-verify="required" name="customer" id={{ cs.customer_id }}
+               value="{% if customer_name %}{{ customer_name}}{% endif %}"
                readonly="readonly">
       </div>
     </div>
@@ -61,8 +61,8 @@
     <div class="layui-col-xs6">
       <label class="layui-form-label">指派给</label>
       <div class="layui-input-block">
-        <select name="assigner" id="assigner" disabled="disabled">
-          <option value="">请选择</option>
+        <select name="assigner" id="assigner" disabled={{ cs.serviceProcePeople_id }}>
+          <option value={{ serviceProcePeople }}>{% if serviceProcePeople %}{{ serviceProcePeople }}{% endif %}</option>
         </select>
       </div>
     </div>
@@ -133,8 +133,8 @@
     </div>
   </div>
 </form>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" charset="utf-8"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" charset="utf-8"></script>
+<script src="{% static 'js/system/login/jquery.min.js' %}" charset="utf-8"></script>
+<script src="{% static 'js/system/login/jquery.cookie.min.js' %}" charset="utf-8"></script>
 <script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
 <script>
   layui.use(['form', 'layer'], function () {
@@ -142,40 +142,6 @@
         layer = parent.layer === undefined ? layui.layer : top.layer,
         $ = layui.jquery;
 
-
-    /**
-     * 加载指派人的下拉框 （客户经理）
-     */
-    $.ajax({
-      type: "get",
-      url: "/customer_manager/",
-      data: {},
-      success: function (data) {
-        // console.log(data);
-        // 判断返回的数据是否为空
-        if (data != null) {
-          // 获取隐藏域中设置的分配人
-          var assigner = $("#assignerMan").val();
-          // 遍历返回的数据
-          for (var i = 0; i < data.length; i++) {
-            var opt = "";
-            // 判断是否需要被选中
-            if (assigner == data[i].username) {
-              // 设置下拉选项
-              opt = "<option value='" + data[i].username + "' selected>" + data[i].username + "</option>";
-            } else {
-              // 设置下拉选项
-              opt = "<option value='" + data[i].username + "'>" + data[i].username + "</option>";
-            }
-
-            // 将下拉项设置到下拉框中
-            $("#assigner").append(opt);
-          }
-        }
-        // 重新渲染下拉框的内容
-        layui.form.render("select");
-      }
-    });
 
 
     /**
@@ -194,7 +160,7 @@
       var formData = data.field;
 
       // 请求的地址
-      var url = "/serve/update/"; // 服务反馈操作
+      var url = "/serve/ServeFeedbackFeedback/"; // 服务反馈操作
 
       $.post(url, formData, function (result) {
         // 判断操作是否执行成功 200=成功

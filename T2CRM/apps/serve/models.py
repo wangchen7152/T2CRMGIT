@@ -38,8 +38,9 @@ class CustomerServe(models.Model):
     serviceProce = models.CharField(db_column='service_proce', max_length=500,
                                     null=True)
     # 服务处理人
-    serviceProcePeople = models.CharField(db_column='service_proce_people',
-                                          max_length=50, null=True)
+    serviceProcePeople = models.ForeignKey(User, on_delete=models.DO_NOTHING,
+                                           help_text=u'分配人',
+                                           related_name='ASPro', null=True)
     # 服务处理日期
     serviceProceTime = models.DateTimeField(db_column='service_proce_time',
                                             null=True)
