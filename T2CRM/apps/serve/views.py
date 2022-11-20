@@ -289,3 +289,18 @@ class ServeFeedbackFeedback(View):
 class ServeArchive(View):
     def get(self, request):
         return render(request, 'serve/serve_archive.html')
+
+
+class ServeHandleRepeat(View):
+    def post(self, request):
+        try:
+            id = request.POST.get('id')
+            state = int(request.POST.get('state'))
+            CustomerServe.objects.filter(pk=id).update(state=state - 1,
+                                                       updateDate=datetime.now())
+            server_type = {
+                2: '退回分配成功', 3: u'退回处理成功', 4: u'退回反馈成功'
+            }
+            return JsonResponse({'code': 200, 'msg': server_type[state]})
+        except:
+            return JsonResponse({'code': 400, 'msg': "操作失败"})

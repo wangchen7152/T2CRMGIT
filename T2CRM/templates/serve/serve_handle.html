@@ -51,6 +51,8 @@
     <script id="customerServeListBar" type="text/html">
         <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-xs"
            lay-event="proce">处理</a>
+        <a href="javascript:;" class="layui-btn layui-btn-danger layui-btn-xs"
+           lay-event="HandleRepeat">重新分配</a>
     </script>
 
 </form>
@@ -66,7 +68,7 @@
             table = layui.table;
 
         // 服务列表展示
-        table.render({
+        var t = table.render({
             elem: '#customerServeList',
             url: '/serve/ServeList/?state=2',
             cellMinWidth: 95,
@@ -161,6 +163,11 @@
                 // 打开服务分配对话框
                 openCustomerServeProceDialog(data.data.id);
             }
+            if (data.event == "HandleRepeat") { // 服务处理操作
+
+                // 打开服务分配对话框
+                CustomerServeHandleRepeat(data.data.id);
+            }
 
         });
 
@@ -183,6 +190,42 @@
                 content: url,
                 // 可以最大化与最小化
                 maxmin: true
+            });
+        }
+        /**
+         * 打开服务分处理对话框
+         */
+        function CustomerServeHandleRepeat(id) {
+            // 弹出确认框，询问用户是否确认删除
+            layer.confirm('确定要重新分配吗？', {
+                icon: 3,
+                title: "服务处理-退回分配"
+            }, function (index) {
+                // 关闭确认框
+                layer.close(index);
+                // 发送ajax请求，删除记录
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'serve:ServeHandleRepeat' %}",
+                    data: {
+                        id: id,
+                        state: 2,
+                    },
+                    success: function (result) {
+                        // 判断删除结果
+                        layer.msg(result.msg);
+                        if (result.code == 200) {
+                            // 提示成功
+                            layer.msg("退回分配成功！", {icon: 6});
+                            // 刷新表格
+                            t.reload();
+                        } else {
+                            // 提示失败
+                            layer.msg(result.msg, {icon: 5});
+                            return false;
+                        }
+                    }
+                });
             });
         }
 

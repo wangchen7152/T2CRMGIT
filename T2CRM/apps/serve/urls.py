@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .views import ServeIndex, ServeList, ServeAssign, CreateWorkflow, \
     DelWorkflow, AssignWorkflow, AssignUpdate, ServiceHandle, HandleWorkflow, \
-    ServeFeedback, ServeArchive, ServeFeedbackFeedback
+    ServeFeedback, ServeArchive, ServeFeedbackFeedback, ServeHandleRepeat
 
 app_name = 'serve'
 urlpatterns = [
@@ -42,4 +42,8 @@ urlpatterns = [
     url(r'^ServeFeedbackFeedback/',
         csrf_exempt(ServeFeedbackFeedback.as_view()),
         name='ServeFeedbackFeedback'),
+    # 退回操作
+    url(r'^ServeHandleRepeat/',
+        csrf_exempt(ServeHandleRepeat.as_view()),
+        name='ServeHandleRepeat'),
 ]
