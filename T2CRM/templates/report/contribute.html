@@ -41,8 +41,8 @@
 
 
 </form>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" charset="utf-8"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" charset="utf-8"></script>
+<script src="{% static 'js/system/login/jquery.min.js' %}" charset="utf-8"></script>
+<script src="{% static 'js/system/login/jquery.cookie.min.js' %}" charset="utf-8"></script>
 <script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
 <script>
   layui.use(['table', 'layer', "form", "laydate"], function () {
@@ -53,7 +53,7 @@
     //用户列表展示
     var tableIns = table.render({
       elem: '#contriList',
-      url: '/report/contribute/',
+      url: '/report/ReportCustomerSalePrice/',
       cellMinWidth: 95,
       page: true,
       height: "full-125",

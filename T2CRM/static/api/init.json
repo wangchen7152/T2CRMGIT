@@ -95,7 +95,7 @@
             "child": [
                 {
                     "title": "客户贡献分析",
-                    "href": "",
+                    "href": "report/ReportIndex",
                     "icon": "fa fa-bar-chart",
                     "target": "_self"
                 },
