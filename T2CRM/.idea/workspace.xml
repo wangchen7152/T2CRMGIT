@@ -2,29 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="082b1962-e094-440a-9340-20240d9979c2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/report/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/report/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/report/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/report/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/report/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/report/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/report/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/T2CRM/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/T2CRM/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/T2CRM/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/T2CRM/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/api/init.json" beforeDir="false" afterPath="$PROJECT_DIR$/static/api/init.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/customer/customer_order.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/customer/customer_order.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/customer/customer_order_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/customer/customer_order_detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/customer/customer_reprieve_add_update.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/customer/customer_reprieve_add_update.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/report/composition.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/report/composition.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/report/contribute.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/report/contribute.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/report/loss.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/report/loss.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/report/serve.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/report/serve.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sales/add_update.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sales/add_update.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sales/cus_dev_plan.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sales/cus_dev_plan.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sales/cus_dev_plan_add_update.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sales/cus_dev_plan_add_update.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sales/cus_dev_plan_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sales/cus_dev_plan_detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sales/sale_chance.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sales/sale_chance.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,108 +31,7 @@
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/apps/report/views.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="124">
-              <caret line="37" column="20" lean-forward="true" selection-start-line="37" selection-start-column="20" selection-end-line="37" selection-end-column="20" />
-              <folding>
-                <element signature="e#0#43#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apps/customer/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="235">
-              <caret line="141" column="10" lean-forward="true" selection-start-line="141" selection-start-column="10" selection-end-line="141" selection-end-column="10" />
-              <folding>
-                <element signature="e#0#28#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/report/contribute.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="672">
-              <caret line="57" column="17" lean-forward="true" selection-start-line="57" selection-start-column="17" selection-end-line="57" selection-end-column="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/sales/add_update.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3839">
-              <caret line="213" column="21" selection-start-line="213" selection-start-column="21" selection-end-line="213" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/report/serve.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-252" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/sales/sale_chance.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="962">
-              <caret line="84" column="20" selection-start-line="84" selection-start-column="12" selection-end-line="84" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/serve/serve_feedback.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="542">
-              <caret line="54" column="13" selection-start-line="54" selection-start-column="13" selection-end-line="54" selection-end-column="64" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/apps/report/urls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="6" column="60" selection-start-line="6" selection-start-column="60" selection-end-line="6" selection-end-column="60" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/T2CRM/settings.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="458">
-              <caret line="43" column="12" lean-forward="true" selection-start-line="43" selection-start-column="12" selection-end-line="43" selection-end-column="12" />
-              <folding>
-                <element signature="e#330#339#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/T2CRM/urls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
-              <caret line="22" column="49" lean-forward="true" selection-start-line="22" selection-start-column="49" selection-end-line="22" selection-end-column="49" />
-              <folding>
-                <element signature="e#638#679#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -506,12 +383,12 @@
       <workItem from="1668773643155" duration="5754000" />
       <workItem from="1668793318639" duration="119000" />
       <workItem from="1668844574744" duration="13336000" />
-      <workItem from="1668925915868" duration="6375000" />
+      <workItem from="1668925915868" duration="7306000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="293958000" />
+    <option name="totallyTimeSpent" value="294889000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -524,7 +401,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="0" width="1552" height="840" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49787235" visible="true" weight="0.22021419" />
       <window_info id="Structure" order="1" sideWeight="0.50212765" side_tool="true" weight="0.22824632" />
@@ -532,7 +408,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32768363" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.41949153" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.4986613" visible="true" weight="0.16525424" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4986613" weight="0.40112993" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32909605" />
