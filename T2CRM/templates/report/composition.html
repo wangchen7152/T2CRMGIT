@@ -34,10 +34,10 @@
      */
     $.ajax({
       type: "get",
-      url: "/report/composition/",
+      url: "/report/SelectCustomerLevel/",
       dataType: "json",
       success: function (result) {
-        // console.log(result);
+        console.log(result);
         var level = []; // 客户等级
         var amount = []; // 客户数量
         var data = []; // 用于构建饼图的对象数组
