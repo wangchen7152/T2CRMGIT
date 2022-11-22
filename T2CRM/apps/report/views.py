@@ -45,6 +45,29 @@ class CustomerLossPage(View):
         return render(request, 'report/loss.html')
 
 
+class GetCustomerLossList(View):
+    def get(self, request):
+        try:
+            page_num = request.GET.get('page')
+            page_size = request.GET.get('limit')
+            state = request.GET.get('state')
+            order_list = CustomerLoss.objects.values().filter(state=state)
+            p = Paginator(order_list, page_size)
+            data = p.page(page_num).object_list
+            count = p.count
+            context = {
+                'code': 0,
+                'msg': '加载成功',
+                'count': count,
+                'data': list(data)
+            }
+            return JsonResponse(context)
+        except Exception as e:
+            print(e)
+            return JsonResponse(
+                {'state': 401, 'msg': '审核用户列表异常，请重新刷新页面'})
+
+
 class CustomerContribute(View):
     def get(self, request):
         return render(request, 'report/serve.html')

@@ -5,8 +5,8 @@ __author__ = 'wang'
 
 from django.conf.urls import url
 from report.views import ReportIndex, ReportCustomerSalePrice, \
-    CompositionCustomer, CustomerLossPage, CustomerContribute, SelectCustomerLevel, \
-    SelectCustomerServer
+    CompositionCustomer, CustomerLossPage, CustomerContribute, \
+    SelectCustomerLevel, SelectCustomerServer, GetCustomerLossList
 
 app_name = 'report'
 urlpatterns = [
@@ -32,5 +32,8 @@ urlpatterns = [
     # 进去客户服务图
     url(r'SelectCustomerServer/$', csrf_exempt(SelectCustomerServer.as_view()),
         name='SelectCustomerServer'),
+    # 进去客户服务图
+    url(r'GetCustomerLossList/$', csrf_exempt(GetCustomerLossList.as_view()),
+        name='GetCustomerLossList'),
 
 ]
