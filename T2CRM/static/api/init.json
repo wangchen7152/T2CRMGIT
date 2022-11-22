@@ -101,19 +101,19 @@
                 },
                 {
                     "title": "客户构成分析",
-                    "href": "",
+                    "href": "report/CompositionCustomer",
                     "icon": "fa fa-cubes",
                     "target": "_self"
                 },
                 {
                     "title": "客户服务分析",
-                    "href": "",
+                    "href": "report/CustomerContribute",
                     "icon": "fa fa-coffee",
                     "target": "_self"
                 },
                 {
                     "title": "客户流失分析",
-                    "href": "",
+                    "href": "report/CustomerLossPage",
                     "icon": "fa fa-user-times",
                     "target": "_self"
                 }

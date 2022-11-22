@@ -1,17 +1,53 @@
 from django.core.paginator import Paginator
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from django.http import JsonResponse
 from django.shortcuts import render
 
 # Create your views here.
 from django.views import View
 
-from customer.models import Customer
+from customer.models import Customer, CustomerLoss
+from serve.models import CustomerServe
 
 
 class ReportIndex(View):
     def get(self, request):
         return render(request, 'report/contribute.html')
+
+
+class CompositionCustomer(View):
+    def get(self, request):
+        return render(request, 'report/composition.html')
+
+
+class SelectCustomerLevel(View):
+    def get(self, request):
+        level = Customer.objects.values('level').annotate(
+            amount=Count('level')).order_by('level')
+        return JsonResponse(list(level), safe=False)
+
+
+class SelectCustomerServer(View):
+    def get(self, request):
+        # 6咨询 7建议 8投诉
+        level = list(CustomerServe.objects.values('serveType').annotate(
+            amount=Count('serveType')).order_by('serveType'))
+        server_type = {
+            6: u'咨询', 8: '投诉', 7: u'建议'
+        }
+        for i in level:
+            i['type'] = server_type.get(i['serveType'])
+        return JsonResponse(level, safe=False)
+
+
+class CustomerLossPage(View):
+    def get(self, request):
+        return render(request, 'report/loss.html')
+
+
+class CustomerContribute(View):
+    def get(self, request):
+        return render(request, 'report/serve.html')
 
 
 class ReportCustomerSalePrice(View):
@@ -42,15 +78,16 @@ class ReportCustomerSalePrice(View):
             customerName = request.GET.get('customerName')
             if customerName:
                 cs_list = cs_list.filter(name__icontains=customerName)
-            type = int(request.GET.get('type'))
-            if type == 1:
-                cs_list = cs_list.filter(sum__gte=0, sum__lte=1000)
-            if type == 2:
-                cs_list = cs_list.filter(sum__gt=1000, sum__lte=3000)
-            if type == 3:
-                cs_list = cs_list.filter(sum__gt=3000, sum__lte=5000)
-            if type == 4:
-                cs_list = cs_list.filter(sum__gt=5000)
+            type = int(request.GET.get('type', 0))
+            if type:
+                if type == 1:
+                    cs_list = cs_list.filter(sum__gte=0, sum__lte=1000)
+                if type == 2:
+                    cs_list = cs_list.filter(sum__gt=1000, sum__lte=3000)
+                if type == 3:
+                    cs_list = cs_list.filter(sum__gt=3000, sum__lte=5000)
+                if type == 4:
+                    cs_list = cs_list.filter(sum__gt=5000)
             p = Paginator(cs_list, page_size)
             data = p.page(page_num).object_list
             count = p.count
