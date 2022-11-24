@@ -5,6 +5,11 @@ from datetime import datetime
 from django.contrib.auth.models import AbstractUser
 
 
+class ModelManager(models.Manager):
+    def get_queryset(self):
+        return super(ModelManager, self).get_queryset().filter(isValid=1)
+
+
 class User(models.Model):
     id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=20, verbose_name=u'用户名')
@@ -42,3 +47,41 @@ class City(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+# 权限资源表
+class Module(models.Model):
+    # 资源名称
+    moduleName = models.CharField(max_length=64, db_column='module_name',
+                                  help_text=u'权限名称')
+    # 权限样式
+    moduleStyle = models.CharField(max_length=128, db_column='module_style',
+                                   help_text=u'样式', null=True)
+    # 跳转url
+    url = models.CharField(max_length=120, db_column='url', null=True)
+    # 自关联
+    parent = models.ForeignKey('self', db_column='parent_id',
+                               db_constraint=False, on_delete=models.DO_NOTHING,
+                               default=-1)
+    # 父级操作值
+    parentOptValue = models.CharField(max_length=64,
+                                      db_column='parent_opt_value',
+                                      help_text=u'父级操作值', null=True)
+    # 级别
+    grade = models.IntegerField(db_column='grade')
+    # 操作值
+    optValue = models.CharField(max_length=20, db_column='opt_value')
+    # 排序
+    orders = models.IntegerField(db_column='orders', help_text=u'排序', null=True)
+    # 是否可用
+    isValid = models.IntegerField(db_column='is_valid', help_text=u'是否可用',
+                                  default=1)
+    createDate = models.DateTimeField(db_column='create_date',
+                                      auto_now_add=True, null=True)
+    updateDate = models.DateTimeField(db_column='update_date',
+                                      auto_now_add=True, max_length=64,
+                                      null=True)
+    objects = ModelManager()
+
+    class Meta:
+        db_table = 't2_module'

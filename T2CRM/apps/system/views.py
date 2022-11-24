@@ -18,7 +18,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin, \
 from django.views.decorators.http import require_GET, require_POST
 from captcha.image import ImageCaptcha
 
-from .models import User
+from .models import User, Module
 from .forms import UserForm
 
 
@@ -327,3 +327,72 @@ class CustomerManager(View):
     def get(self, request):
         CustomerManagerList = User.objects.values('id', 'username').all()
         return JsonResponse(list(CustomerManagerList), safe=False)
+
+
+class ModulePage(View):
+    @xframe_options_exempt
+    def get(self, request):
+        return render(request, 'system/module/module.html')
+
+
+class ModuleList(View):
+    def get(self, request):
+        try:
+            queryset = Module.objects.values('id', 'parent', 'moduleName',
+                                             'moduleStyle',
+                                             'optValue', 'url', 'grade',
+                                             'createDate',
+                                             'updateDate').order_by('id').all()
+            return JsonResponse(list(queryset), safe=False)
+        except Exception as e:
+            pass
+
+
+class AddUpdateModule(View):
+    @xframe_options_exempt
+    def get(self, request):
+        id = request.GET.get('id')
+        parentId = request.GET.get('parentId')
+        grade = request.GET.get('grade')
+        context = {'grade': int(grade), 'parentId': parentId}
+        if id:
+            module = Module.objects.get(pk=id)
+            context['module'] = module
+            return render(request, 'system/module/add_update.html', context)
+        else:
+            return render(request, 'system/module/add_update.html', context)
+
+    @xframe_options_exempt
+    def post(self, request):
+        try:
+            # 创建的菜单等级
+            grade = int(request.POST.get('grade'))
+            # 菜单url
+            url = request.POST.get('url')
+            # 父级id
+            parentId = request.POST.get('parentId')
+            # 菜单名
+            moduleName = request.POST.get('moduleName')
+            # 菜单样式
+            moduleStyle = request.POST.get('moduleStyle')
+            # 排序
+            orders = request.POST.get('orders')
+            # 是否为编辑
+            id = request.POST.get('id')
+            if id:
+                Module.objects.filter(pk=id).update(grade=grade, url=url,
+                                                    moduleName=moduleName,
+                                                    moduleStyle=moduleStyle,
+                                                    orders=orders,
+                                                    updateDate=datetime.now())
+                return JsonResponse({'code': 200, 'msg': "菜单编辑成功"})
+            else:
+                parent = Module.objects.get(pk=parentId)
+                Module.objects.create(grade=grade, url=url, parent=parent,
+                                      moduleName=moduleName,
+                                      moduleStyle=moduleStyle,
+                                      orders=orders, createDate=datetime.now())
+                return JsonResponse({'code': 200, 'msg': "菜单创建成功"})
+
+        except Exception as e:
+            pass

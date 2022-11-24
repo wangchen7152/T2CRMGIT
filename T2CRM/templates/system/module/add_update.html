@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+{# 导入静态资源 #}
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+</head>
+<body>
+{# csrf 保护 #}
+{% csrf_token %}
+<form class="layui-form" style="width:80%;">
+  <div class="layui-form-item layui-row layui-col-xs12">
+    <label class="layui-form-label">菜单名</label>
+    <div class="layui-input-block">
+      <input type="text" class="layui-input userName"
+             lay-verify="required" name="moduleName" id="moduleName"
+             value="{% if module.moduleName %}{{ module.moduleName }}{% endif %}"
+             placeholder="请输入菜单名">
+    </div>
+  </div>
+  <div class="layui-form-item layui-row layui-col-xs12">
+    <label class="layui-form-label">菜单样式</label>
+    <div class="layui-input-block">
+      <input type="text" class="layui-input userName"
+             name="moduleStyle" id="moduleStyle"
+             value="{% if module.moduleStyle %}{{ module.moduleStyle }}{% endif %}" placeholder="请输入菜单样式">
+    </div>
+  </div>
+  <div class="layui-form-item layui-row layui-col-xs12">
+    <label class="layui-form-label">排序</label>
+    <div class="layui-input-block">
+      <input type="text" class="layui-input userName"
+             name="orders" id="orders" placeholder="请输入排序值"
+             value="{% if module.orders %}{{ module.orders }}{% endif %}">
+    </div>
+  </div>
+  <div class="layui-form-item layui-row layui-col-xs12">
+    <label class="layui-form-label">权限码</label>
+    <div class="layui-input-block">
+      <input type="text" class="layui-input userName"
+             lay-verify="required" name="optValue" id="optValue" placeholder="请输入菜单权限码"
+             value="{% if module.optValue %}{{ module.optValue }}{% endif %}">
+    </div>
+  </div>
+  <div class="layui-form-item layui-row layui-col-xs12">
+    <label class="layui-form-label">菜单级别</label>
+    <div class="layui-input-block">
+      <select name="grade" disabled>
+        <option value= "0" {% if grade == 0 %}selected="selected"{% endif %}>一级菜单</option>
+        <option value= "1" {% if grade == 1 %}selected="selected"{% endif %}>二级菜单</option>
+        <option value= "2" {% if grade == 2 %}selected="selected"{% endif %}>三级菜单</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- 0 一级菜单不需要 url，1 二级菜单需要 url，2 三级菜单（按钮）不需要 url -->
+  {% if grade == 1 %}
+    <div class="layui-form-item layui-row layui-col-xs12">
+      <label class="layui-form-label">菜单url</label>
+      <div class="layui-input-block">
+        <input type="text" class="layui-input userName"
+               lay-verify="required" name="url" id="url" placeholder="请输入菜单url"
+               value="{% if module.url %}{{ module.url }}{% endif %}">
+      </div>
+    </div>
+  {% endif %}
+
+  <!--
+     添加根级菜单
+  -->
+  <input name="parentId" type="hidden" value="{% if parentId %}{{ parentId }}{% endif %}"/>
+  <input name="id" id="id" type="hidden" value="{% if module.id %}{{ module.id }}{% endif %}"/>
+  <br/>
+  <div class="layui-form-item layui-row layui-col-xs12">
+    <div class="layui-input-block">
+      <button class="layui-btn layui-btn-lg" lay-submit=""
+              lay-filter="updateModule">确认
+      </button>
+      <button class="layui-btn layui-btn-lg layui-btn-normal" id="closeBtn">取消</button>
+    </div>
+  </div>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" charset="utf-8"></script>
+<script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script>
+  layui.use(['form', 'layer'], function () {
+    var form = layui.form,
+        layer = parent.layer === undefined ? layui.layer : top.layer,
+        $ = layui.jquery;
+
+    /**
+     * 监听表单submit
+     */
+    form.on("submit(updateModule)", function (data) {
+      //弹出loading
+      var index = top.layer.msg('数据提交中，请稍候', {icon: 16, time: false, shade: 0.8});
+      var url = "";
+      var id = $("#id").val();
+      if (id == "" || id == null || id == undefined) {
+        url = "/system/AddUpdateModule/";
+      } else {
+        url = "/system/AddUpdateModule/";
+      }
+      // 发送ajax请求
+      $.post(url, data.field, function (res) {
+        if (res.code == 200) {
+          setTimeout(function () {
+            top.layer.close(index);
+            top.layer.msg("操作成功！");
+            layer.closeAll("iframe");
+            //刷新父页面
+            parent.location.reload();
+          }, 500);
+        } else {
+          layer.msg(
+              res.msg, {
+                icon: 5
+              }
+          );
+        }
+      });
+      return false;
+    });
+
+    /**
+     * 关闭弹出层
+     */
+    $("#closeBtn").click(function () {
+      // 当你在iframe页面关闭自身时
+      var index = parent.layer.getFrameIndex(window.name); // 先得到当前iframe层的索引
+      parent.layer.close(index); // 再执行关闭
+    });
+
+  });
+</script>
+</body>
+</html>
