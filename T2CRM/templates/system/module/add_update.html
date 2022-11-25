@@ -23,6 +23,7 @@
              placeholder="请输入菜单名">
     </div>
   </div>
+{% if grade == 1 %}
   <div class="layui-form-item layui-row layui-col-xs12">
     <label class="layui-form-label">菜单样式</label>
     <div class="layui-input-block">
@@ -31,6 +32,7 @@
              value="{% if module.moduleStyle %}{{ module.moduleStyle }}{% endif %}" placeholder="请输入菜单样式">
     </div>
   </div>
+    {% endif %}
   <div class="layui-form-item layui-row layui-col-xs12">
     <label class="layui-form-label">排序</label>
     <div class="layui-input-block">
@@ -112,7 +114,7 @@
         if (res.code == 200) {
           setTimeout(function () {
             top.layer.close(index);
-            top.layer.msg("操作成功！");
+            top.layer.msg(res.msg);
             layer.closeAll("iframe");
             //刷新父页面
             parent.location.reload();
