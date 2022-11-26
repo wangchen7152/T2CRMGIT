@@ -7,7 +7,7 @@ from django.conf.urls import url
 from django.urls import path
 from .views import Registry, Login, CheckUsername, GenerateCaptcha, Index, \
     Welcome, AuditAccount, AccountUserList, UserSetting, LogOut, ChangePassword, \
-    CustomerManager, ModulePage, ModuleList, AddUpdateModule
+    CustomerManager, ModulePage, ModuleList, AddUpdateModule, DeleteModule
 from . import views
 
 # 设置命名空间名称
@@ -48,7 +48,10 @@ urlpatterns = [
     url(r'ModulePage/', ModulePage.as_view(), name='ModulePage'),
     # 获取权限菜单
     url(r'ModuleList/$', ModuleList.as_view(), name='ModuleList'),
-    # 获取权限菜单
+    # 编辑或创建权限菜单
     url(r'AddUpdateModule/$', csrf_exempt(AddUpdateModule.as_view()),
         name='AddUpdateModule'),
+    # 删除权限菜单
+    url(r'DeleteModule/$', csrf_exempt(DeleteModule.as_view()),
+        name='DeleteModule'),
 ]

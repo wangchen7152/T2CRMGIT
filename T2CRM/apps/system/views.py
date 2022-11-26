@@ -353,11 +353,17 @@ class AddUpdateModule(View):
     def get(self, request):
         id = request.GET.get('id')
         parentId = request.GET.get('parentId')
-        grade = request.GET.get('grade')
+        grade = int(request.GET.get('grade'))
         context = {'grade': int(grade), 'parentId': parentId}
+        if parentId != 'null' and int(parentId) != -1:
+            parent_name = Module.objects.get(pk=parentId).moduleName
+            context['parent_name'] = parent_name
         if id:
             module = Module.objects.get(pk=id)
             context['module'] = module
+            if grade != 0:
+                parent_name = Module.objects.get(pk=module.parent_id).moduleName
+                context['parent_name'] = parent_name
             return render(request, 'system/module/add_update.html', context)
         else:
             return render(request, 'system/module/add_update.html', context)
@@ -365,29 +371,56 @@ class AddUpdateModule(View):
     def post(self, request):
         try:
             data = request.POST.dict()
-
             # 如果有id证明为编辑
             id = data.get('id')
-            if id != '':
-                data.pop('parentId')
-                data['updateDate'] = datetime.now()
-                Module.objects.filter(pk=id).update(**data)
+            # 移除前端传回的空字段，防止数据库无法更新
+            new_date = {}
+            try:
+                for key, value in data.items():
+                    if value != '':
+                        new_date[key] = value
+            except Exception as e:
+                print(e)
+            # 移除掉parent_name
+            if new_date.get('parent_name'):
+                new_date.pop('parent_name')
+            if id:
+                new_date.pop('parentId')
+                new_date['updateDate'] = datetime.now()
+                Module.objects.filter(pk=id).update(**new_date)
                 return JsonResponse({'code': 200, 'msg': "编辑成功"})
             # 编辑操作
             else:
-                # 创建操作
-                data.pop('id')
                 # 验证权限码是否重复
-                optValue = data.get('optValue')
+                optValue = new_date.get('optValue')
                 if Module.objects.filter(optValue=optValue):
                     return JsonResponse({'code': 400, 'msg': "权限码已存在！"})
-                parentId = data.pop('parentId')
+                parentId = int(new_date.pop('parentId'))
                 if parentId and parentId == -1:
                     pass
                 else:
                     parent = Module.objects.get(pk=parentId)
-                    data['parent'] = parent
-                    Module.objects.create(**data)
+                    new_date['parent'] = parent
+                Module.objects.create(**new_date)
             return JsonResponse({'code': 200, 'msg': "创建成功"})
         except Exception as e:
             pass
+
+
+class DeleteModule(View):
+    def post(self, request):
+        try:
+            user_id = request.session.get('user')['id']
+            if user_id == 1:
+                id = request.POST.dict().get('id')
+                if Module.objects.filter(parent=id):
+                    return JsonResponse(
+                        {'code': 400, 'msg': '请先删除子菜单'})
+                else:
+                    Module.objects.filter(pk=id).update(isValid=0,
+                                                        updateDate=datetime.now())
+                    return JsonResponse({'code': 200, 'msg': "删除成功"})
+            else:
+                return JsonResponse({'code': 200, 'msg': "没有删除权限，请联系管理员处理"})
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': "删除失败"})

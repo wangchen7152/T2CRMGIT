@@ -17,8 +17,8 @@
 <table id="menu-table" class="layui-table" lay-filter="menu-table"></table>
 <!-- 操作列 -->
 <script type="text/html" id="auth-state">
-  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="add">添加子项</a>
-  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+  <a class="layui-btn layui-btn-green layui-btn-xs" lay-event="add">添加子项</a>
+  <a class="layui-btn layui-btn-green layui-btn-xs" lay-event="edit">修改</a>
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
@@ -193,10 +193,11 @@
       // 弹出确认框询问用户是否确认删除
       layer.confirm('您确认删除该记录吗？', {icon: 3, title: "资源管理"}, function (data) {
         // 如果确认删除，则发送ajax请求
-        $.post("/module/delete/", {id: id}, function (result) {
+        $.post("/module/DeleteModule/", {id: id}, function (result) {
           // 判断是否成功
+          console.log(result.msg);
           if (result.code == 200) {
-            layer.msg("删除成功！", {icon: 6});
+            layer.msg(result.msg, {icon: 6});
             // 刷新页面
             window.location.reload();
           } else {

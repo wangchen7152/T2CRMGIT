@@ -14,6 +14,16 @@
 {# csrf 保护 #}
 {% csrf_token %}
 <form class="layui-form" style="width:80%;">
+{% if grade != 0 %}
+<div class="layui-form-item layui-row layui-col-xs12">
+    <label class="layui-form-label">父级菜单</label>
+    <div class="layui-input-block">
+      <input type="text" class="layui-input parent_name"
+             disabled="disabled" name="parent_name" id="parent_name"
+             value="{% if parent_name %}{{ parent_name }}{% endif %}">
+    </div>
+  </div>
+{% endif %}
   <div class="layui-form-item layui-row layui-col-xs12">
     <label class="layui-form-label">菜单名</label>
     <div class="layui-input-block">

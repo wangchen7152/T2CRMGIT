@@ -85,3 +85,42 @@ class Module(models.Model):
 
     class Meta:
         db_table = 't2_module'
+
+
+class Role(models.Model):
+    RoleName = models.CharField(max_length=24, db_column='role_name',
+                                help_text=u'角色名称')
+    RoleRemark = models.CharField(max_length=64, db_column='role_remark',
+                                  help_text=u'角色名称')
+    CreateDate = models.DateTimeField(db_column='create_date',
+                                      help_text=u'创建时间', auto_now_add=True,
+                                      null=True)
+    UpdateDate = models.DateTimeField(db_column='update_date',
+                                      auto_now_add=True, null=True)
+    # 是否可用
+    isValid = models.IntegerField(db_column='is_valid', help_text=u'是否可用',
+                                  default=1)
+    objects = ModelManager()
+
+    class Meta:
+        db_table = 't2_role'
+
+
+class RolePermission(models.Model):
+    RoleId = models.ForeignKey(Role, on_delete=models.DO_NOTHING,
+                               db_column='role_id')
+    ModuleId = models.ForeignKey(Module, on_delete=models.DO_NOTHING,
+                                 db_column='module_id')
+    AclValue = models.CharField(max_length=64, null=True)
+    CreateDate = models.DateTimeField(db_column='create_date',
+                                      help_text=u'创建时间', auto_now_add=True,
+                                      null=True)
+    UpdateDate = models.DateTimeField(db_column='update_date',
+                                      auto_now_add=True, null=True)
+    # 是否可用
+    isValid = models.IntegerField(db_column='is_valid', help_text=u'是否可用',
+                                  default=1)
+    objects = ModelManager()
+
+    class Meta:
+        db_table = 't2_role_permission'
