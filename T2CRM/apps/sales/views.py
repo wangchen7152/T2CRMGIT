@@ -350,6 +350,8 @@ class AddOrUpdateSaleChance(View):
                                               isValid=1,
                                               createDate=datetime.now(),
                                               updateDate=datetime.now())
+                    SaleChance.objects.filter(id=int(saleChanceId)).update(
+                        devResult=1)
                     return JsonResponse({'code': 200, 'msg': '营销计划创建成功'})
                 except Exception as e:
                     return JsonResponse({'code': 400, 'msg': '营销计划创建失败'})

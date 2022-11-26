@@ -145,7 +145,7 @@
                 },
                 {
                     "title": "菜单管理",
-                    "href": "",
+                    "href": "system/ModulePage",
                     "icon": "fa fa-window-maximize",
                     "target": "_self"
                 }

@@ -18,7 +18,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin, \
 from django.views.decorators.http import require_GET, require_POST
 from captcha.image import ImageCaptcha
 
-from .models import User
+from .models import User, Module
 from .forms import UserForm
 
 
@@ -327,3 +327,100 @@ class CustomerManager(View):
     def get(self, request):
         CustomerManagerList = User.objects.values('id', 'username').all()
         return JsonResponse(list(CustomerManagerList), safe=False)
+
+
+class ModulePage(View):
+    @xframe_options_exempt
+    def get(self, request):
+        return render(request, 'system/module/module.html')
+
+
+class ModuleList(View):
+    def get(self, request):
+        try:
+            queryset = Module.objects.values('id', 'parent', 'moduleName',
+                                             'moduleStyle',
+                                             'optValue', 'url', 'grade',
+                                             'createDate',
+                                             'updateDate').order_by('id').all()
+            return JsonResponse(list(queryset), safe=False)
+        except Exception as e:
+            pass
+
+
+class AddUpdateModule(View):
+    @xframe_options_exempt
+    def get(self, request):
+        id = request.GET.get('id')
+        parentId = request.GET.get('parentId')
+        grade = int(request.GET.get('grade'))
+        context = {'grade': int(grade), 'parentId': parentId}
+        if parentId != 'null' and int(parentId) != -1:
+            parent_name = Module.objects.get(pk=parentId).moduleName
+            context['parent_name'] = parent_name
+        if id:
+            module = Module.objects.get(pk=id)
+            context['module'] = module
+            if grade != 0:
+                parent_name = Module.objects.get(pk=module.parent_id).moduleName
+                context['parent_name'] = parent_name
+            return render(request, 'system/module/add_update.html', context)
+        else:
+            return render(request, 'system/module/add_update.html', context)
+
+    def post(self, request):
+        try:
+            data = request.POST.dict()
+            # 如果有id证明为编辑
+            id = data.get('id')
+            # 移除前端传回的空字段，防止数据库无法更新
+            new_date = {}
+            try:
+                for key, value in data.items():
+                    if value != '':
+                        new_date[key] = value
+            except Exception as e:
+                print(e)
+            # 移除掉parent_name
+            if new_date.get('parent_name'):
+                new_date.pop('parent_name')
+            if id:
+                new_date.pop('parentId')
+                new_date['updateDate'] = datetime.now()
+                Module.objects.filter(pk=id).update(**new_date)
+                return JsonResponse({'code': 200, 'msg': "编辑成功"})
+            # 编辑操作
+            else:
+                # 验证权限码是否重复
+                optValue = new_date.get('optValue')
+                if Module.objects.filter(optValue=optValue):
+                    return JsonResponse({'code': 400, 'msg': "权限码已存在！"})
+                parentId = int(new_date.pop('parentId'))
+                if parentId and parentId == -1:
+                    pass
+                else:
+                    parent = Module.objects.get(pk=parentId)
+                    new_date['parent'] = parent
+                Module.objects.create(**new_date)
+            return JsonResponse({'code': 200, 'msg': "创建成功"})
+        except Exception as e:
+            pass
+
+
+class DeleteModule(View):
+    def post(self, request):
+        try:
+            user_id = request.session.get('user')['id']
+            if user_id == 1:
+                id = request.POST.dict().get('id')
+                if Module.objects.filter(parent=id):
+                    return JsonResponse(
+                        {'code': 400, 'msg': '请先删除子菜单'})
+                else:
+                    Module.objects.filter(pk=id).update(isValid=0,
+                                                        updateDate=datetime.now())
+                    return JsonResponse({'code': 200, 'msg': "删除成功"})
+            else:
+                return JsonResponse({'code': 200, 'msg': "没有删除权限，请联系管理员处理"})
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': "删除失败"})
