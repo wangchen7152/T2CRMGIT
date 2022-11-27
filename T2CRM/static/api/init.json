@@ -139,7 +139,7 @@
                 },
                 {
                     "title": "角色管理",
-                    "href": "",
+                    "href": "system/RolePage",
                     "icon": "fa fa-street-view",
                     "target": "_self"
                 },

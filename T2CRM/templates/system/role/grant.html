@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+{# 导入静态资源 #}
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{% static 'lib/layui-v2.6.3/css/layui.css' %}" media="all">
+  <link rel="stylesheet" href="{% static 'css/public.css' %}" media="all">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ztree/ztree_v3@3.5.46/css/zTreeStyle/zTreeStyle.css"
+        type="text/css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@ztree/ztree_v3@3.5.46/js/jquery.ztree.core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@ztree/ztree_v3@3.5.46/js/jquery.ztree.excheck.min.js"></script>
+  <script src="{% static 'lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+</head>
+<body style="background: white;">
+{# csrf 保护 #}
+{% csrf_token %}
+<!-- 角色ID -->
+<input type="hidden" name="roleId" value="{% if id %}{{ id }}{% endif %}"/>
+<div id="module_tree" class="ztree"></div>
+<script>
+  $(function () {
+    // 加载树形结构
+    loadModuleData();
+  });
+
+  // 定义树形结构对象
+  var zTreeObj;
+
+  /**
+   * 加载资源树形数据
+   */
+  function loadModuleData() {
+    // 配置信息对象  zTree的参数配置
+    var setting = {
+      // 使用复选框
+      check: {
+        enable: true
+      },
+      // 使用简单的JSON数据
+      data: {
+        simpleData: {
+          enable: true
+        }
+      },
+      // 绑定函数
+      callback: {
+        // onCheck函数：当 checkbox/radio 被选中或取消选中时触发的函数
+        onCheck: zTreeOnCheck
+      }
+    };
+
+    // 数据
+    // 通过ajax查询资源列表
+    $.ajax({
+      type: "get",
+      url: "/role/SelectRoleModule/",
+      // 查询所有的资源列表时，传递角色ID，查询当前角色对应的已经授权的资源
+      data: {
+        id: $("[name='roleId']").val()
+      },
+      dataType: "json",
+      success: function (data) {
+        var zNodes = [];
+        for (var i = 0; i < data.length; i++) {
+          zNodes.push({
+            id: data[i].id,
+            pId: data[i].parent,
+            name: data[i].moduleName,
+            open: false,
+            checked: data[i].checked
+          });
+        }
+        // data:查询到的资源列表
+        // 加载zTree树插件
+        zTreeObj = $.fn.zTree.init($("#module_tree"), setting, zNodes);
+      }
+    });
+  }
+
+  /**
+   * 当 checkbox/radio 被选中或取消选中时触发的函数
+   */
+  function zTreeOnCheck() {
+    // 获取 id 为 module_tree 的 zTree 对象
+    var treeObj = $.fn.zTree.getZTreeObj("module_tree");
+    // 获取勾选的节点
+    var nodes = treeObj.getCheckedNodes(true);
+    // 所有勾选模块的id数组
+    var module_checked_id = '';
+    for (var i = 0; i < nodes.length; i++) {
+      if (i != nodes.length - 1) {
+        module_checked_id += nodes[i].id + ',';
+      } else {
+        module_checked_id += nodes[i].id;
+      }
+    }
+
+    // 请求数据
+    var data = {
+      'module_checked_id': module_checked_id,
+      'role_id': $("[name='roleId']").val()
+    };
+
+    // 发送请求，添加权限
+    layui.use(['layer'], function () {
+      var layer = parent.layer === undefined ? layui.layer : top.layer,
+          $ = layui.jquery;
+
+      /**
+       * 添加权限
+       */
+      $.post('/role/SelectRoleModule/', data, function (result) {
+        if (200 == result.code) {
+          layer.msg(result.msg, {icon: 6});
+        } else {
+          layer.msg(result.msg, {icon: 5});
+        }
+      });
+
+    });
+
+  }
+</script>
+</body>
+</html>
