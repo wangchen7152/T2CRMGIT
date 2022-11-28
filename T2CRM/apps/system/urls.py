@@ -8,7 +8,8 @@ from django.urls import path
 from .views import Registry, Login, CheckUsername, GenerateCaptcha, Index, \
     Welcome, AuditAccount, AccountUserList, UserSetting, LogOut, ChangePassword, \
     CustomerManager, ModulePage, ModuleList, AddUpdateModule, DeleteModule, \
-    RolePage, RoleList, AddUpdateRole, DeleteRole, SelectRoleModule, RoleGrant
+    RolePage, RoleList, AddUpdateRole, DeleteRole, SelectRoleModule, RoleGrant, \
+    UserPage, UserList, UserAddOrUpdate, SelectRoleForUser
 from . import views
 
 # 设置命名空间名称
@@ -71,4 +72,14 @@ urlpatterns = [
     # 获取授权树状结构数据
     url(r'role/SelectRoleModule/$', csrf_exempt(SelectRoleModule.as_view()),
         name='SelectRoleModule'),
+    # 进入用户页面
+    url(r'UserPage/$', csrf_exempt(UserPage.as_view()), name='UserPage'),
+    # 获取用户列表
+    url(r'UserList/$', csrf_exempt(UserList.as_view()), name='UserList'),
+    # 编辑或添加用户
+    url(r'UserAddOrUpdate/$', csrf_exempt(UserAddOrUpdate.as_view()),
+        name='UserAddOrUpdate'),
+    # 用户角色列表
+    url(r'SelectRoleForUser/$', csrf_exempt(SelectRoleForUser.as_view()),
+        name='SelectRoleForUser'),
 ]

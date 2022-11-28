@@ -133,7 +133,7 @@
                 },
                 {
                     "title": "用户管理",
-                    "href": "",
+                    "href": "system/UserPage",
                     "icon": "fa fa-users",
                     "target": "_self"
                 },

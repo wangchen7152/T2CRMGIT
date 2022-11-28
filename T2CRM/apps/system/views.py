@@ -18,7 +18,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin, \
 from django.views.decorators.http import require_GET, require_POST
 from captcha.image import ImageCaptcha
 
-from .models import User, Module, Role, RolePermission
+from .models import User, Module, Role, RolePermission, UserRole
 from .forms import UserForm
 
 
@@ -547,3 +547,92 @@ class SelectRoleModule(View):
                 return JsonResponse({'code': 200, 'msg': '角色添加权限成功'})
         except Exception as e:
             return JsonResponse({'code': 400, 'msg': '权限添加失败'})
+
+
+class UserPage(View):
+    def get(self, request):
+        return render(request, 'system/user/user.html')
+
+
+class UserList(View):
+    def get(self, request):
+        # 获取第几页
+        page_num = request.GET.get('page')
+        # 获取每页几条
+        limit = request.GET.get('limit')
+        UserList = User.objects.values('id', 'username', 'truename', 'email',
+                                       'phone', 'createDate',
+                                       'updateDate').filter(state=1).all()
+        username = request.GET.get('username')
+        if username:
+            UserList = UserList.filter(username__contains=username)
+        email = request.GET.get('email')
+        if email:
+            UserList = UserList.filter(email__contains=email)
+        phone = request.GET.get('phone')
+        if phone:
+            UserList = UserList.filter(phone__contains=phone)
+        p = Paginator(UserList, limit)
+        data = p.page(page_num).object_list
+        count = p.count
+        context = {
+            'code': 0,
+            'msg': '加载成功',
+            'count': count,
+            'data': list(data)
+        }
+        return JsonResponse(context)
+
+
+class UserAddOrUpdate(View):
+    def get(self, request):
+        id = request.GET.get('id')
+        if id:
+            user = User.objects.get(pk=id)
+            return render(request, 'system/user/add_update.html',
+                          {'user': user})
+        else:
+            return render(request, 'system/user/add_update.html')
+
+    def post(self, request):
+        data = request.POST.dict()
+        # 用户id，如果有则表示当前为编辑用户的操作
+        id = data.get('id')
+        # 用户名称
+        username = data.get('username')
+        # 邮箱
+        email = data.get('email')
+        # 电话
+        phone = data.get('phone')
+        data.pop('id')
+        if id:
+            if User.objects.filter(
+                    ~Q(pk=id), Q(username=username) | Q(phone=phone) | Q(
+                        email=email)):
+                return JsonResponse({'code': 400, 'msg': '用户信息已存在'})
+            else:
+                User.objects.filter(pk=id).update(**data)
+                return JsonResponse({'code': 200, 'msg': '用户编辑成功'})
+        else:
+            if User.objects.filter(Q(username=username) | Q(phone=phone) | Q(
+                    email=email)):
+                return JsonResponse({'code': 400, 'msg': '用户信息已存在'})
+            User.objects.create(**data)
+            return JsonResponse({'code': 200, 'msg': '用户创建成功'})
+
+
+class SelectRoleForUser(View):
+    def get(self, request):
+        try:
+            role = Role.objects.values('id', 'RoleName').all().order_by('id')
+            data = {'role': list(role)}
+            id = request.GET.get('id')
+            if id:
+                roleIds = UserRole.objects.values_list('id', flat=True).filter(
+                    UserId__id=id)
+                userRole = Role.objects.values('id', 'RoleName').filter(
+                    pk__in=roleIds).all()
+                data['userRole'] = list(userRole)
+            return JsonResponse(data, safe=False)
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': '角色获取失败'})

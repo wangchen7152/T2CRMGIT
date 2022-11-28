@@ -124,3 +124,22 @@ class RolePermission(models.Model):
 
     class Meta:
         db_table = 't2_role_permission'
+
+
+class UserRole(models.Model):
+    UserId = models.ForeignKey(User, on_delete=models.DO_NOTHING,
+                               db_column='user_id')
+    RoleId = models.ForeignKey(Role, on_delete=models.DO_NOTHING,
+                               db_column='role_id')
+    CreateDate = models.DateTimeField(db_column='create_date',
+                                      help_text=u'创建时间', auto_now_add=True,
+                                      null=True)
+    UpdateDate = models.DateTimeField(db_column='update_date',
+                                      auto_now_add=True, null=True)
+    # 是否可用
+    isValid = models.IntegerField(db_column='is_valid', help_text=u'是否可用',
+                                  default=1)
+    objects = ModelManager()
+
+    class Meta:
+        db_table = 't2_user_role'
