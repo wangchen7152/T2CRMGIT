@@ -18,6 +18,7 @@ class User(models.Model):
     truename = models.CharField(max_length=20, null=True, verbose_name=u'昵称')
     email = models.CharField(max_length=30, null=True, verbose_name=u'邮箱')
     phone = models.CharField(max_length=20, null=True, verbose_name=u'电话号码')
+    # 0未审核 1审核通过 黑名单为-1
     state = models.IntegerField(default=0, verbose_name=u'状态')
     isValid = models.IntegerField(db_column='is_valid', default=1,
                                   verbose_name=u'是否可用')
@@ -27,6 +28,7 @@ class User(models.Model):
     updateDate = models.DateTimeField(db_column='update_date', null=True,
                                       verbose_name=u'更新时间')
     company = models.CharField(max_length=24, verbose_name=u'所属公司', null=True)
+    deleted = models.IntegerField(default=0, verbose_name=u'是否删除', null=True)
 
     # 元信息
     class Meta:

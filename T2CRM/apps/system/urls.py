@@ -9,7 +9,7 @@ from .views import Registry, Login, CheckUsername, GenerateCaptcha, Index, \
     Welcome, AuditAccount, AccountUserList, UserSetting, LogOut, ChangePassword, \
     CustomerManager, ModulePage, ModuleList, AddUpdateModule, DeleteModule, \
     RolePage, RoleList, AddUpdateRole, DeleteRole, SelectRoleModule, RoleGrant, \
-    UserPage, UserList, UserAddOrUpdate, SelectRoleForUser
+    UserPage, UserList, UserAddOrUpdate, SelectRoleForUser, DelUser
 from . import views
 
 # 设置命名空间名称
@@ -29,7 +29,6 @@ urlpatterns = [
     # # 首页欢迎
     path('welcome/', views.Welcome, name='welcome'),
     # 用户审核
-    url(r'^audit_account/$', AuditAccount.as_view(), name='audit_account'),
     url(r'^audit_account/$', AuditAccount.as_view(), name='audit_account'),
     # 加载账号列表
     url(r'^AccountUserList/$', AccountUserList.as_view(),
@@ -82,4 +81,7 @@ urlpatterns = [
     # 用户角色列表
     url(r'SelectRoleForUser/$', csrf_exempt(SelectRoleForUser.as_view()),
         name='SelectRoleForUser'),
+    # 用户角色列表
+    url(r'DelUser/$', csrf_exempt(DelUser.as_view()),
+        name='DelUser'),
 ]

@@ -562,7 +562,8 @@ class UserList(View):
         limit = request.GET.get('limit')
         UserList = User.objects.values('id', 'username', 'truename', 'email',
                                        'phone', 'createDate',
-                                       'updateDate').filter(state=1).all()
+                                       'updateDate').filter(state=1,
+                                                            deleted=0).all()
         username = request.GET.get('username')
         if username:
             UserList = UserList.filter(username__contains=username)
@@ -605,6 +606,8 @@ class UserAddOrUpdate(View):
         # 电话
         phone = data.get('phone')
         data.pop('id')
+        select = data.get('select')
+        data.pop('select')
         if id:
             if User.objects.filter(
                     ~Q(pk=id), Q(username=username) | Q(phone=phone) | Q(
@@ -612,13 +615,42 @@ class UserAddOrUpdate(View):
                 return JsonResponse({'code': 400, 'msg': '用户信息已存在'})
             else:
                 User.objects.filter(pk=id).update(**data)
+                if select != '':
+                    self.CreateUserRole(id, select)
+                else:
+                    UserRole.objects.filter(UserId=id).delete()
                 return JsonResponse({'code': 200, 'msg': '用户编辑成功'})
         else:
             if User.objects.filter(Q(username=username) | Q(phone=phone) | Q(
                     email=email)):
                 return JsonResponse({'code': 400, 'msg': '用户信息已存在'})
-            User.objects.create(**data)
-            return JsonResponse({'code': 200, 'msg': '用户创建成功'})
+            # 设置初始化密码，方便用户直接登录
+            password = data.get('username')
+            _salt = GenerateCode(4)
+            md5_password = md5((password + _salt).encode(
+                encoding='utf-8')).hexdigest()
+            data['password'] = md5_password
+            data['state'] = 1
+            data['salt'] = _salt
+            user = User.objects.create(**data)
+            if select != '':
+                self.CreateUserRole(user.id, select)
+            return JsonResponse({'code': 200, 'msg': '用户创建成功,密码为用户名，请尽快修改密码'})
+
+    @staticmethod
+    def CreateUserRole(UserID, RoleIDS):
+        if RoleIDS != '':
+            # 清除用户已添加角色信息
+            UserRole.objects.filter(UserId=UserID).delete()
+            # 获取添加角色的ID
+            RoleIDS = [int(id) for id in RoleIDS.split(',')]
+            # 便利角色id放入list,后续可以批量创建
+            role_list = []
+            for RoleId in RoleIDS:
+                role_list.append(UserRole(UserId=User.objects.get(pk=UserID),
+                                          RoleId=Role.objects.get(
+                                              pk=RoleId)))
+            UserRole.objects.bulk_create(role_list)
 
 
 class SelectRoleForUser(View):
@@ -628,7 +660,8 @@ class SelectRoleForUser(View):
             data = {'role': list(role)}
             id = request.GET.get('id')
             if id:
-                roleIds = UserRole.objects.values_list('id', flat=True).filter(
+                roleIds = UserRole.objects.values_list('RoleId',
+                                                       flat=True).filter(
                     UserId__id=id)
                 userRole = Role.objects.values('id', 'RoleName').filter(
                     pk__in=roleIds).all()
@@ -636,3 +669,21 @@ class SelectRoleForUser(View):
             return JsonResponse(data, safe=False)
         except Exception as e:
             return JsonResponse({'code': 400, 'msg': '角色获取失败'})
+
+
+class DelUser(View):
+    def post(self, request):
+        ids = request.POST.getlist('ids')
+        try:
+            # 删除勾选用户和角色的关联关系
+            # 根据用户id查询所有用户和角色关联的字段
+
+            UserRoleID = UserRole.objects. \
+                values_list('id', flat=True).filter(UserId__in=ids)
+            if UserRoleID:
+                UserRole.objects.filter(pk__in=list(UserRoleID)).delete()
+            # 删除用户
+            User.objects.filter(pk__in=ids).update(deleted=1)
+            return JsonResponse({'code': 200, 'msg': '用户删除成功'})
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': '用户删除失败'})

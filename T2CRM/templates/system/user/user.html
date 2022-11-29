@@ -194,7 +194,7 @@
         // 发送ajax请求，执行删除用户
         $.ajax({
           type: "post",
-          url: "/user/delete/",
+          url: "/system/DelUser/",
           data: {ids: ids}, // 传递的参数是数组
           traditional: true, // 是否支持传递数组参数
           success: function (result) {
@@ -244,7 +244,7 @@
         // 发送ajax请求，删除记录
         $.ajax({
           type: "post",
-          url: "/user/delete/",
+          url: "/system/DelUser/",
           data: {ids: id}, // 传递的参数是数组
           traditional: true, // 是否支持传递数组参数
           success: function (result) {

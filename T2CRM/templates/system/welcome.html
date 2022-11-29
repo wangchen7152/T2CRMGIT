@@ -230,56 +230,56 @@
                 <div class="welcome-module">
                   <div class="layui-row layui-col-space10 layuimini-qiuck">
                     <div class="layui-col-xs3 layuimini-qiuck-module">
-                      <a href="javascript:;" layuimini-content-href="module" data-title="菜单管理"
+                      <a href="{% url 'system:welcome' %}" layuimini-content-href="{% url 'system:welcome' %}" data-title="菜单管理"
                          data-icon="fa fa-window-maximize">
                         <i class="fa fa-window-maximize"></i>
                         <cite>菜单管理</cite>
                       </a>
                     </div>
                     <div class="layui-col-xs3 layuimini-qiuck-module">
-                      <a href="javascript:;" layuimini-content-href="role" data-title="角色管理"
+                      <a href="{% url 'system:RoleList' %}" layuimini-content-href="{% url 'system:RolePage' %}" data-title="角色管理"
                          data-icon="fa fa-street-view">
                         <i class="fa fa-street-view"></i>
                         <cite>角色管理</cite>
                       </a>
                     </div>
                     <div class="layui-col-xs3 layuimini-qiuck-module">
-                      <a href="javascript:;" layuimini-content-href="user" data-title="用户管理"
+                      <a href="javascript:;" layuimini-content-href="{% url 'system:UserPage' %}" data-title="用户管理"
                          data-icon="fa fa-users">
                         <i class="fa fa-users"></i>
                         <cite>用户管理</cite>
                       </a>
                     </div>
                     <div class="layui-col-xs3 layuimini-qiuck-module">
-                      <a href="javascript:;" layuimini-content-href="audit_account" data-title="账号审核"
+                      <a href="javascript:;" layuimini-content-href="{% url 'system:audit_account' %}" data-title="账号审核"
                          data-icon="fa fa-user-plus">
                         <i class="fa fa-user-plus"></i>
                         <cite>账号审核</cite>
                       </a>
                     </div>
                     <div class="layui-col-xs3 layuimini-qiuck-module">
-                      <a href="javascript:;" layuimini-content-href="sales/cus_dev_plan/index" data-title="客户开发计划"
+                      <a href="javascript:;" layuimini-content-href="{% url 'sales:index' %}" data-title="客户开发计划"
                          data-icon="fa fa-handshake-o">
                         <i class="fa fa-handshake-o"></i>
                         <cite>客户开发计划</cite>
                       </a>
                     </div>
                     <div class="layui-col-xs3 layuimini-qiuck-module">
-                      <a href="javascript:;" layuimini-content-href="report/composition/index" data-title="客户构成分析"
+                      <a href="javascript:;" layuimini-content-href="{% url 'report:CompositionCustomer' %}" data-title="客户构成分析"
                          data-icon="fa fa-cubes">
                         <i class="fa fa-cubes"></i>
                         <cite>客户构成分析</cite>
                       </a>
                     </div>
                     <div class="layui-col-xs3 layuimini-qiuck-module">
-                      <a href="javascript:;" layuimini-content-href="report/serve/index" data-title="客户服务分析"
+                      <a href="javascript:;" layuimini-content-href="{% url 'report:SelectCustomerServer' %}" data-title="客户服务分析"
                          data-icon="fa fa-coffee">
                         <i class="fa fa-coffee"></i>
                         <cite>客户服务分析</cite>
                       </a>
                     </div>
                     <div class="layui-col-xs3 layuimini-qiuck-module">
-                      <a href="javascript:;" layuimini-content-href="https://www.baidu.com" data-title="百度搜索"
+                      <a href="javascript:;" layuimini-content-href="https://www.baidu.com/" data-title="百度搜索"
                          data-icon="fa fa-search">
                         <i class="fa fa-search"></i>
                         <cite>百度搜索</cite>
