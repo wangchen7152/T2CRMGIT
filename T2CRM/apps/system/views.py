@@ -18,6 +18,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin, \
 from django.views.decorators.http import require_GET, require_POST
 from captcha.image import ImageCaptcha
 
+from sales.views import connect
 from .models import User, Module, Role, RolePermission, UserRole
 from .forms import UserForm
 
@@ -325,8 +326,34 @@ class ChangePassword(View):
 
 class CustomerManager(View):
     def get(self, request):
-        CustomerManagerList = User.objects.values('id', 'username').all()
-        return JsonResponse(list(CustomerManagerList), safe=False)
+        # 创建连接
+        connection = connect()
+        # 建立游标
+        cursor = connection.cursor()
+        # 编辑sql
+        sql = '''
+        SELECT
+            u.id id,
+            u.username username
+        FROM
+            t2_user u
+            LEFT JOIN t2_user_role r ON u.id = r.user_id
+            LEFT JOIN t2_role o on o.id= r.role_id
+        WHERE
+            u.is_valid = 1 
+            AND u.deleted =0
+        '''
+        # 获取需要客户权限id
+        id = request.GET.get('id')
+        if id:
+            sql += ' AND o.id = "%s"' % (id)
+        # 执行sql
+        cursor.execute(sql)
+        # 返回结果，类型是dict
+        user_list = cursor.fetchall()  # 查询当前 SQL 执行后所有的记录
+        # 关闭游标
+        cursor.close()
+        return JsonResponse(user_list, safe=False)
 
 
 class ModulePage(View):
@@ -675,13 +702,15 @@ class DelUser(View):
     def post(self, request):
         ids = request.POST.getlist('ids')
         try:
+            # 方式一
             # 删除勾选用户和角色的关联关系
             # 根据用户id查询所有用户和角色关联的字段
-
-            UserRoleID = UserRole.objects. \
-                values_list('id', flat=True).filter(UserId__in=ids)
-            if UserRoleID:
-                UserRole.objects.filter(pk__in=list(UserRoleID)).delete()
+            # UserRoleID = UserRole.objects. \
+            #     values_list('id', flat=True).filter(UserId__in=ids)
+            # if UserRoleID:
+            #     UserRole.objects.filter(pk__in=list(UserRoleID)).delete()
+            # 方式二
+            # UserRole.objects.filter(UserId__id__in=ids).delete()
             # 删除用户
             User.objects.filter(pk__in=ids).update(deleted=1)
             return JsonResponse({'code': 200, 'msg': '用户删除成功'})
