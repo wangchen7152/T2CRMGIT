@@ -133,13 +133,13 @@
                 },
                 {
                     "title": "用户管理",
-                    "href": "",
+                    "href": "system/UserPage",
                     "icon": "fa fa-users",
                     "target": "_self"
                 },
                 {
                     "title": "角色管理",
-                    "href": "",
+                    "href": "system/RolePage",
                     "icon": "fa fa-street-view",
                     "target": "_self"
                 },

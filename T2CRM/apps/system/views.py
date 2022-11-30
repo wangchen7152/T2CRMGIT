@@ -18,7 +18,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin, \
 from django.views.decorators.http import require_GET, require_POST
 from captcha.image import ImageCaptcha
 
-from .models import User, Module
+from .models import User, Module, Role, RolePermission, UserRole
 from .forms import UserForm
 
 
@@ -424,3 +424,266 @@ class DeleteModule(View):
                 return JsonResponse({'code': 200, 'msg': "没有删除权限，请联系管理员处理"})
         except Exception as e:
             return JsonResponse({'code': 400, 'msg': "删除失败"})
+
+
+class RolePage(View):
+    @xframe_options_exempt
+    def get(self, request):
+        return render(request, 'system/role/role.html')
+
+
+class RoleList(View):
+    @xframe_options_exempt
+    def get(self, request):
+        try:
+            # 获取第几页
+            page_num = request.GET.get('page')
+            # 获取每页几条
+            limit = request.GET.get('limit')
+            RoleList = Role.objects.values('id', 'RoleRemark', 'RoleName',
+                                           'CreateDate', 'UpdateDate').all()
+            # roleName
+            roleName = request.GET.get('roleName')
+            if roleName:
+                RoleList = RoleList.filter(RoleName__icontains=roleName)
+            p = Paginator(RoleList, limit)
+            data = p.page(page_num).object_list
+            count = p.count
+            context = {
+                'code': 0,
+                'msg': '加载成功',
+                'count': count,
+                'data': list(data)
+            }
+            return JsonResponse(context)
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': 'error'})
+
+
+class AddUpdateRole(View):
+    def get(self, request):
+        id = request.GET.get('id')
+        if id:
+            role = Role.objects.get(pk=id)
+            return render(request, 'system/role/add_update.html', {
+                'role': role
+            })
+        else:
+            return render(request, 'system/role/add_update.html')
+
+    def post(self, request):
+        try:
+            # 角色名称
+            RoleName = request.POST.get('roleName')
+            # 角色备注
+            roleRemark = request.POST.get('roleRemark')
+            # 角色ID
+            id = request.POST.get('id')
+            if id:
+                Role.objects.filter(pk=id).update(RoleName=RoleName,
+                                                  RoleRemark=roleRemark,
+                                                  UpdateDate=datetime.now())
+                return JsonResponse({'code': 200, 'msg': '角色编辑成功'})
+            else:
+                if Role.objects.filter(RoleName=RoleName):
+                    return JsonResponse({'code': 400, 'msg': '角色名称已存在'})
+                Role.objects.create(RoleName=RoleName, RoleRemark=roleRemark,
+                                    CreateDate=datetime.now())
+                return JsonResponse({'code': 200, 'msg': '角色创建成功'})
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': '角色操作失败'})
+
+
+class DeleteRole(View):
+    def post(self, request):
+        id = request.POST.get('id')
+        Role.objects.filter(pk=id).update(isValid=0)
+        # 将角色绑定的权限清空
+        RolePermission.objects.filter(RoleId__id=id).delete()
+        return JsonResponse({'code': 200, 'msg': '角色删除成功'})
+
+
+class RoleGrant(View):
+    def get(self, request):
+        id = request.GET.get('id')
+        return render(request, 'system/role/grant.html', {'id': id})
+
+
+class SelectRoleModule(View):
+    def get(self, request):
+        # 角色ID
+        RoleId = request.GET.get('id')
+        # 查询所有模块
+        module = list(Module.objects.values('id', 'parent', 'moduleName').all())
+        # 查询角色已拥有权限,values_list返回元组，flat=true只有一个值，则返回列表
+        RoleModule = RolePermission.objects. \
+            values_list('ModuleId', flat=True).filter(RoleId__id=RoleId).all()
+        for m in module:
+            if m.get('id') in RoleModule:
+                m['checked'] = 'true'
+        return JsonResponse(module, safe=False)
+
+    def post(self, request):
+        try:
+            role_id = request.POST.get('role_id')
+            ModuleIdListStr = request.POST.get('module_checked_id')
+            if ModuleIdListStr == '':
+                # 删除所有权限，方便重新添加
+                RolePermission.objects.filter(RoleId__id=role_id).delete()
+                return JsonResponse({'code': 200, 'msg': '角色删除权限成功'})
+            else:
+                ModuleIdListInt = [int(i) for i in ModuleIdListStr.split(',')]
+                role = Role.objects.get(pk=role_id)
+                # 删除所有权限，方便重新添加
+                RolePermission.objects.filter(RoleId__id=role_id).delete()
+                # 创建空列表，放入需要绑定的数据
+                CreateID = []
+                for id in ModuleIdListInt:
+                    CreateID.append(RolePermission(RoleId=role,
+                                                   ModuleId=Module.objects.get(
+                                                       pk=id)))
+                # 执行批量创建操作
+                RolePermission.objects.bulk_create(CreateID)
+                return JsonResponse({'code': 200, 'msg': '角色添加权限成功'})
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': '权限添加失败'})
+
+
+class UserPage(View):
+    def get(self, request):
+        return render(request, 'system/user/user.html')
+
+
+class UserList(View):
+    def get(self, request):
+        # 获取第几页
+        page_num = request.GET.get('page')
+        # 获取每页几条
+        limit = request.GET.get('limit')
+        UserList = User.objects.values('id', 'username', 'truename', 'email',
+                                       'phone', 'createDate',
+                                       'updateDate').filter(state=1,
+                                                            deleted=0).all()
+        username = request.GET.get('username')
+        if username:
+            UserList = UserList.filter(username__contains=username)
+        email = request.GET.get('email')
+        if email:
+            UserList = UserList.filter(email__contains=email)
+        phone = request.GET.get('phone')
+        if phone:
+            UserList = UserList.filter(phone__contains=phone)
+        p = Paginator(UserList, limit)
+        data = p.page(page_num).object_list
+        count = p.count
+        context = {
+            'code': 0,
+            'msg': '加载成功',
+            'count': count,
+            'data': list(data)
+        }
+        return JsonResponse(context)
+
+
+class UserAddOrUpdate(View):
+    def get(self, request):
+        id = request.GET.get('id')
+        if id:
+            user = User.objects.get(pk=id)
+            return render(request, 'system/user/add_update.html',
+                          {'user': user})
+        else:
+            return render(request, 'system/user/add_update.html')
+
+    def post(self, request):
+        data = request.POST.dict()
+        # 用户id，如果有则表示当前为编辑用户的操作
+        id = data.get('id')
+        # 用户名称
+        username = data.get('username')
+        # 邮箱
+        email = data.get('email')
+        # 电话
+        phone = data.get('phone')
+        data.pop('id')
+        select = data.get('select')
+        data.pop('select')
+        if id:
+            if User.objects.filter(
+                    ~Q(pk=id), Q(username=username) | Q(phone=phone) | Q(
+                        email=email)):
+                return JsonResponse({'code': 400, 'msg': '用户信息已存在'})
+            else:
+                User.objects.filter(pk=id).update(**data)
+                if select != '':
+                    self.CreateUserRole(id, select)
+                else:
+                    UserRole.objects.filter(UserId=id).delete()
+                return JsonResponse({'code': 200, 'msg': '用户编辑成功'})
+        else:
+            if User.objects.filter(Q(username=username) | Q(phone=phone) | Q(
+                    email=email)):
+                return JsonResponse({'code': 400, 'msg': '用户信息已存在'})
+            # 设置初始化密码，方便用户直接登录
+            password = data.get('username')
+            _salt = GenerateCode(4)
+            md5_password = md5((password + _salt).encode(
+                encoding='utf-8')).hexdigest()
+            data['password'] = md5_password
+            data['state'] = 1
+            data['salt'] = _salt
+            user = User.objects.create(**data)
+            if select != '':
+                self.CreateUserRole(user.id, select)
+            return JsonResponse({'code': 200, 'msg': '用户创建成功,密码为用户名，请尽快修改密码'})
+
+    @staticmethod
+    def CreateUserRole(UserID, RoleIDS):
+        if RoleIDS != '':
+            # 清除用户已添加角色信息
+            UserRole.objects.filter(UserId=UserID).delete()
+            # 获取添加角色的ID
+            RoleIDS = [int(id) for id in RoleIDS.split(',')]
+            # 便利角色id放入list,后续可以批量创建
+            role_list = []
+            for RoleId in RoleIDS:
+                role_list.append(UserRole(UserId=User.objects.get(pk=UserID),
+                                          RoleId=Role.objects.get(
+                                              pk=RoleId)))
+            UserRole.objects.bulk_create(role_list)
+
+
+class SelectRoleForUser(View):
+    def get(self, request):
+        try:
+            role = Role.objects.values('id', 'RoleName').all().order_by('id')
+            data = {'role': list(role)}
+            id = request.GET.get('id')
+            if id:
+                roleIds = UserRole.objects.values_list('RoleId',
+                                                       flat=True).filter(
+                    UserId__id=id)
+                userRole = Role.objects.values('id', 'RoleName').filter(
+                    pk__in=roleIds).all()
+                data['userRole'] = list(userRole)
+            return JsonResponse(data, safe=False)
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': '角色获取失败'})
+
+
+class DelUser(View):
+    def post(self, request):
+        ids = request.POST.getlist('ids')
+        try:
+            # 删除勾选用户和角色的关联关系
+            # 根据用户id查询所有用户和角色关联的字段
+
+            UserRoleID = UserRole.objects. \
+                values_list('id', flat=True).filter(UserId__in=ids)
+            if UserRoleID:
+                UserRole.objects.filter(pk__in=list(UserRoleID)).delete()
+            # 删除用户
+            User.objects.filter(pk__in=ids).update(deleted=1)
+            return JsonResponse({'code': 200, 'msg': '用户删除成功'})
+        except Exception as e:
+            return JsonResponse({'code': 400, 'msg': '用户删除失败'})
