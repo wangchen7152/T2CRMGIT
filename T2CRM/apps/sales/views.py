@@ -7,6 +7,7 @@ from django.views import View
 from django.views.decorators.clickjacking import xframe_options_exempt
 from datetime import datetime
 
+from T2CRM.common import PermissionCheck
 from customer.models import LinkMan
 from dbutil import pymysql_pool
 from .models import SaleChance, CusDevPlan
@@ -37,6 +38,7 @@ def connect():
 class SalesIndex(View):
     """跳转营销管理首页"""
 
+    @PermissionCheck('1010')
     @xframe_options_exempt
     def get(self, request):
         return render(request, 'sales/sale_chance.html')
@@ -266,6 +268,7 @@ class DelSaleChance(View):
 
 
 class SaleDevPlanIndex(View):
+    @PermissionCheck('1020')
     def get(self, request):
         return render(request, 'sales/cus_dev_plan.html')
 
