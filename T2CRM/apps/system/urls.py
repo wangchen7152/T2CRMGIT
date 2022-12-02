@@ -82,6 +82,7 @@ urlpatterns = [
     url(r'SelectRoleForUser/$', csrf_exempt(SelectRoleForUser.as_view()),
         name='SelectRoleForUser'),
     # 用户角色列表
-    url(r'DelUser/$', csrf_exempt(DelUser.as_view()),
-        name='DelUser'),
+    url(r'DelUser/$', csrf_exempt(DelUser.as_view()), name='DelUser'),
+    # 角色权限限制框
+    path('init/', views.index_init, name='index_init')
 ]

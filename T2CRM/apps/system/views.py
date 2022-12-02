@@ -18,6 +18,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin, \
 from django.views.decorators.http import require_GET, require_POST
 from captcha.image import ImageCaptcha
 
+from T2CRM.common import PermissionCheck
 from sales.views import connect
 from .models import User, Module, Role, RolePermission, UserRole
 from .forms import UserForm
@@ -716,3 +717,67 @@ class DelUser(View):
             return JsonResponse({'code': 200, 'msg': '用户删除成功'})
         except Exception as e:
             return JsonResponse({'code': 400, 'msg': '用户删除失败'})
+
+
+@require_GET
+def index_init(request):
+    """初始化菜单"""
+    context = {
+        "homeInfo": {
+            "title": "首页",
+            "href": "welcome"
+        },
+        "logoInfo": {
+            "title": "CRM-智能办公",
+            "image": "static/images/logo.png",
+            "href": ""
+        },
+    }
+    # 初始化一级列表
+    GradeOne = []
+    # 查询所有的一级菜单
+    first_module = Module.objects.values('id', 'moduleName', 'moduleStyle',
+                                         'url', 'orders').filter(grade=0).all()
+    # 从session获取当前用户信息
+    user = User.objects.get(id=request.session.get('user')['id'])
+    # 根据用户id获取角色id
+    roleids = UserRole.objects.values_list('RoleId', flat=True).filter(
+        UserId=user.id)
+    # 根据角色id获取角色关联权限信息
+
+    modules = RolePermission.objects.values_list('ModuleId', flat=True).filter(
+        RoleId__in=roleids)
+
+    for m1 in first_module:
+        if m1['id'] not in modules:
+            continue
+        first = {
+            "title": m1['moduleName'],
+            "icon": m1['url'],
+            "href": "",
+            "target": "_self",
+        }
+        GradeOne.append(first)
+
+        # 初始化二级列表
+        GradeTwo = []
+        # 查询所有的二级菜单
+        GradeTwo_module = Module.objects.values \
+            ('id', 'moduleName', 'moduleStyle', 'url', 'orders').filter(
+            parent=m1['id']).all()
+        for m2 in GradeTwo_module:
+            if m2['id'] not in modules:
+                continue
+            second = {
+                "title": m2['moduleName'],
+                "href": m2['url'],
+                "icon": m2['moduleStyle'],
+                "target": "_self"
+            }
+            # 将二级新信息添加二级菜单
+            GradeTwo.append(second)
+        # 将二级信息添加如first格式内
+        first['child'] = GradeTwo
+    # 一级菜单加入menu内
+    context['menuInfo'] = GradeOne
+    return JsonResponse(context)
