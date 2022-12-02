@@ -54,7 +54,8 @@ MIDDLEWARE = [
     # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'T2CRM.common.URLMiddleware'
+    'T2CRM.common.URLMiddleware',
+    'T2CRM.common.ExceptionMiddleware'
 ]
 
 ROOT_URLCONF = 'T2CRM.urls'
