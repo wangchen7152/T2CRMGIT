@@ -46,7 +46,9 @@
   <!--操作-->
   <script id="roleListBar" type="text/html">
     <a class="layui-btn layui-btn-xs" id="edit" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+    {%  if '502004' in request.session.user_permission %}
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+    {% endif %}
   </script>
 </form>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" charset="utf-8"></script>

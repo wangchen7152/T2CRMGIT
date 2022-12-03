@@ -6,16 +6,19 @@ from django.shortcuts import render
 # Create your views here.
 from django.views import View
 
+from T2CRM.common import PermissionCheck
 from customer.models import Customer, CustomerLoss
 from serve.models import CustomerServe
 
 
 class ReportIndex(View):
+    @PermissionCheck(['4010'])
     def get(self, request):
         return render(request, 'report/contribute.html')
 
 
 class CompositionCustomer(View):
+    @PermissionCheck(['4020'])
     def get(self, request):
         return render(request, 'report/composition.html')
 
@@ -41,6 +44,7 @@ class SelectCustomerServer(View):
 
 
 class CustomerLossPage(View):
+    @PermissionCheck(['4040'])
     def get(self, request):
         return render(request, 'report/loss.html')
 
@@ -69,6 +73,7 @@ class GetCustomerLossList(View):
 
 
 class CustomerContribute(View):
+    @PermissionCheck(['4030'])
     def get(self, request):
         return render(request, 'report/serve.html')
 

@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from django.views.decorators.http import require_GET
 
+from T2CRM.common import PermissionCheck
 from customer.models import Customer, CityCourse, Province, CustomerOrders, \
     OrdersDetail, CustomerLoss, CustomerReprieve, LinkMan
 from sales.views import connect
@@ -19,6 +20,7 @@ from system.views import GenerateCode
 
 
 class CustomerIndex(View):
+    @PermissionCheck(['2010'])
     @xframe_options_exempt
     def get(self, request):
         return render(request, 'customer/customer.html')
@@ -83,6 +85,7 @@ class CustomerList(View):
 
 
 class AddCuster(View):
+    @PermissionCheck(['201001', '201005'])
     @xframe_options_exempt
     def get(self, request):
         # 有ID确认为更新用户信息
@@ -96,6 +99,7 @@ class AddCuster(View):
         else:
             return render(request, 'customer/customer_add_update.html', context)
 
+    @PermissionCheck(['201001', '201005'])
     def post(self, request):
         try:
             name = request.POST.get('name').strip()
@@ -157,6 +161,7 @@ class AddCuster(View):
 
 
 class DeleteCustomer(View):
+    @PermissionCheck(['201006'])
     def post(self, request):
         try:
             id = request.POST.get('id')
@@ -170,6 +175,7 @@ class DeleteCustomer(View):
 
 
 @require_GET
+@PermissionCheck(['201004'])
 def OrderIndex(request):
     id = request.GET.get('id')
     c = Customer.objects.get(id=id)
@@ -328,11 +334,13 @@ scheduler.start()
 
 
 class CustomerLoseIndex(View):
+    @PermissionCheck(['2020'])
     def get(self, request):
         return render(request, 'customer/customer_loss.html')
 
 
 class CustomerLoseList(View):
+    @PermissionCheck(['202001'])
     def get(self, request):
         page_num = request.GET.get('page')
         page_size = request.GET.get('limit')
@@ -384,6 +392,7 @@ class CustomerLoseList(View):
 
 
 class CusterLossDetail(View):
+    @PermissionCheck(['202002'])
     def get(self, request):
         try:
             id = request.GET.get('id')
