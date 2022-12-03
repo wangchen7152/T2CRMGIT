@@ -38,7 +38,7 @@ def connect():
 class SalesIndex(View):
     """跳转营销管理首页"""
 
-    @PermissionCheck('1010')
+    @PermissionCheck(['1010'])
     @xframe_options_exempt
     def get(self, request):
         return render(request, 'sales/sale_chance.html')
@@ -134,6 +134,7 @@ class CreateUpdateSales(View):
     进入添加或编辑营销机会
     """
 
+    @PermissionCheck(['101001', '101003'])
     @xframe_options_exempt
     def get(self, request):
         salechanceId = request.GET.get('saleChanceId')
@@ -182,6 +183,7 @@ class CustomerCompany(View):
 
 
 class CreateSaleChance(View):
+    @PermissionCheck(['101001', '101003'])
     def post(self, request):
         try:
             # 获取营销机会的ID
@@ -261,6 +263,7 @@ class CreateSaleChance(View):
 
 
 class DelSaleChance(View):
+    @PermissionCheck(['101002'])
     def post(self, request):
         ids = [i for i in request.POST.get('ids').split(',')]
         SaleChance.objects.filter(pk__in=ids).update(deleted=1)
@@ -268,12 +271,13 @@ class DelSaleChance(View):
 
 
 class SaleDevPlanIndex(View):
-    @PermissionCheck('1020')
+    @PermissionCheck(['1020'])
     def get(self, request):
         return render(request, 'sales/cus_dev_plan.html')
 
 
 class SaleDevPlanDetail(View):
+    @PermissionCheck(['102001'])
     def get(self, request):
         id = request.GET.get('saleChanceId')
         sc = SaleChance.objects.get(pk=id)

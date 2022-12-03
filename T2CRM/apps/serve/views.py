@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.views import View
 from datetime import datetime
 
+from T2CRM.common import PermissionCheck
 from customer.models import Customer
 from sales.views import connect
 from serve.models import CustomerServe
@@ -14,6 +15,7 @@ from system.models import User
 
 
 class ServeIndex(View):
+    @PermissionCheck(['3010'])
     def get(self, request):
         user = request.session.get('user'),
         return render(request, 'serve/serve_create.html', {
@@ -108,12 +110,14 @@ class ServeList(View):
 
 # 进入服务分配页面
 class ServeAssign(View):
+    @PermissionCheck(['3020'])
     def get(self, request):
         return render(request, 'serve/serve_assign.html')
 
 
 # 服务创建内创建服务
 class CreateWorkflow(View):
+    @PermissionCheck(['301001', '301002'])
     def get(self, request):
         id = request.GET.get('id')
         context = None
@@ -124,6 +128,7 @@ class CreateWorkflow(View):
         else:
             return render(request, 'serve/serve_create_create.html', context)
 
+    @PermissionCheck(['301001', '3010012'])
     def post(self, request):
         try:
             # 创建的用户ID
@@ -188,6 +193,7 @@ class CreateWorkflow(View):
 
 # 服务创建内删除客户服务
 class DelWorkflow(View):
+    @PermissionCheck(['301003'])
     def post(self, request):
         id = request.POST.get('id')
         CustomerServe.objects.filter(pk=id).update(deleted=1)
@@ -196,6 +202,7 @@ class DelWorkflow(View):
 
 # 服务分配内进入分配
 class AssignWorkflow(View):
+    @PermissionCheck(['302001'])
     def get(self, request):
         id = request.GET.get('id')
         cs = CustomerServe.objects.get(pk=id)
@@ -224,11 +231,13 @@ class AssignUpdate(View):
 
 
 class ServiceHandle(View):
+    @PermissionCheck(['3030'])
     def get(self, request):
         return render(request, 'serve/serve_handle.html')
 
 
 class HandleWorkflow(View):
+    @PermissionCheck(['303001'])
     def get(self, request):
         id = request.GET.get('id')
         cs = CustomerServe.objects.get(pk=id)
@@ -241,6 +250,7 @@ class HandleWorkflow(View):
                    'serviceProcePeople': serviceProcePeople}
         return render(request, 'serve/serve_handle_handle.html', context)
 
+    @PermissionCheck(['303001'])
     def post(self, request):
         # 服务ID
         id = request.POST.get('id')
@@ -254,6 +264,7 @@ class HandleWorkflow(View):
 
 
 class ServeFeedback(View):
+    @PermissionCheck(['3040'])
     def get(self, request):
         return render(request, 'serve/serve_feedback.html')
 
@@ -262,6 +273,7 @@ class ServeFeedback(View):
 
 
 class ServeFeedbackFeedback(View):
+    @PermissionCheck(['304001'])
     def get(self, request):
         id = request.GET.get('id')
         cs = CustomerServe.objects.get(pk=id)
@@ -273,6 +285,7 @@ class ServeFeedbackFeedback(View):
                    'serviceProcePeople': serviceProcePeople}
         return render(request, 'serve/serve_feedback_feedback.html', context)
 
+    @PermissionCheck(['304001'])
     def post(self, request):
         # 服务ID
         id = request.POST.get('id')
@@ -287,11 +300,13 @@ class ServeFeedbackFeedback(View):
 
 
 class ServeArchive(View):
+    @PermissionCheck(['3050'])
     def get(self, request):
         return render(request, 'serve/serve_archive.html')
 
 
 class ServeHandleRepeat(View):
+    @PermissionCheck(['304002', '303002'])
     def post(self, request):
         try:
             id = request.POST.get('id')

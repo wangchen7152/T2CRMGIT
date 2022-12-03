@@ -18,6 +18,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin, \
 from django.views.decorators.http import require_GET, require_POST
 from captcha.image import ImageCaptcha
 
+from T2CRM.common import PermissionCheck, Message
 from sales.views import connect
 from .models import User, Module, Role, RolePermission, UserRole
 from .forms import UserForm
@@ -183,12 +184,14 @@ def Welcome(request):
 
 
 class AuditAccount(View):
+    @PermissionCheck(['5010'])
     def get(self, request):
         user_list = User.objects.all()
         return render(request, 'system/audit_account.html', {
             "user_list": user_list,
         })
 
+    @PermissionCheck(['501001', '501002'])
     def post(self, request):
         try:
             id_list = request.POST.getlist('ids')
@@ -357,6 +360,7 @@ class CustomerManager(View):
 
 
 class ModulePage(View):
+    @PermissionCheck(['5040'])
     @xframe_options_exempt
     def get(self, request):
         return render(request, 'system/module/module.html')
@@ -376,6 +380,7 @@ class ModuleList(View):
 
 
 class AddUpdateModule(View):
+    @PermissionCheck(['504001', '504002', '504003'])
     @xframe_options_exempt
     def get(self, request):
         id = request.GET.get('id')
@@ -395,6 +400,7 @@ class AddUpdateModule(View):
         else:
             return render(request, 'system/module/add_update.html', context)
 
+    @PermissionCheck(['504001', '504002', '504003'])
     def post(self, request):
         try:
             data = request.POST.dict()
@@ -435,6 +441,7 @@ class AddUpdateModule(View):
 
 
 class DeleteModule(View):
+    @PermissionCheck(['504004'])
     def post(self, request):
         try:
             user_id = request.session.get('user')['id']
@@ -454,6 +461,7 @@ class DeleteModule(View):
 
 
 class RolePage(View):
+    @PermissionCheck(['5020'])
     @xframe_options_exempt
     def get(self, request):
         return render(request, 'system/role/role.html')
@@ -488,6 +496,7 @@ class RoleList(View):
 
 
 class AddUpdateRole(View):
+    @PermissionCheck(['502001', '502002', '502003'])
     def get(self, request):
         id = request.GET.get('id')
         if id:
@@ -498,6 +507,7 @@ class AddUpdateRole(View):
         else:
             return render(request, 'system/role/add_update.html')
 
+    @PermissionCheck(['502001', '502002', '502003'])
     def post(self, request):
         try:
             # 角色名称
@@ -522,11 +532,19 @@ class AddUpdateRole(View):
 
 
 class DeleteRole(View):
+    # 删除角色
+    @PermissionCheck(['502004'])
     def post(self, request):
         id = request.POST.get('id')
         Role.objects.filter(pk=id).update(isValid=0)
+        # 查看是否仍有用户绑定该角色
+        UserRoleS = UserRole.objects.filter(RoleId__in=id)
+        if UserRoleS:
+            return JsonResponse(Message(400, '已有用户关联该角色，请先解除关联').result())
+
         # 将角色绑定的权限清空
         RolePermission.objects.filter(RoleId__id=id).delete()
+
         return JsonResponse({'code': 200, 'msg': '角色删除成功'})
 
 
@@ -577,6 +595,7 @@ class SelectRoleModule(View):
 
 
 class UserPage(View):
+    @PermissionCheck(['5030'])
     def get(self, request):
         return render(request, 'system/user/user.html')
 
@@ -613,6 +632,7 @@ class UserList(View):
 
 
 class UserAddOrUpdate(View):
+    @PermissionCheck(['503001', '503002', '503003'])
     def get(self, request):
         id = request.GET.get('id')
         if id:
@@ -622,6 +642,7 @@ class UserAddOrUpdate(View):
         else:
             return render(request, 'system/user/add_update.html')
 
+    @PermissionCheck(['503001', '503002', '503003'])
     def post(self, request):
         data = request.POST.dict()
         # 用户id，如果有则表示当前为编辑用户的操作
@@ -660,21 +681,24 @@ class UserAddOrUpdate(View):
             data['state'] = 1
             data['salt'] = _salt
             user = User.objects.create(**data)
-            if select != '':
-                self.CreateUserRole(user.id, select)
+            try:
+                if select != '':
+                    self.CreateUserRole(user.id, select)
+            except Exception as e:
+                print(e)
             return JsonResponse({'code': 200, 'msg': '用户创建成功,密码为用户名，请尽快修改密码'})
 
     @staticmethod
-    def CreateUserRole(UserID, RoleIDS):
+    def CreateUserRole(idaa, RoleIDS):
         if RoleIDS != '':
             # 清除用户已添加角色信息
-            UserRole.objects.filter(UserId=UserID).delete()
+            UserRole.objects.filter(UserId=idaa).delete()
             # 获取添加角色的ID
             RoleIDS = [int(id) for id in RoleIDS.split(',')]
             # 便利角色id放入list,后续可以批量创建
             role_list = []
             for RoleId in RoleIDS:
-                role_list.append(UserRole(UserId=User.objects.get(pk=UserID),
+                role_list.append(UserRole(UserId=User.objects.get(pk=idaa),
                                           RoleId=Role.objects.get(
                                               pk=RoleId)))
             UserRole.objects.bulk_create(role_list)
@@ -699,6 +723,7 @@ class SelectRoleForUser(View):
 
 
 class DelUser(View):
+    @PermissionCheck(['503004'])
     def post(self, request):
         ids = request.POST.getlist('ids')
         try:
@@ -716,3 +741,67 @@ class DelUser(View):
             return JsonResponse({'code': 200, 'msg': '用户删除成功'})
         except Exception as e:
             return JsonResponse({'code': 400, 'msg': '用户删除失败'})
+
+
+@require_GET
+def index_init(request):
+    """初始化菜单"""
+    context = {
+        "homeInfo": {
+            "title": "首页",
+            "href": "welcome"
+        },
+        "logoInfo": {
+            "title": "CRM-智能办公",
+            "image": "static/images/logo.png",
+            "href": ""
+        },
+    }
+    # 初始化一级列表
+    GradeOne = []
+    # 查询所有的一级菜单
+    first_module = Module.objects.values('id', 'moduleName', 'moduleStyle',
+                                         'url', 'orders').filter(grade=0).all()
+    # 从session获取当前用户信息
+    user = User.objects.get(id=request.session.get('user')['id'])
+    # 根据用户id获取角色id
+    roleids = UserRole.objects.values_list('RoleId', flat=True).filter(
+        UserId=user.id)
+    # 根据角色id获取角色关联权限信息
+
+    modules = RolePermission.objects.values_list('ModuleId', flat=True).filter(
+        RoleId__in=roleids)
+
+    for m1 in first_module:
+        if m1['id'] not in modules:
+            continue
+        first = {
+            "title": m1['moduleName'],
+            "icon": m1['url'],
+            "href": "",
+            "target": "_self",
+        }
+        GradeOne.append(first)
+
+        # 初始化二级列表
+        GradeTwo = []
+        # 查询所有的二级菜单
+        GradeTwo_module = Module.objects.values \
+            ('id', 'moduleName', 'moduleStyle', 'url', 'orders').filter(
+            parent=m1['id']).all()
+        for m2 in GradeTwo_module:
+            if m2['id'] not in modules:
+                continue
+            second = {
+                "title": m2['moduleName'],
+                "href": m2['url'],
+                "icon": m2['moduleStyle'],
+                "target": "_self"
+            }
+            # 将二级新信息添加二级菜单
+            GradeTwo.append(second)
+        # 将二级信息添加如first格式内
+        first['child'] = GradeTwo
+    # 一级菜单加入menu内
+    context['menuInfo'] = GradeOne
+    return JsonResponse(context)
