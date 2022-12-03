@@ -38,7 +38,7 @@ def connect():
 class SalesIndex(View):
     """跳转营销管理首页"""
 
-    @PermissionCheck('1010')
+    @PermissionCheck(['1010'])
     @xframe_options_exempt
     def get(self, request):
         return render(request, 'sales/sale_chance.html')
@@ -268,7 +268,7 @@ class DelSaleChance(View):
 
 
 class SaleDevPlanIndex(View):
-    @PermissionCheck('1020')
+    @PermissionCheck(['1020'])
     def get(self, request):
         return render(request, 'sales/cus_dev_plan.html')
 

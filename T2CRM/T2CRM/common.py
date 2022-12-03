@@ -45,7 +45,7 @@ class URLMiddleware(MiddlewareMixin):
 class CustomSystemException(Exception):
     """自定义异常类型"""
 
-    def __init__(self, status_code=200, msg='系统错误请联系管理员'):
+    def __init__(self, status_code=400, msg='系统错误请联系管理员'):
         self.status_code = status_code,
         self.msg = msg,
 
@@ -61,7 +61,7 @@ class Message(object):
     def __init__(self, status_code=200, msg='success', obj=None):
         self.status_code = status_code,
         self.msg = msg,
-        self.obj = obj,
+        self.obj = obj
 
     def result(self):
         result = {'status_code': self.status_code[0], 'msg': self.msg[0]}
@@ -74,7 +74,8 @@ class ExceptionMiddleware(MiddlewareMixin):
     @xframe_options_exempt
     def process_exception(self, request, execption):
         if isinstance(execption, CustomSystemException):
-            result = Message(status_code=execption.status_code, msg=execption.msg).result()
+            result = Message(status_code=execption.status_code[0],
+                             msg=execption.msg[0]).result()
         elif isinstance(execption, Exception) or isinstance(execption,
                                                             BaseException):
             result = Message(status_code=400, msg='服务器异常，请联系管理员').result()
@@ -88,8 +89,11 @@ def PermissionCheck(permission):
     def decorator(func):
         def wrapper(request, *args, **kwargs):
             user_permissin = request.request.session._session['user_permission']
-            if not user_permissin or permission not in user_permissin:
+            if not user_permissin:
                 raise CustomSystemException.error('没有权限')
+            for p in permission:
+                if p not in user_permissin:
+                    raise CustomSystemException.error('没有权限')
             else:
                 return func(request, *args, **kwargs)
 
