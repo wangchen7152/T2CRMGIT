@@ -88,7 +88,11 @@ class ExceptionMiddleware(MiddlewareMixin):
 def PermissionCheck(permission):
     def decorator(func):
         def wrapper(request, *args, **kwargs):
-            user_permissin = request.request.session._session['user_permission']
+            try:
+                user_permissin = request.request.session._session['user_permission']
+            except:
+                user_permissin = request.session._session['user_permission']
+
             if not user_permissin:
                 raise CustomSystemException.error('没有权限')
             for p in permission:
