@@ -711,6 +711,10 @@ class SelectRoleForUser(View):
             data = {'role': list(role)}
             id = request.GET.get('id')
             if id:
+                # values方法可以获取number字段的字典列表。
+                # values_list可以获取number的元组列表。
+                # values_list方法加个参数flat=True可以获取number的值列表。
+                # 添加flat=true表示当前数据库查询，只需要值
                 roleIds = UserRole.objects.values_list('RoleId',
                                                        flat=True).filter(
                     UserId__id=id)
